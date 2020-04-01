@@ -2021,9 +2021,7 @@ namespace WindowsFormsApp1
         {
             var tempEdges = edges.Where(el => el.Ver1 == ver).ToList();
             {
-                kArrTimer.Add(new double[tempEdges.Count]);
-                bArrTimer.Add(new double[tempEdges.Count]);
-                stepArrTimer.Add(new double[tempEdges.Count]);
+                //stepArrTimer.Add(new double[tempEdges.Count]);
                 curYArrTimer.Add(new double[tempEdges.Count]);
                 curXArrTimer.Add(new double[tempEdges.Count]);
                 changeArrTimer.Add(new double[tempEdges.Count]);
@@ -2039,7 +2037,6 @@ namespace WindowsFormsApp1
                     timers[curTimersCount][i].Tick += (x, y) => TickForOtherVertex(tempEdges[i1],
                           (curTimersCount, i1));
                     timers[curTimersCount][i].Start();
-
                 }
             }
         }
@@ -2059,15 +2056,11 @@ namespace WindowsFormsApp1
 
             if (vertex[edge.Ver1].X == vertex[edge.Ver2].X)
             {
-                stepArrTimer[number][vertexIndex] = Math.Abs(
-                                                        vertex[edge.Ver2].Y - vertex[edge.Ver1].Y) / edge.Weight /
-                                                    10;
-
-                changeArrTimer[number][vertexIndex] += stepArrTimer[number][vertexIndex];
+                changeArrTimer[number][vertexIndex] += edge.Step;
 
                 curXArrTimer[number][vertexIndex] = vertex[edge.Ver2].X;
 
-                curYArrTimer[number][vertexIndex] = stepArrTimer[number][vertexIndex];
+                curYArrTimer[number][vertexIndex] = edge.Step;
 
                 if (vertex[edge.Ver2].Y > vertex[edge.Ver1].Y)
                 {
@@ -2093,22 +2086,14 @@ namespace WindowsFormsApp1
             }
             else
             {
-                kArrTimer[number][vertexIndex] = Calculate.GetK(vertex[edge.Ver1], vertex[edge.Ver2]);
-                bArrTimer[number][vertexIndex] = Calculate.GetB(vertex[edge.Ver1], vertex[edge.Ver2]);
-
-                stepArrTimer[number][vertexIndex] = Math.Abs(
-                                                        vertex[edge.Ver2].X - vertex[edge.Ver1].X) / edge.Weight /
-                                                    10;
-
-                changeArrTimer[number][vertexIndex] += stepArrTimer[number][vertexIndex];
+                changeArrTimer[number][vertexIndex] += edge.Step;
 
                 curXArrTimer[number][vertexIndex] = vertex[edge.Ver2].X > vertex[edge.Ver1].X
                     ? vertex[edge.Ver1].X + changeArrTimer[number][vertexIndex]
                     : vertex[edge.Ver1].X - changeArrTimer[number][vertexIndex];
 
                 curYArrTimer[number][vertexIndex] =
-                    kArrTimer[number][vertexIndex] * curXArrTimer[number][vertexIndex]
-                    + bArrTimer[number][vertexIndex];
+                    edge.K * curXArrTimer[number][vertexIndex] + edge.B;
 
                 if (vertex[edge.Ver2].X > vertex[edge.Ver1].X)
                 {
@@ -2136,9 +2121,9 @@ namespace WindowsFormsApp1
         private void MainTick()
         {
             timer.Interval = 1;
-            for (var i = 0; i < kArrTimer.Count; i++)
+            for (var i = 0; i < curYArrTimer.Count; i++)
             {
-                for (var j = 0; j < kArrTimer[i].Length; j++)
+                for (var j = 0; j < curYArrTimer[i].Length; j++)
                 {
                     //if (CirclesAreNotIntersectForOtherVertex(j, edge, i))
                     if (curXArrTimer[i][j] != 0 && curYArrTimer[i][j] != 0)
@@ -2151,18 +2136,23 @@ namespace WindowsFormsApp1
         }
 
         // ToDo заполнять массивы до начала.
+        // TODo рассмотреть FilleEdges, если петли.
 
-        private void FillK()
+        private void FillEdges()
         {
-            for (var i = 0; i < edges.Count; i++)
+            for (int i = 0; i < edges.Count; i++)
             {
-                
+                if (vertex[edges[i].Ver1].X != vertex[edges[i].Ver2].Y)
+                {
+                    edges[i].K = Calculate.GetK(vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
+                    edges[i].B = Calculate.GetB(vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
+                    edges[i].Step = Math.Abs(vertex[edges[i].Ver2].X - vertex[edges[i].Ver1].X) /
+                                    (edges[i].Weight * 10);
+                }
             }
         }
 
-        private List<double[]> kArrTimer = new List<double[]>();
-        private List<double[]> bArrTimer = new List<double[]>();
-        private List<double[]> stepArrTimer = new List<double[]>();
+        //private List<double[]> stepArrTimer = new List<double[]>();
         private List<double[]> curYArrTimer = new List<double[]>();
         private List<double[]> curXArrTimer = new List<double[]>();
         private List<double[]> changeArrTimer = new List<double[]>();
@@ -2173,6 +2163,7 @@ namespace WindowsFormsApp1
         private Timer timer = new Timer();
         private void button1_Click(object sender, EventArgs e)
         {
+            FillEdges();
             timer = new Timer { Interval = 1 };
             timer.Tick += (x, y) => MainTick();
             timer.Start();
@@ -2185,9 +2176,7 @@ namespace WindowsFormsApp1
 
             timers = new List<Timer[]>();
 
-            kArrTimer.Add(new double[tempEdges.Count]);
-            bArrTimer.Add(new double[tempEdges.Count]);
-            stepArrTimer.Add(new double[tempEdges.Count]);
+            //stepArrTimer.Add(new double[tempEdges.Count]);
             curYArrTimer.Add(new double[tempEdges.Count]);
             curXArrTimer.Add(new double[tempEdges.Count]);
             changeArrTimer.Add(new double[tempEdges.Count]);

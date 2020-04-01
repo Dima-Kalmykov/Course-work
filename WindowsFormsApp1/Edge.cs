@@ -11,6 +11,10 @@ namespace WindowsFormsApp1
         internal int Ver1;
         internal int Ver2;
 
+        internal double K;
+        internal double B;
+        internal double Step;
+
         // Вес ребра.
         internal double Weight;
 
