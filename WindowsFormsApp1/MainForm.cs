@@ -2151,16 +2151,6 @@ namespace WindowsFormsApp1
 
         private bool clickContinue;
 
-        private void FillK()
-        {
-            for (var i = 0; i < vertex.Count; i++)
-            {
-                var tempEdges = edges.Where(el => el.Ver1 == i).ToList();
-
-
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             //clickContinue = true;
