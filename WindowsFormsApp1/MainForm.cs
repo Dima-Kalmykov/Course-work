@@ -1982,26 +1982,9 @@ namespace WindowsFormsApp1
         // Для графика: когда точка приходит в вершину вычитваем 1 и 
         // прибавляем столько рёбер, сколько выходит из неё и сторим график.
 
-        //В начале запуска основного метода запускать асинхронный метод,
-        // который для всех вершине проверяет состояние центра. 
-
         // Рассмотреть петли
 
         // Рассмотреть случай, когда x=x || y=y
-
-        // Рассмотреть случай, когда точка задевает другие рёбра
-        // Можно просто сделать метод DrawAllEdge перерисовывать все рёбра постоянно
-        // В методе DeletePoint()
-
-        // Проходимся по всем рёбрам/вершинам и
-        // создаём много таймеров, которые будут подписаны на одно и то же событие.
-
-
-
-
-        // Помечать точки, где был
-        // ПАДАЕТ КОГДА ПРИХОЖУ В ВЕРШИНЫ ПОВТОРНО. (ТУДА СЮДА РЕБРО)
-        // Рассмотреть случай, когда надо отправлять точку повторно.
 
         private bool CirclesAreNotIntersectForOtherVertex(int index, Edge edge, int number) =>
             (Calculate.GetDistance(
@@ -2021,10 +2004,8 @@ namespace WindowsFormsApp1
         {
             var tempEdges = edges.Where(el => el.Ver1 == ver).ToList();
             {
-                //stepArrTimer.Add(new double[tempEdges.Count]);
                 curYArrTimer.Add(new double[tempEdges.Count]);
                 curXArrTimer.Add(new double[tempEdges.Count]);
-                changeArrTimer.Add(new double[tempEdges.Count]);
                 timers.Add(new Timer[tempEdges.Count]);
 
                 var curTimersCount = timers.Count - 1;
@@ -2056,8 +2037,6 @@ namespace WindowsFormsApp1
 
             if (vertex[edge.Ver1].X == vertex[edge.Ver2].X)
             {
-                changeArrTimer[number][vertexIndex] += edge.Step;
-
                 curXArrTimer[number][vertexIndex] = vertex[edge.Ver2].X;
 
                 curYArrTimer[number][vertexIndex] = edge.Step;
@@ -2080,17 +2059,16 @@ namespace WindowsFormsApp1
                         timers[number][vertexIndex].Stop();
 
                         NewWaysForPoints(edge.Ver2);
-                        return;
                     }
                 }
             }
             else
             {
-                changeArrTimer[number][vertexIndex] += edge.Step;
-
-                curXArrTimer[number][vertexIndex] = vertex[edge.Ver2].X > vertex[edge.Ver1].X
-                    ? vertex[edge.Ver1].X + changeArrTimer[number][vertexIndex]
-                    : vertex[edge.Ver1].X - changeArrTimer[number][vertexIndex];
+                curXArrTimer[number][vertexIndex] = curXArrTimer[number][vertexIndex] == 0
+                    ? vertex[edge.Ver1].X
+                    : vertex[edge.Ver2].X > vertex[edge.Ver1].X
+                            ? curXArrTimer[number][vertexIndex] + edge.Step
+                            : curXArrTimer[number][vertexIndex] - edge.Step;
 
                 curYArrTimer[number][vertexIndex] =
                     edge.K * curXArrTimer[number][vertexIndex] + edge.B;
@@ -2100,7 +2078,7 @@ namespace WindowsFormsApp1
                     if (curXArrTimer[number][vertexIndex] >= vertex[edge.Ver2].X)
                     {
                         timers[number][vertexIndex].Stop();
-
+                        
                         NewWaysForPoints(edge.Ver2);
                         return;
                     }
@@ -2120,7 +2098,7 @@ namespace WindowsFormsApp1
 
         private void MainTick()
         {
-            timer.Interval = 1;
+            timer.Interval = 3;
             for (var i = 0; i < curYArrTimer.Count; i++)
             {
                 for (var j = 0; j < curYArrTimer[i].Length; j++)
@@ -2135,8 +2113,10 @@ namespace WindowsFormsApp1
             field.Image = toolsForDrawing.GetBitmap();
         }
 
+        // Todo сделать удаление точки, при попадании её в вершину.
+        // ToDo Удалять таймеры после их использования.
         // ToDo заполнять массивы до начала.
-        // TODo рассмотреть FilleEdges, если петли.
+        // ToDo рассмотреть FilleEdges, если петли.
 
         private void FillEdges()
         {
@@ -2152,10 +2132,8 @@ namespace WindowsFormsApp1
             }
         }
 
-        //private List<double[]> stepArrTimer = new List<double[]>();
         private List<double[]> curYArrTimer = new List<double[]>();
         private List<double[]> curXArrTimer = new List<double[]>();
-        private List<double[]> changeArrTimer = new List<double[]>();
         private List<Timer[]> timers;
 
         private bool clickContinue;
@@ -2179,7 +2157,7 @@ namespace WindowsFormsApp1
             //stepArrTimer.Add(new double[tempEdges.Count]);
             curYArrTimer.Add(new double[tempEdges.Count]);
             curXArrTimer.Add(new double[tempEdges.Count]);
-            changeArrTimer.Add(new double[tempEdges.Count]);
+            //changeArrTimer.Add(new double[tempEdges.Count]);
             timers.Add(new Timer[tempEdges.Count]);
 
             for (var i = 0; i < tempEdges.Count; i++)
