@@ -2060,7 +2060,8 @@ namespace WindowsFormsApp1
             if (vertex[edge.Ver1].X == vertex[edge.Ver2].X)
             {
                 stepArrTimer[number][vertexIndex] = Math.Abs(
-                    vertex[edge.Ver2].Y - vertex[edge.Ver1].Y) / edge.Weight / 10;
+                                                        vertex[edge.Ver2].Y - vertex[edge.Ver1].Y) / edge.Weight /
+                                                    10;
 
                 changeArrTimer[number][vertexIndex] += stepArrTimer[number][vertexIndex];
 
@@ -2096,7 +2097,8 @@ namespace WindowsFormsApp1
                 bArrTimer[number][vertexIndex] = Calculate.GetB(vertex[edge.Ver1], vertex[edge.Ver2]);
 
                 stepArrTimer[number][vertexIndex] = Math.Abs(
-                    vertex[edge.Ver2].X - vertex[edge.Ver1].X) / edge.Weight / 10;
+                                                        vertex[edge.Ver2].X - vertex[edge.Ver1].X) / edge.Weight /
+                                                    10;
 
                 changeArrTimer[number][vertexIndex] += stepArrTimer[number][vertexIndex];
 
@@ -2126,20 +2128,37 @@ namespace WindowsFormsApp1
                         timers[number][vertexIndex].Stop();
 
                         NewWaysForPoints(edge.Ver2);
-                        return;
                     }
                 }
             }
+        }
 
-            if (CirclesAreNotIntersectForOtherVertex(vertexIndex, edge, number))
-                toolsForDrawing.DrawPoint((float)curXArrTimer[number][vertexIndex],
-                    (float)curYArrTimer[number][vertexIndex]);
+        private void MainTick()
+        {
+            timer.Interval = 1;
+            for (var i = 0; i < kArrTimer.Count; i++)
+            {
+                for (var j = 0; j < kArrTimer[i].Length; j++)
+                {
+                    //if (CirclesAreNotIntersectForOtherVertex(j, edge, i))
+                    if (curXArrTimer[i][j] != 0 && curYArrTimer[i][j] != 0)
+                        toolsForDrawing.DrawPoint((float)curXArrTimer[i][j], (float)curYArrTimer[i][j]);
+                }
+            }
 
             toolsForDrawing.DrawAllEdges(edges, vertex);
             field.Image = toolsForDrawing.GetBitmap();
         }
 
         // ToDo заполнять массивы до начала.
+
+        private void FillK()
+        {
+            for (var i = 0; i < edges.Count; i++)
+            {
+                
+            }
+        }
 
         private List<double[]> kArrTimer = new List<double[]>();
         private List<double[]> bArrTimer = new List<double[]>();
@@ -2151,8 +2170,12 @@ namespace WindowsFormsApp1
 
         private bool clickContinue;
 
+        private Timer timer = new Timer();
         private void button1_Click(object sender, EventArgs e)
         {
+            timer = new Timer { Interval = 1 };
+            timer.Tick += (x, y) => MainTick();
+            timer.Start();
             //clickContinue = true;
             //CheckGraphForStrongConnectionButton.PerformClick();
 

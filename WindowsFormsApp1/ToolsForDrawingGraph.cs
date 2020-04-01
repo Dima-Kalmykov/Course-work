@@ -92,15 +92,15 @@ namespace WindowsFormsApp1
             cover.DrawString(number, font, brush, point);
         }
 
-        internal void DeletePoint(float x, float y,Vertex ver1, Vertex ver2)
+        internal void DeletePoint(float x, float y, Vertex ver1, Vertex ver2)
         {
-            cover.FillEllipse(Brushes.White,
-                x - PointR / 2, y - PointR / 2, PointR, PointR);
+                cover.FillEllipse(Brushes.White,
+                    x - PointR / 2, y - PointR / 2, PointR, PointR);
 
-            cover.DrawEllipse(whitePen,
-                x - PointR / 2, y - PointR / 2, PointR, PointR);
-            
-            DrawArrow(ver1, ver2);
+                cover.DrawEllipse(whitePen,
+                    x - PointR / 2, y - PointR / 2, PointR, PointR);
+
+                DrawArrow(ver1, ver2);
         }
 
         internal void DrawPoint(float x, float y)
