@@ -403,12 +403,16 @@ namespace WindowsFormsApp1
         /// <param name="vertex"> Список вершин </param>
         internal void DrawFullGraph(List<Edge> edges, List<Vertex> vertex)
         {
-            for (int i = 0; i < edges.Count; i++)
-                DrawEdge(vertex[edges[i].Ver1], vertex[edges[i].Ver2], edges[i]);
+            ClearField();
+
+            foreach (var edge in edges)
+                DrawEdge(vertex[edge.Ver1], vertex[edge.Ver2], edge);
 
             for (int i = 0; i < vertex.Count; i++)
                 DrawVertex(vertex[i].X, vertex[i].Y, (i + 1).ToString());
         }
+
+
 
         /// <summary>
         /// Задаём рёбрам случайный вес.
