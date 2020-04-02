@@ -2064,11 +2064,18 @@ namespace WindowsFormsApp1
             }
             else
             {
+                // Рисуем массив.
                 curXArrTimer[number][vertexIndex] = curXArrTimer[number][vertexIndex] == 0
                     ? vertex[edge.Ver1].X
                     : vertex[edge.Ver2].X > vertex[edge.Ver1].X
                             ? curXArrTimer[number][vertexIndex] + edge.Step
                             : curXArrTimer[number][vertexIndex] - edge.Step;
+
+                //edge.CurX = edge.CurX == 0
+                //    ? vertex[edge.Ver1].X
+                //    : vertex[edge.Ver2].X > vertex[edge.Ver1].X
+                //        ? edge.CurX + edge.Step
+                //        : edge.CurX - edge.Step;
 
                 curYArrTimer[number][vertexIndex] =
                     edge.K * curXArrTimer[number][vertexIndex] + edge.B;
@@ -2078,7 +2085,7 @@ namespace WindowsFormsApp1
                     if (curXArrTimer[number][vertexIndex] >= vertex[edge.Ver2].X)
                     {
                         timers[number][vertexIndex].Stop();
-                        
+
                         NewWaysForPoints(edge.Ver2);
                         return;
                     }
@@ -2096,9 +2103,16 @@ namespace WindowsFormsApp1
             }
         }
 
+        // Передавать в таймер счётчик, который будет увеличиваться, 
+        // и брать значение из соответсвующего ребра.
+        // Можно обнулять значение массива рёбер, и если не 0, то рисовать его
+
+        // НАУЧИТЬСЯ ОПРЕДЕЛЯТЬ РЕБРО ПО МАССИВАМ КООРДИНАТ.
+
+
         private void MainTick()
         {
-            timer.Interval = 3;
+            timer.Interval = 400;
             for (var i = 0; i < curYArrTimer.Count; i++)
             {
                 for (var j = 0; j < curYArrTimer[i].Length; j++)

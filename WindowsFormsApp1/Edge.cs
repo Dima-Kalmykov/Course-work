@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 
 namespace WindowsFormsApp1
 {
@@ -14,7 +15,9 @@ namespace WindowsFormsApp1
         internal double K;
         internal double B;
         internal double Step;
+        internal double CurX;
 
+        internal int counter = 0;
         // Вес ребра.
         internal double Weight;
 
