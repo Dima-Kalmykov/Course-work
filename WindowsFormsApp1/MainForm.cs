@@ -1974,8 +1974,6 @@ namespace WindowsFormsApp1
         private double changeStep;
         private double step;
 
-        private bool reachVertex;
-
         private void MainTick(List<Edge>[] listArr)
         {
             // Если готова выпустить точку.
