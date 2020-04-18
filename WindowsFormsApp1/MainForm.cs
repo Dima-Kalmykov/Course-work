@@ -1,20 +1,12 @@
 ﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Timers;
+using System.Linq;
+using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WindowsFormsApp1
@@ -335,6 +327,10 @@ namespace WindowsFormsApp1
                         responseSC = true;
                     else
                     {
+                        DrawVertexButton.Enabled = true;
+                        DeleteElementButton.Enabled = true;
+                        DrawEdgeButton.Enabled = true;
+                        ChangeEdgeLengthButton.Enabled = true;
                         responseSC = false;
                         checkGraphForStronglyConnectionForm.Caption.Text =
                             "Граф не является сильносвязным";
@@ -1980,136 +1976,6 @@ namespace WindowsFormsApp1
 
         private bool reachVertex;
 
-        // Для графика: когда точка приходит в вершину вычитваем 1 и 
-        // прибавляем столько рёбер, сколько выходит из неё и сторим график.
-
-        // Рассмотреть петли
-
-        // Рассмотреть случай, когда x=x || y=y
-
-        private bool CirclesAreNotIntersectForOtherVertex(int index, Edge edge, int number) =>
-            (Calculate.GetDistance(
-                 curXArrTimer[number][index],
-                 curYArrTimer[number][index],
-                 vertex[index].X,
-                 vertex[index].Y)
-             >= toolsForDrawing.R + toolsForDrawing.PointR - 4.2) &&
-            (Calculate.GetDistance(
-                 curXArrTimer[number][index],
-                 curYArrTimer[number][index],
-                 vertex[edge.Ver2].X,
-                 vertex[edge.Ver2].Y)
-             >= toolsForDrawing.R + toolsForDrawing.PointR - 4.2);
-
-        //private void NewWaysForPoints(int ver)
-        //{
-        //    var tempEdges = edges.Where(el => el.Ver1 == ver).ToList();
-        //    {
-        //        curYArrTimer.Add(new double[tempEdges.Count]);
-        //        curXArrTimer.Add(new double[tempEdges.Count]);
-        //        timers.Add(new Timer[tempEdges.Count]);
-
-        //        var curTimersCount = timers.Count - 1;
-        //        for (var i = 0; i < tempEdges.Count; i++)
-        //        {
-        //            timers[curTimersCount][i] = new Timer();
-        //            var i1 = i;
-
-        //            timers[curTimersCount][i].Interval = 10;
-        //            timers[curTimersCount][i].Tick += (x, y) => TickForOtherVertex(tempEdges[i1],
-        //                  (curTimersCount, i1));
-        //            timers[curTimersCount][i].Start();
-        //        }
-        //    }
-        //}
-
-        // Общий таймер который рисует рёбра.
-        // Counter for timers.
-
-        //private void TickForOtherVertex(Edge edge, (int number, int vertexIndex) tuple)
-        //{
-        //    var (number, vertexIndex) = tuple;
-
-        //    vertex[edge.Ver1].amount = number;
-        //    if (CirclesAreNotIntersectForOtherVertex(vertexIndex, edge, number))
-        //        toolsForDrawing.DeletePoint(
-        //            (float)curXArrTimer[number][vertexIndex], (float)curYArrTimer[number][vertexIndex],
-        //            vertex[edge.Ver1], vertex[edge.Ver2]);
-
-        //    if (vertex[edge.Ver1].X == vertex[edge.Ver2].X)
-        //    {
-        //        curXArrTimer[number][vertexIndex] = vertex[edge.Ver2].X;
-
-        //        curYArrTimer[number][vertexIndex] = edge.Step;
-
-        //        if (vertex[edge.Ver2].Y > vertex[edge.Ver1].Y)
-        //        {
-        //            if (curYArrTimer[number][vertexIndex] >= vertex[edge.Ver2].Y)
-        //            {
-        //                timers[number][vertexIndex].Stop();
-
-        //                NewWaysForPoints(edge.Ver2);
-        //                return;
-        //            }
-        //        }
-
-        //        if (vertex[edge.Ver2].Y < vertex[edge.Ver1].Y)
-        //        {
-        //            if (curYArrTimer[number][vertexIndex] <= vertex[edge.Ver2].Y)
-        //            {
-        //                timers[number][vertexIndex].Stop();
-
-        //                NewWaysForPoints(edge.Ver2);
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // Рисуем массив.
-        //        curXArrTimer[number][vertexIndex] = curXArrTimer[number][vertexIndex] == 0
-        //            ? vertex[edge.Ver1].X
-        //            : vertex[edge.Ver2].X > vertex[edge.Ver1].X
-        //                    ? curXArrTimer[number][vertexIndex] + edge.Step
-        //                    : curXArrTimer[number][vertexIndex] - edge.Step;
-
-        //        //edge.CurX = edge.CurX == 0
-        //        //    ? vertex[edge.Ver1].X
-        //        //    : vertex[edge.Ver2].X > vertex[edge.Ver1].X
-        //        //        ? edge.CurX + edge.Step
-        //        //        : edge.CurX - edge.Step;
-
-        //        curYArrTimer[number][vertexIndex] =
-        //            edge.K * curXArrTimer[number][vertexIndex] + edge.B;
-
-        //        if (vertex[edge.Ver2].X > vertex[edge.Ver1].X)
-        //        {
-        //            if (curXArrTimer[number][vertexIndex] >= vertex[edge.Ver2].X)
-        //            {
-        //                timers[number][vertexIndex].Stop();
-
-        //                NewWaysForPoints(edge.Ver2);
-        //                return;
-        //            }
-        //        }
-
-        //        if (vertex[edge.Ver2].X < vertex[edge.Ver1].X)
-        //        {
-        //            if (curXArrTimer[number][vertexIndex] <= vertex[edge.Ver2].X)
-        //            {
-        //                timers[number][vertexIndex].Stop();
-
-        //                NewWaysForPoints(edge.Ver2);
-        //            }
-        //        }
-        //    }
-        //}
-
-        // Передавать в таймер счётчик, который будет увеличиваться, 
-        // и брать значение из соответсвующего ребра.
-        // Можно обнулять значение массива рёбер, и если не 0, то рисовать его
-
-        // НАУЧИТЬСЯ ОПРЕДЕЛЯТЬ РЕБРО ПО МАССИВАМ КООРДИНАТ.
-
         private void MainTick(List<Edge>[] listArr)
         {
             // Если готова выпустить точку.
@@ -2162,116 +2028,159 @@ namespace WindowsFormsApp1
             var distanceX = Math.Abs(ver2.X - ver1.X);
             var distanceY = Math.Abs(ver2.Y - ver1.Y);
 
-            float x;
-            float y;
+            float x = 0;
+            float y = 0;
 
-            if (ver1.X < ver2.X)
+            // Loop. x^2 + y^2 = 400
+            if (ver1 == ver2)
             {
-                if (ver1.Y > ver2.Y)
+                // Левая нижняя дуга.
+                if (timer.ElapsedMilliseconds / 1000.0 <= allTime / 4)
                 {
-                    x = (float) (distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                    y = -(float) (distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    x = (float)(100 / allTime * timer.ElapsedMilliseconds / 1000.0);
+                    y = (float)Math.Sqrt(400 - x * x);
+
+                    if (x * x >= 400)
+                    //return new PointF(ver1.X - 20, ver1.Y);
+                    {
+                        x = (float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 4));
+                        y = -(float)Math.Sqrt(400 - x * x);
+
+                        x += 20;
+                        y -= 20;
+                        return new PointF(y + ver1.X, ver1.Y - x);
+                    }
+
+                    x += 20;
+                    y -= 20;
+                    return new PointF(-x + ver1.X, ver1.Y + y);
                 }
-                else
+
+                if (timer.ElapsedMilliseconds / 1000.0 <= allTime / 2)
                 {
-                    x = (float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                    y = (float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    //Верхняя правая дуга.
+                    x = (float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 4));
+                    y = -(float)Math.Sqrt(400 - x * x);
+
+                    if (x * x >= 400)
+                    {
+                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 2));
+                        y = -(float)Math.Sqrt(400 - x * x);
+
+
+                        x += 20;
+                        y -= 20;
+                        return new PointF(-x + ver1.X, ver1.Y + y);
+                    }
+
+                    x += 20;
+                    y -= 20;
+                    return new PointF(y + ver1.X, ver1.Y - x);
+                }
+
+
+                if (timer.ElapsedMilliseconds / 1000.0 <= allTime * 3 / 4)
+                {
+                    // Правая верхняя дуга
+                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 2));
+                    y = -(float)Math.Sqrt(400 - x * x);
+
+                    if (x * x >= 400)
+                    {
+                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime * 3 / 4));
+                        y = -(float)Math.Sqrt(400 - x * x);
+
+                        x += 20;
+                        y += 20;
+                        return new PointF(-y + ver1.X, ver1.Y - x);
+                    }
+
+                    x += 20;
+                    y -= 20;
+                    return new PointF(-x + ver1.X, ver1.Y + y);
+                }
+
+
+
+                if (timer.ElapsedMilliseconds / 1000.0 <= allTime)
+                {
+                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime * 3 / 4));
+                    y = -(float)Math.Sqrt(400 - x * x);
+
+                    if (x * x >= 400)
+                    {
+                        x = (float)(100 / allTime * timer.ElapsedMilliseconds / 1000.0);
+                        y = (float)Math.Sqrt(400 - x * x);
+
+                        return new PointF(ver1.X - 20, ver1.Y);
+                    }
+
+                    x += 20;
+                    y += 20;
+                    return new PointF(-y + ver1.X, ver1.Y - x);
                 }
             }
             else
             {
-                if (ver1.Y > ver2.Y)
+                // Normal edge.
+                if (ver1.X < ver2.X)
                 {
-                    x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                    y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    if (ver1.Y > ver2.Y)
+                    {
+                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
+                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    }
+                    else
+                    {
+                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
+                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    }
                 }
                 else
                 {
-                    x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                    y = (float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    if (ver1.Y > ver2.Y)
+                    {
+                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
+                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    }
+                    else
+                    {
+                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
+                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                    }
                 }
             }
 
             return new PointF(x, y);
         }
 
-        // ToDo Рассмотреть случаи, когда на одной прямой и петли.
-        // Todo сделать удаление точки, при попадании её в вершину.
-        // ToDo Удалять таймеры после их использования.
-        // ToDo заполнять массивы до начала.
-        // ToDo рассмотреть FilleEdges, если петли.
-
-        private void FillEdges()
-        {
-            for (int i = 0; i < edges.Count; i++)
-            {
-                if (vertex[edges[i].Ver1].X != vertex[edges[i].Ver2].Y)
-                {
-                    edges[i].K = Calculate.GetK(vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
-                    edges[i].B = Calculate.GetB(vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
-                    edges[i].Step = Math.Abs(vertex[edges[i].Ver2].X - vertex[edges[i].Ver1].X) /
-                                    (edges[i].Weight);
-                }
-            }
-        }
-
-        private List<double[]> curYArrTimer = new List<double[]>();
-        private List<double[]> curXArrTimer = new List<double[]>();
-
-        private List<Stopwatch> timers = new List<Stopwatch>();
-        //private List<Edge>[] listArr;
-        private List<Edge> points = new List<Edge>();
-
-        //private List<Timer[]> timers;
+        private readonly List<Stopwatch> timers = new List<Stopwatch>();
+        private readonly List<Edge> points = new List<Edge>();
 
         private bool clickContinue;
         private Timer mainTimer = new Timer();
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //FillEdges();
-            vertex[0].hasPoint = true;
-            List<Edge>[] listArr = new List<Edge>[vertex.Count];
+            clickContinue = true;
+            CheckGraphForStrongConnectionButton.PerformClick();
 
-            #region Method
-
-            for (int i = 0; i < vertex.Count; i++)
+            if (responseSC)
             {
-                List<Edge> curEdges = edges.Where(el => el.Ver1 == i).ToList();
-                listArr[i] = new List<Edge>();
-                listArr[i].AddRange(curEdges);
+                vertex[0].hasPoint = true;
+                List<Edge>[] listArr = new List<Edge>[vertex.Count];
+
+                for (int i = 0; i < vertex.Count; i++)
+                {
+                    List<Edge> curEdges = edges.Where(el => el.Ver1 == i).ToList();
+                    listArr[i] = new List<Edge>();
+                    listArr[i].AddRange(curEdges);
+                }
+
+                mainTimer = new Timer { Interval = 2 };
+                mainTimer.Tick += (x, y) => MainTick(listArr);
+                mainTimer.Start();
             }
-
-            #endregion
-
-            mainTimer = new Timer { Interval = 2 };
-            mainTimer.Tick += (x, y) => MainTick(listArr); // Подписываю свой тик
-            mainTimer.Start();
-
-            //clickContinue = true;
-            //CheckGraphForStrongConnectionButton.PerformClick();
-
-            //if (responseSC)
-            //{
-            //var tempEdges = edges.Where(el => el.Ver1 == 0).ToList();
-
-            //timers = new List<Timer[]>();
-
-            ////stepArrTimer.Add(new double[tempEdges.Count]);
-            //curYArrTimer.Add(new double[tempEdges.Count]);
-            //curXArrTimer.Add(new double[tempEdges.Count]);
-            ////changeArrTimer.Add(new double[tempEdges.Count]);
-            //timers.Add(new Timer[tempEdges.Count]);
-
-            //for (var i = 0; i < tempEdges.Count; i++)
-            //{
-            //    timers[0][i] = new Timer();
-            //    var i1 = i;
-            //    timers[0][i].Interval = 10;
-            //    timers[0][i].Tick += (x, y) => TickForOtherVertex(tempEdges[i1], (0, i1));
-            //    timers[0][i].Start();
-            //}
-            //}
         }
 
         /// <summary>
@@ -2283,18 +2192,14 @@ namespace WindowsFormsApp1
         {
             if (StopProcessButton.Text == "STOP")
             {
-                //timers.ForEach(timer => timer.Stop());
+                timers.ForEach(timer => timer.Stop());
                 StopProcessButton.Text = "CONTINUE";
             }
             else
             {
-                //timers.ForEach(timer => timer.Start());
+                timers.ForEach(timer => timer.Start());
                 StopProcessButton.Text = "STOP";
             }
         }
     }
 }
-
-
-
-// Если вершины сверху, то вызываем метод печать всех вершин.

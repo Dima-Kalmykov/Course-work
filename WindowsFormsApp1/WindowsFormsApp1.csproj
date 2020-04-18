@@ -44,6 +44,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Wolfram.NETLink">
+      <HintPath>..\..\..\..\..\Program Files\Wolfram Research\Mathematica\11.3\SystemFiles\Links\NETLink\Examples\Part2\MathKernelApp\bin\Release\Wolfram.NETLink.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgoritmForCheckGraphForStronglyConnection.cs" />
