@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -22,7 +21,7 @@ namespace WindowsFormsApp1
             new CheckGraphForStronglyConnectionForm();
 
         private ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
-        private Form1 chart = new Form1();
+        private Chart chartForm = new Chart();
 
         // Инструменты для рисования.
         private ToolsForDrawingGraph toolsForDrawing;
@@ -1982,9 +1981,9 @@ namespace WindowsFormsApp1
         private void MainTick(List<Edge>[] listArr)
         {
             // Если готова выпустить точку.
-            int count = points.Count;
+            var count = points.Count;
 
-            for (int i = 0; i < vertex.Count; i++)
+            for (var i = 0; i < vertex.Count; i++)
             {
                 if (vertex[i].hasPoint)
                 {
@@ -1995,10 +1994,10 @@ namespace WindowsFormsApp1
                         firstVertex = false;
                         totalCount += listArr[i].Count;
                     }
-
-                    totalCount += firstVertex
-                        ? listArr[i].Count
-                        : listArr[i].Count - 1;
+                    else
+                    {
+                        totalCount += listArr[i].Count - 1;
+                    }
 
                     //label1.Text = totalCount.ToString();
 
@@ -2177,12 +2176,10 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            chart.chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
-            chart.chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
+            chartForm.chartForm.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
+            chartForm.chartForm.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
 
-            
-            timer1.Start();
-            chart.Show();
+
             clickContinue = true;
             CheckGraphForStrongConnectionButton.PerformClick();
 
@@ -2201,7 +2198,10 @@ namespace WindowsFormsApp1
                 mainTimer = new Timer { Interval = 2 };
                 mainTimer.Tick += (x, y) => MainTick(listArr);
                 mainTimer.Start();
+                timer1.Start();
                 sp.Start();
+                chartForm.Show();
+                Activate();
             }
         }
 
@@ -2226,7 +2226,7 @@ namespace WindowsFormsApp1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            chart.chart1.Series["Amount of points"]
+            chartForm.chartForm.Series["Amount of points"]
                 .Points.AddXY(sp.ElapsedMilliseconds / 100.0, totalCount);
         }
     }
