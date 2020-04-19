@@ -22,6 +22,7 @@ namespace WindowsFormsApp1
             new CheckGraphForStronglyConnectionForm();
 
         private ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
+        private Form1 chart = new Form1();
 
         // Инструменты для рисования.
         private ToolsForDrawingGraph toolsForDrawing;
@@ -1974,6 +1975,10 @@ namespace WindowsFormsApp1
         private double changeStep;
         private double step;
 
+        private int totalCount = 0;
+        private bool firstVertex = true;
+
+
         private void MainTick(List<Edge>[] listArr)
         {
             // Если готова выпустить точку.
@@ -1984,6 +1989,18 @@ namespace WindowsFormsApp1
                 if (vertex[i].hasPoint)
                 {
                     vertex[i].hasPoint = false;
+
+                    if (firstVertex)
+                    {
+                        firstVertex = false;
+                        totalCount += listArr[i].Count;
+                    }
+
+                    totalCount += firstVertex
+                        ? listArr[i].Count
+                        : listArr[i].Count - 1;
+
+                    //label1.Text = totalCount.ToString();
 
                     points.AddRange(listArr[i]);
 
@@ -2003,7 +2020,6 @@ namespace WindowsFormsApp1
                 if (timers[i].ElapsedMilliseconds > points[i].Weight * 1000)
                 {
                     vertex[points[i].Ver2].hasPoint = true;
-                    // Вот тут будет меняться то, что точка hasPoint.
                     points.RemoveAt(i);
                     timers.RemoveAt(i);
                     i--;
@@ -2157,9 +2173,16 @@ namespace WindowsFormsApp1
 
         private bool clickContinue;
         private Timer mainTimer = new Timer();
+        Stopwatch sp = new Stopwatch();
 
         private void button1_Click(object sender, EventArgs e)
         {
+            chart.chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
+            chart.chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
+
+            
+            timer1.Start();
+            chart.Show();
             clickContinue = true;
             CheckGraphForStrongConnectionButton.PerformClick();
 
@@ -2178,6 +2201,7 @@ namespace WindowsFormsApp1
                 mainTimer = new Timer { Interval = 2 };
                 mainTimer.Tick += (x, y) => MainTick(listArr);
                 mainTimer.Start();
+                sp.Start();
             }
         }
 
@@ -2198,6 +2222,12 @@ namespace WindowsFormsApp1
                 timers.ForEach(timer => timer.Start());
                 StopProcessButton.Text = "STOP";
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            chart.chart1.Series["Amount of points"]
+                .Points.AddXY(sp.ElapsedMilliseconds / 100.0, totalCount);
         }
     }
 }
