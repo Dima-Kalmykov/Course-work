@@ -2214,11 +2214,17 @@ namespace WindowsFormsApp1
         {
             if (StopProcessButton.Text == "STOP")
             {
+                mainTimer.Stop();
+                timer1.Stop();
+                sp.Stop();
                 timers.ForEach(timer => timer.Stop());
                 StopProcessButton.Text = "CONTINUE";
             }
             else
             {
+                sp.Start();
+                mainTimer.Start();
+                timer1.Start();
                 timers.ForEach(timer => timer.Start());
                 StopProcessButton.Text = "STOP";
             }
