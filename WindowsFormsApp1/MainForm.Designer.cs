@@ -43,7 +43,6 @@
             this.ShowOrHideAdjMatrix = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.StopProcessButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.field)).BeginInit();
             this.SuspendLayout();
@@ -188,15 +187,6 @@
             this.StopProcessButton.UseVisualStyleBackColor = true;
             this.StopProcessButton.Click += new System.EventHandler(this.StopProcessButton_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 646);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 17);
-            this.label1.TabIndex = 22;
-            this.label1.Text = "label1";
-            // 
             // timer1
             // 
             this.timer1.Interval = 1;
@@ -208,7 +198,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(1341, 874);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.StopProcessButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ShowOrHideAdjMatrix);
@@ -231,7 +220,6 @@
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -251,7 +239,6 @@
         private System.Windows.Forms.Button ShowOrHideAdjMatrix;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button StopProcessButton;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer1;
     }
 }
