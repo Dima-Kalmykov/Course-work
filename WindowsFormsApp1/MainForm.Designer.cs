@@ -44,7 +44,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.StopProcessButton = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.field)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // field
@@ -192,12 +194,23 @@
             this.timer1.Interval = 1;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(377, 777);
+            this.trackBar1.Maximum = 19;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(330, 56);
+            this.trackBar1.TabIndex = 23;
+            this.trackBar1.Value = 10;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(1341, 874);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.StopProcessButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ShowOrHideAdjMatrix);
@@ -219,7 +232,9 @@
             this.Click += new System.EventHandler(this.MainForm_Click);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -240,6 +255,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button StopProcessButton;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }
 

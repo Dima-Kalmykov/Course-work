@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-
-namespace WindowsFormsApp1
+﻿namespace WindowsFormsApp1
 {
     /// <summary>
     /// Класс, описывающий рёбра.
@@ -12,20 +9,14 @@ namespace WindowsFormsApp1
         internal int Ver1;
         internal int Ver2;
 
-        internal double K;
-        internal double B;
-        internal double Step;
-        internal double CurX;
-
-        internal int counter = 0;
         // Вес ребра.
         internal double Weight;
 
         internal Edge(int ver1, int ver2, double weight)
         {
-            this.Ver1 = ver1;
-            this.Ver2 = ver2;
-            this.Weight = weight;
+            Ver1 = ver1;
+            Ver2 = ver2;
+            Weight = weight;
         }
 
         /// <summary>

@@ -1917,11 +1917,11 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="amount"> Количество пробелов </param>
         /// <returns> Строка из пробелов </returns>
-        private string GetSpaces(int amount)
+        private static string GetSpaces(int amount)
         {
             string result = default;
 
-            for (int i = 0; i < amount; i++)
+            for (var i = 0; i < amount; i++)
                 result += " ";
 
             return result;
@@ -1932,11 +1932,11 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="amount"> Количество дефисов </param>
         /// <returns> Строка из дефисов </returns>
-        private string GetHyphen(int amount)
+        private static string GetHyphen(int amount)
         {
             string result = default;
 
-            for (int i = 0; i < amount; i++)
+            for (var i = 0; i < amount; i++)
                 result += "-";
 
             return result;
@@ -1977,9 +1977,19 @@ namespace WindowsFormsApp1
         private int totalCount = 0;
         private bool firstVertex = true;
 
+        private bool er = true;
+
+        private float coefficient = 1;
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            chartForm.chartForm.Series["Amount of points"]
+                .Points.AddXY((int)(sp.ElapsedMilliseconds * coefficient) / 1000, totalCount);
+        }
 
         private void MainTick(List<Edge>[] listArr)
         {
+            coefficient = (float)(trackBar1.Value / 10.0);
             // Если готова выпустить точку.
             var count = points.Count;
 
@@ -1999,15 +2009,13 @@ namespace WindowsFormsApp1
                         totalCount += listArr[i].Count - 1;
                     }
 
-                    //label1.Text = totalCount.ToString();
-
                     points.AddRange(listArr[i]);
 
                     timers.AddRange(listArr[i].ConvertAll(el => new Stopwatch()));
                 }
             }
 
-            for (int i = count; i < timers.Count; i++)
+            for (var i = count; i < timers.Count; i++)
             {
                 timers[i].Start();
             }
@@ -2016,7 +2024,7 @@ namespace WindowsFormsApp1
 
             for (var i = 0; i < points.Count; i++)
             {
-                if (timers[i].ElapsedMilliseconds > points[i].Weight * 1000)
+                if (timers[i].ElapsedMilliseconds * coefficient > points[i].Weight * 1000)
                 {
                     vertex[points[i].Ver2].hasPoint = true;
                     points.RemoveAt(i);
@@ -2048,15 +2056,15 @@ namespace WindowsFormsApp1
             if (ver1 == ver2)
             {
                 // Левая нижняя дуга.
-                if (timer.ElapsedMilliseconds / 1000.0 <= allTime / 4)
+                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime / 4)
                 {
-                    x = (float)(100 / allTime * timer.ElapsedMilliseconds / 1000.0);
+                    x = (float)(100 / allTime * timer.ElapsedMilliseconds*coefficient / 1000.0);
                     y = (float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     //return new PointF(ver1.X - 20, ver1.Y);
                     {
-                        x = (float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 4));
+                        x = (float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 4));
                         y = -(float)Math.Sqrt(400 - x * x);
 
                         x += 20;
@@ -2069,15 +2077,15 @@ namespace WindowsFormsApp1
                     return new PointF(-x + ver1.X, ver1.Y + y);
                 }
 
-                if (timer.ElapsedMilliseconds / 1000.0 <= allTime / 2)
+                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime / 2)
                 {
                     //Верхняя правая дуга.
-                    x = (float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 4));
+                    x = (float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 4));
                     y = -(float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     {
-                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 2));
+                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 2));
                         y = -(float)Math.Sqrt(400 - x * x);
 
 
@@ -2092,15 +2100,15 @@ namespace WindowsFormsApp1
                 }
 
 
-                if (timer.ElapsedMilliseconds / 1000.0 <= allTime * 3 / 4)
+                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime * 3 / 4)
                 {
                     // Правая верхняя дуга
-                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime / 2));
+                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 2));
                     y = -(float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     {
-                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime * 3 / 4));
+                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime * 3 / 4));
                         y = -(float)Math.Sqrt(400 - x * x);
 
                         x += 20;
@@ -2115,14 +2123,14 @@ namespace WindowsFormsApp1
 
 
 
-                if (timer.ElapsedMilliseconds / 1000.0 <= allTime)
+                if (timer.ElapsedMilliseconds *coefficient/ 1000.0 <= allTime)
                 {
-                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds / 1000.0 - allTime * 3 / 4));
+                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime * 3 / 4));
                     y = -(float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     {
-                        x = (float)(100 / allTime * timer.ElapsedMilliseconds / 1000.0);
+                        x = (float)(100 / allTime * timer.ElapsedMilliseconds * coefficient / 1000.0);
                         y = (float)Math.Sqrt(400 - x * x);
 
                         return new PointF(ver1.X - 20, ver1.Y);
@@ -2140,26 +2148,26 @@ namespace WindowsFormsApp1
                 {
                     if (ver1.Y > ver2.Y)
                     {
-                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
+                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
                     }
                     else
                     {
-                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
+                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
                     }
                 }
                 else
                 {
                     if (ver1.Y > ver2.Y)
                     {
-                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
+                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
                     }
                     else
                     {
-                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds / 1000) + ver1.X;
-                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds / 1000) + ver1.Y;
+                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
+                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
                     }
                 }
             }
@@ -2178,7 +2186,7 @@ namespace WindowsFormsApp1
         {
             chartForm.chartForm.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
-
+            chartForm.chartForm.ChartAreas[0].AxisX.Minimum = 0;
 
             clickContinue = true;
             CheckGraphForStrongConnectionButton.PerformClick();
@@ -2186,9 +2194,9 @@ namespace WindowsFormsApp1
             if (responseSC)
             {
                 vertex[0].hasPoint = true;
-                List<Edge>[] listArr = new List<Edge>[vertex.Count];
+                var listArr = new List<Edge>[vertex.Count];
 
-                for (int i = 0; i < vertex.Count; i++)
+                for (var i = 0; i < vertex.Count; i++)
                 {
                     List<Edge> curEdges = edges.Where(el => el.Ver1 == i).ToList();
                     listArr[i] = new List<Edge>();
@@ -2228,12 +2236,6 @@ namespace WindowsFormsApp1
                 timers.ForEach(timer => timer.Start());
                 StopProcessButton.Text = "STOP";
             }
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            chartForm.chartForm.Series["Amount of points"]
-                .Points.AddXY(sp.ElapsedMilliseconds / 100.0, totalCount);
         }
     }
 }
