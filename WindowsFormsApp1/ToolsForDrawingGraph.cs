@@ -412,8 +412,6 @@ namespace WindowsFormsApp1
                 DrawVertex(vertex[i].X, vertex[i].Y, (i + 1).ToString());
         }
 
-
-
         /// <summary>
         /// Задаём рёбрам случайный вес.
         /// </summary>
@@ -507,47 +505,5 @@ namespace WindowsFormsApp1
         /// <param name="y"> y координата вершины </param>
         internal void DrawSelectedVertex(int x, int y) =>
             cover.DrawEllipse(redPen, x - R, y - R, 2 * R, 2 * R);
-
-
-
-
-
-
-        // Когда много вершин и рёбер. (Пока неактивно)
-        internal double[,] GetRandomAdjMatri2x(int size)
-        {
-            double[,] adjMatrix = new double[size, size];
-
-            for (int i = 0; i < size; i++)
-            {
-                if (i == 0)
-                    continue;
-
-                bool flag1 = false;
-                bool flag2 = false;
-
-                while (!(flag1 && flag2))
-                {
-                    flag1 = false;
-                    flag2 = false;
-                    for (int j = 0; j < i; j++)
-                    {
-                        adjMatrix[i, j] = rnd.Next(2);
-                        if (adjMatrix[i, j] == 1)
-                            flag1 = true;
-
-                        adjMatrix[j, i] = rnd.Next(2);
-                        if (adjMatrix[j, i] == 1)
-                            flag2 = true;
-                    }
-                }
-
-                adjMatrix[i, i] = rnd.Next(2);
-            }
-
-            adjMatrix[0, 0] = rnd.Next(2);
-
-            return adjMatrix;
-        }
     }
 }

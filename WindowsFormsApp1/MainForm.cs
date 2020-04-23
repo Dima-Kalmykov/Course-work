@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -110,6 +111,7 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = false;
             }
         }
+
 
         /// <summary>
         /// Нажатие на кнопку "Удаление всего графа".
@@ -1987,6 +1989,7 @@ namespace WindowsFormsApp1
                 .Points.AddXY((int)(sp.ElapsedMilliseconds * coefficient) / 1000, totalCount);
         }
 
+
         private void MainTick(List<Edge>[] listArr)
         {
             coefficient = (float)(trackBar1.Value / 10.0);
@@ -2058,7 +2061,7 @@ namespace WindowsFormsApp1
                 // Левая нижняя дуга.
                 if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime / 4)
                 {
-                    x = (float)(100 / allTime * timer.ElapsedMilliseconds*coefficient / 1000.0);
+                    x = (float)(100 / allTime * timer.ElapsedMilliseconds * coefficient / 1000.0);
                     y = (float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
@@ -2123,7 +2126,7 @@ namespace WindowsFormsApp1
 
 
 
-                if (timer.ElapsedMilliseconds *coefficient/ 1000.0 <= allTime)
+                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime)
                 {
                     x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime * 3 / 4));
                     y = -(float)Math.Sqrt(400 - x * x);
@@ -2207,6 +2210,7 @@ namespace WindowsFormsApp1
                 mainTimer.Tick += (x, y) => MainTick(listArr);
                 mainTimer.Start();
                 timer1.Start();
+                timer2.Start();
                 sp.Start();
                 chartForm.Show();
                 Activate();
@@ -2224,6 +2228,7 @@ namespace WindowsFormsApp1
             {
                 mainTimer.Stop();
                 timer1.Stop();
+                timer2.Stop();
                 sp.Stop();
                 timers.ForEach(timer => timer.Stop());
                 StopProcessButton.Text = "CONTINUE";
@@ -2233,9 +2238,90 @@ namespace WindowsFormsApp1
                 sp.Start();
                 mainTimer.Start();
                 timer1.Start();
+                timer2.Start();
                 timers.ForEach(timer => timer.Start());
                 StopProcessButton.Text = "STOP";
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Если была выбрана вершина для перемещения, то перекрашиваем её.
+            if (indexVertexForMove != -1)
+            {
+                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
+                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                firstPress = true;
+                field.Image = toolsForDrawing.GetBitmap();
+            }
+
+            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
+            if (ver1ForConnection != -1)
+            {
+                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
+                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+
+                ver1ForConnection = -1;
+
+                field.Image = toolsForDrawing.GetBitmap();
+            }
+
+            // Делаем остальные кнопки активными.
+            DrawVertexButton.Enabled = true;
+            DrawEdgeButton.Enabled = true;
+            ChangeEdgeLengthButton.Enabled = true;
+            DeleteElementButton.Enabled = true;
+
+            // Проверяем, есть ли, что сохранять.
+            if (field.Image != null && !(adjMatrix is null) && adjMatrix.Length != 0)
+            {
+                SaveFileDialog saveGraphDialog = new SaveFileDialog();
+                saveGraphDialog.Title = "Сохранить картинку как...";
+                saveGraphDialog.OverwritePrompt = true;
+                saveGraphDialog.CheckPathExists = true;
+                saveGraphDialog.Filter = "Files(*.CSV)|*.CSV";
+
+
+                saveGraphDialog.ShowHelp = true;
+
+                // Процесс сохранения файла.
+                if (saveGraphDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        string sv = saveGraphDialog.FileName;
+                        File.WriteAllText(sv, chartData.ToString());
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Невозможно сохранить изображение", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+                MessageBox.Show("Нарисуйте что-нибудь");
+
+            // Если есть веришны, то появляется возможность открыть матрицу смежности.
+            if (vertex.Count != 0)
+                ShowOrHideAdjMatrix.Enabled = true;
+            else
+            {
+                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                showAdjacencyMatrixForm.Hide();
+                ShowOrHideAdjMatrix.Enabled = false;
+            }
+        }
+
+        private static StringBuilder chartData = new StringBuilder($"Time;Amount\n");
+        private int seconds;
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            var time = TimeSpan.FromSeconds(seconds++);
+
+            var timeStr = time.ToString(@"hh\:mm\:ss");
+            chartData.AppendLine($"{timeStr};{totalCount}");
         }
     }
 }
