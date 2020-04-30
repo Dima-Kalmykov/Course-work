@@ -23,9 +23,12 @@ namespace WindowsFormsApp1
 
         private ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
         private Chart chartForm = new Chart();
+        private Form1 chartDisplay = new Form1();
 
         // Инструменты для рисования.
         private ToolsForDrawingGraph toolsForDrawing;
+
+
 
         // Списки смежности.
         private List<Vertex> vertex;
@@ -2290,6 +2293,7 @@ namespace WindowsFormsApp1
                     try
                     {
                         string sv = saveGraphDialog.FileName;
+                        pathToCsvFile = sv;
                         File.WriteAllText(sv, chartData.ToString());
                     }
                     catch (Exception)
@@ -2313,7 +2317,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static StringBuilder chartData = new StringBuilder($"Time;Amount\n");
+        private static StringBuilder chartData = new StringBuilder("Time;Amount\n");
         private int seconds;
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -2322,6 +2326,76 @@ namespace WindowsFormsApp1
 
             var timeStr = time.ToString(@"hh\:mm\:ss");
             chartData.AppendLine($"{timeStr};{totalCount}");
+        }
+
+        private static string pathToCsvFile;
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            chartDisplay.chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
+            chartDisplay.chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
+            chartDisplay.chart1.ChartAreas[0].AxisX.Minimum = 0;
+
+            // Если была выбрана вершина для перемещения, то перекрашиваем её.
+            if (indexVertexForMove != -1)
+            {
+                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
+                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                firstPress = true;
+                field.Image = toolsForDrawing.GetBitmap();
+            }
+
+            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
+            if (ver1ForConnection != -1)
+            {
+                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
+                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+
+                ver1ForConnection = -1;
+
+                field.Image = toolsForDrawing.GetBitmap();
+            }
+
+            // Делаем остальные кнопки активными.
+            DrawVertexButton.Enabled = true;
+            DrawEdgeButton.Enabled = true;
+            ChangeEdgeLengthButton.Enabled = true;
+            DeleteElementButton.Enabled = true;
+
+            var openGraphDialog = new OpenFileDialog
+            {
+                Filter = "Imagine Files(*.CSV)|*.CSV",  
+                ShowHelp = true
+            };
+
+            // Процесс считывания информации из файла файла.
+            if (openGraphDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    pathForOpenFile = openGraphDialog.FileName;
+                    List<string[]> lines = File.ReadAllLines(pathForOpenFile)
+                                               .Select(el => el.Split(';'))
+                                               .Skip(1)
+                                               .ToList();
+
+                    foreach (string[] line in lines)
+                    {
+                        var time = TimeSpan.Parse(line[0]).TotalSeconds;
+                        var amount = int.Parse(line[1]);
+
+                        chartDisplay.chart1.Series["Series1"]
+                            .Points.AddXY(time, amount);
+                    }
+
+                    chartDisplay.Show();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Невозможно открыть изображение", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
