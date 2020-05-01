@@ -32,110 +32,27 @@ namespace WindowsFormsApp1
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
             // Строка, которую при возможности преобразуем в число.
-            string strForParse = GetNumberTextBox.Text;
+            var strForParse = GetNumberTextBox.Text;
 
-            // Смотрим, не введена ли какая-то константа. 
-            if (GetNumberTextBox.Text == "E" || GetNumberTextBox.Text == "e")
-                number = Math.E;
-            else if (GetNumberTextBox.Text == "Pi" || GetNumberTextBox.Text == "pi")
-                number = Math.PI;
-            else
+            try
             {
-                // Случай, конда ничего не ввели.
-                if (GetNumberTextBox.TextLength == 0)
+                mathKernel1.Compute("N[" + strForParse.Replace(',', '.') + ", 20]");
+                number = double.Parse(mathKernel1.Result.ToString().Replace('.', ','));
+                if (number < 0.0001 ||
+                    number > Math.Pow(10, 4) ||
+                    double.IsInfinity(number) ||
+                    double.IsNaN(number)
+                    )
                 {
-                    MessageBox.Show("Введите положительное число в диапазоне [1;999]");
-                    GetNumberTextBox.Text = "";
-                    GetNumberTextBox.Focus();
-                    return;
+                    throw new Exception();
                 }
-
-                // Случай, когда введено ключевое слово sqrt.
-                // Тут мы выделяем то, что внутри sqrt и начинаем обработку.
-                if (GetNumberTextBox.TextLength > 5)
-                    if (GetNumberTextBox.Text.Substring(0, 5) == "Sqrt(" ||
-                        GetNumberTextBox.Text.Substring(0, 5) == "sqrt(")
-                        if (GetNumberTextBox.Text[GetNumberTextBox.TextLength - 1] == ')')
-                            strForParse = GetNumberTextBox.Text.Substring(5,
-                                GetNumberTextBox.TextLength - 6);
-
-                // Случай, когда ничего внутри sqrt нет.
-                if (strForParse.Length == 0)
-                {
-                    MessageBox.Show("Введите положительное число в диапазоне [1;999]");
-                    GetNumberTextBox.Text = "";
-                    GetNumberTextBox.Focus();
-                    return;
-                }
-
-                // Случай, когда внутри sqrt какая-то константа.
-                if (strForParse == "E" || strForParse == "e")
-                    number = Math.E;
-                else if (strForParse == "Pi" || strForParse == "pi")
-                    number = Math.PI;
-                else
-                {
-                    // Случай, когда число не начинается с цифры, или начинается 0,
-                    // или заканчивается не цифрой.
-                    if (!(char.IsDigit(strForParse[0])) || strForParse[0] == '0' ||
-                        !(char.IsDigit(strForParse[strForParse.Length - 1])))
-                    {
-                        MessageBox.Show("Введите положительное число в диапазоне [1;999]");
-                        GetNumberTextBox.Text = "";
-                        GetNumberTextBox.Focus();
-                        return;
-                    }
-
-                    // Случай, когда в числе есть символы,
-                    // отличные от цифр, точек и запятых.
-                    for (int i = 0; i < strForParse.Length; i++)
-                    {
-                        if (!(char.IsDigit(strForParse[i]) ||
-                              strForParse[i] == ',' || strForParse[i] == '.'))
-                        {
-                            MessageBox.Show("Введите положительное число в диапазоне [1;999]");
-                            GetNumberTextBox.Text = "";
-                            GetNumberTextBox.Focus();
-                            return;
-                        }
-                    }
-
-                    // Вспомогательный массив, чтобы поменять точку на запятую.
-                    char[] tempArr = strForParse.ToCharArray();
-
-                    // Меняем точки на запятые.
-                    for (int i = 0; i < tempArr.Length; i++)
-                    {
-                        if (tempArr[i] == '.')
-                            tempArr[i] = ',';
-                    }
-
-                    // Записываем результат (после того, как мы поменяли точки на запятые).
-                    strForParse = new string(tempArr);
-
-                    // Пытаемся преобразовать получившуюся строку к double.
-                    if (!double.TryParse(strForParse, out number))
-                    {
-                        MessageBox.Show("Введите положительное число в диапазоне [1;999]");
-                        GetNumberTextBox.Text = "";
-                        GetNumberTextBox.Focus();
-                        return;
-                    }
-
-                    // Случай, когда число не входит в диапазон.
-                    if (number < 1 || number > 999)
-                    {
-                        MessageBox.Show("Введите положительное число в диапазоне [1;999]");
-                        GetNumberTextBox.Text = "";
-                        GetNumberTextBox.Focus();
-                        return;
-                    }
-                }
-
-                // Если было введено sqrt, то возвращаем корень из числа.
-                if (GetNumberTextBox.TextLength > 5)
-                    if (GetNumberTextBox.Text[1] == 'q')
-                        number = Math.Sqrt(number);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Number must be in range [0.0001 - 10^4]");
+                GetNumberTextBox.Text = "";
+                GetNumberTextBox.Focus();
+                return;
             }
 
             cancel = false;

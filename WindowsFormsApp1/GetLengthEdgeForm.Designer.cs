@@ -32,6 +32,7 @@
             this.GetNumberTextBox = new System.Windows.Forms.TextBox();
             this.ConfirmButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.mathKernel1 = new Wolfram.NETLink.MathKernel();
             this.SuspendLayout();
             // 
             // TextForUnderstandingLabel
@@ -76,6 +77,24 @@
             this.CancelButton.UseVisualStyleBackColor = false;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // mathKernel1
+            // 
+            this.mathKernel1.AutoCloseLink = true;
+            this.mathKernel1.CaptureGraphics = false;
+            this.mathKernel1.CaptureMessages = true;
+            this.mathKernel1.CapturePrint = true;
+            this.mathKernel1.GraphicsFormat = "Automatic";
+            this.mathKernel1.GraphicsHeight = 0;
+            this.mathKernel1.GraphicsResolution = 0;
+            this.mathKernel1.GraphicsWidth = 0;
+            this.mathKernel1.HandleEvents = true;
+            this.mathKernel1.Input = null;
+            this.mathKernel1.Link = null;
+            this.mathKernel1.LinkArguments = null;
+            this.mathKernel1.PageWidth = 0;
+            this.mathKernel1.ResultFormat = Wolfram.NETLink.MathKernel.ResultFormatType.OutputForm;
+            this.mathKernel1.UseFrontEnd = true;
+            // 
             // GetLengthEdgeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -101,5 +120,6 @@
         internal System.Windows.Forms.TextBox GetNumberTextBox;
         private System.Windows.Forms.Button ConfirmButton;
         private System.Windows.Forms.Button CancelButton;
+        private Wolfram.NETLink.MathKernel mathKernel1;
     }
 }

@@ -115,7 +115,6 @@ namespace WindowsFormsApp1
             }
         }
 
-
         /// <summary>
         /// Нажатие на кнопку "Удаление всего графа".
         /// </summary>
