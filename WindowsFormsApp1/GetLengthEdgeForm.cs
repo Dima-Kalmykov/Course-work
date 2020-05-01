@@ -32,12 +32,9 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            // Строка, которую при возможности преобразуем в число.
-            var strForParse = GetNumberTextBox.Text;
-
             try
             {
-                number = Calculator.Calculate(strForParse).Result;
+                number = Calculator.Calculate(GetNumberTextBox.Text).Result;
 
                 if (number < 0.0001 ||
                     number > Math.Pow(10, 4) ||
@@ -58,7 +55,7 @@ namespace WindowsFormsApp1
 
             cancel = false;
 
-            GetNumberTextBox.Text = "";
+            GetNumberTextBox.Text = string.Empty;
             GetNumberTextBox.Focus();
             Close();
         }
