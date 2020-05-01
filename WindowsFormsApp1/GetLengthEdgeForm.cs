@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Dangl.Calculator;
 
 namespace WindowsFormsApp1
 {
@@ -36,8 +37,8 @@ namespace WindowsFormsApp1
 
             try
             {
-                mathKernel1.Compute("N[" + strForParse.Replace(',', '.') + ", 20]");
-                number = double.Parse(mathKernel1.Result.ToString().Replace('.', ','));
+                number = Calculator.Calculate(strForParse).Result;
+
                 if (number < 0.0001 ||
                     number > Math.Pow(10, 4) ||
                     double.IsInfinity(number) ||
