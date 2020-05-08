@@ -16,5 +16,9 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
         }
+
+        private void Chart_Load(object sender, EventArgs e)
+        {
+        }
     }
 }

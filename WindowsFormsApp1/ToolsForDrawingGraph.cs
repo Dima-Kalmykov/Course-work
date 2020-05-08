@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Linq;
 
 namespace WindowsFormsApp1
 {
@@ -32,7 +29,7 @@ namespace WindowsFormsApp1
         private int widthArrow = 10;
         private int heightArrow = 7;
 
-        private Random rnd = new Random();
+        private static readonly Random Rnd = new Random(DateTime.Now.Millisecond);
 
         internal ToolsForDrawingGraph(int width, int height)
         {
@@ -94,22 +91,22 @@ namespace WindowsFormsApp1
 
         internal void DeletePoint(float x, float y, Vertex ver1, Vertex ver2)
         {
-                cover.FillEllipse(Brushes.White,
-                    x - PointR / 2, y - PointR / 2, PointR, PointR);
+            cover.FillEllipse(Brushes.White,
+                x - PointR / 2, y - PointR / 2, PointR, PointR);
 
-                cover.DrawEllipse(whitePen,
-                    x - PointR / 2, y - PointR / 2, PointR, PointR);
+            cover.DrawEllipse(whitePen,
+                x - PointR / 2, y - PointR / 2, PointR, PointR);
 
-                DrawArrow(ver1, ver2);
+            DrawArrow(ver1, ver2);
         }
 
         internal void DrawPoint(float x, float y)
         {
-                cover.FillEllipse(Brushes.Blue,
-                    x - PointR / 2, y - PointR / 2, PointR, PointR);
+            cover.FillEllipse(Brushes.Blue,
+                x - PointR / 2, y - PointR / 2, PointR, PointR);
 
-                cover.DrawEllipse(greenPen,
-                    x - PointR / 2, y - PointR / 2, PointR, PointR);
+            cover.DrawEllipse(greenPen,
+                x - PointR / 2, y - PointR / 2, PointR, PointR);
         }
 
         /// <summary>
@@ -346,8 +343,8 @@ namespace WindowsFormsApp1
 
             for (int i = 0; i < adjMatrix.GetLength(0); i++)
             {
-                xCoord = rnd.Next(2 * R, maxX + 1);
-                yCoord = rnd.Next(2 * R, maxY + 1);
+                xCoord = Rnd.Next(2 * R, maxX + 1);
+                yCoord = Rnd.Next(2 * R, maxY + 1);
 
                 nearOtherVertex = true;
 
@@ -412,6 +409,24 @@ namespace WindowsFormsApp1
                 DrawVertex(vertex[i].X, vertex[i].Y, (i + 1).ToString());
         }
 
+        private (int, int) GetRandomFreePair(double[,] matrix)
+        {
+            var freePairs = new List<(int, int)>();
+
+            for (var i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (var j = 0; j < matrix.GetLength(0); j++)
+                {
+                    if (matrix[i, j] == 0)
+                    {
+                        freePairs.Add((i, j));
+                    }
+                }
+            }
+
+            return freePairs[Rnd.Next(freePairs.Count)];
+        }
+
         /// <summary>
         /// Задаём рёбрам случайный вес.
         /// </summary>
@@ -430,13 +445,86 @@ namespace WindowsFormsApp1
                 {
                     if (adjMatrix[i, j] == 1)
                         adjMatrix[i, j] =
-                            rnd.Next(min, max) + rnd.NextDouble() +
-                            rnd.Next(2) * double.Epsilon;
+                            Rnd.Next(min, max) + Rnd.NextDouble() +
+                            Rnd.Next(2) * double.Epsilon;
                 }
 
             }
 
             return adjMatrix;
+        }
+
+        internal List<Edge> GetOtherGraphWithGivenAmountOfEdgesAndVertex(List<Vertex> vertex, List<Edge> edges)
+        {
+            var size = vertex.Count;
+            var matrix = new double[size, size];
+            List<Edge> edgesForChoice = edges.GetRange(0, edges.Count);
+            var curVertexIndex = 0;
+
+            var newEdges = new List<Edge>(size);
+            var counter = 1;
+
+            var randomVertexIndex = Rnd.Next(vertex.Count);
+
+            while (curVertexIndex == randomVertexIndex)
+            {
+                randomVertexIndex = Rnd.Next(vertex.Count);
+            }
+
+            var randomEdge = edgesForChoice[Rnd.Next(edgesForChoice.Count)];
+            newEdges.Add(new Edge(curVertexIndex, randomVertexIndex, randomEdge.Weight));
+            edgesForChoice.Remove(randomEdge);
+
+
+            matrix[curVertexIndex, randomVertexIndex] = 1;
+
+            curVertexIndex = randomVertexIndex;
+
+            while (counter < vertex.Count - 1)
+            {
+                randomVertexIndex = Rnd.Next(vertex.Count);
+
+                while (curVertexIndex == randomVertexIndex || newEdges.Any(e => e.Ver1 == randomVertexIndex))
+                {
+                    randomVertexIndex = Rnd.Next(vertex.Count);
+                }
+
+
+                randomEdge = edgesForChoice[Rnd.Next(edgesForChoice.Count)];
+                newEdges.Add(new Edge(curVertexIndex, randomVertexIndex, randomEdge.Weight));
+                edgesForChoice.Remove(randomEdge);
+
+                matrix[curVertexIndex, randomVertexIndex] = 1;
+
+                curVertexIndex = randomVertexIndex;
+
+                counter++;
+            }
+
+            counter++;
+
+            var expectedSum = (newEdges.Count) * (newEdges.Count + 1) / 2;
+            var index1 = expectedSum - newEdges.Sum(e => e.Ver1);
+            var index2 = expectedSum - newEdges.Sum(e => e.Ver2);
+
+            randomEdge = edgesForChoice[Rnd.Next(edgesForChoice.Count)];
+            newEdges.Add(new Edge(index1, index2, randomEdge.Weight));
+            edgesForChoice.Remove(randomEdge);
+
+            matrix[index1, index2] = 1;
+
+            while (counter < edges.Count)
+            {
+                var (vertexIndex1, vertexIndex2) = GetRandomFreePair(matrix);
+                matrix[vertexIndex1, vertexIndex2] = 1;
+                randomEdge = edgesForChoice[Rnd.Next(edgesForChoice.Count)];
+                newEdges.Add(new Edge(vertexIndex1, vertexIndex2, randomEdge.Weight));
+                edgesForChoice.Remove(randomEdge);
+
+                counter++;
+            }
+
+            return newEdges;
         }
 
         /// <summary>
@@ -449,22 +537,20 @@ namespace WindowsFormsApp1
         {
             double[,] adjMatrix = new double[size, size];
 
-            // Частный случай.
-            if (size == 1)
+            switch (size)
             {
-                adjMatrix[0, 0] = rnd.Next(2);
-                return adjMatrix;
-            }
+                // Частный случай.
+                case 1:
+                    adjMatrix[0, 0] = Rnd.Next(2);
+                    return adjMatrix;
+                // Частный случай.
+                case 2:
+                    adjMatrix[1, 0] = 1;
+                    adjMatrix[0, 1] = 1;
+                    adjMatrix[0, 0] = Rnd.Next(2);
+                    adjMatrix[1, 1] = Rnd.Next(2);
 
-            // Частный случай.
-            if (size == 2)
-            {
-                adjMatrix[1, 0] = 1;
-                adjMatrix[0, 1] = 1;
-                adjMatrix[0, 0] = rnd.Next(2);
-                adjMatrix[1, 1] = rnd.Next(2);
-
-                return adjMatrix;
+                    return adjMatrix;
             }
 
             // Проводим рёбра по кругу (1 -> 2 -> 3 -> ... -> n-1 -> n -> 1)
@@ -476,11 +562,11 @@ namespace WindowsFormsApp1
 
             // Из каждой веришны проводим ещё одно ребро случайным образом.
             for (int i = 0; i < size; i++)
-                adjMatrix[i, rnd.Next(size)] = 1;
+                adjMatrix[i, Rnd.Next(size)] = 1;
 
             // Случайным образом заполняем диагональ.
             for (int i = 0; i < size; i++)
-                adjMatrix[i, i] = rnd.Next(2);
+                adjMatrix[i, i] = Rnd.Next(2);
 
             return adjMatrix;
         }

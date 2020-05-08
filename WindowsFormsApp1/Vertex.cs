@@ -9,8 +9,7 @@
         internal int X;
         internal int Y;
 
-        internal int amount;
-        internal bool hasPoint = false;
+        internal bool HasPoint = false;
 
         internal Vertex(int x, int y)
         {
@@ -23,7 +22,6 @@
         /// Сделано для вывода информации в файл.
         /// </summary>
         /// <returns> Строка с информацией о вершине </returns>
-        public override string ToString() =>
-            $"{X} {Y}";
+        public override string ToString() => $"{X} {Y}";
     }
 }

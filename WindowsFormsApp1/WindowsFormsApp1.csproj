@@ -73,6 +73,18 @@
     <Compile Include="ChartDisplayForm.Designer.cs">
       <DependentUpon>ChartDisplayForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChartForTesting1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChartForTesting1.Designer.cs">
+      <DependentUpon>ChartForTesting1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChartForTesting2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChartForTesting2.Designer.cs">
+      <DependentUpon>ChartForTesting2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +135,12 @@
     <Compile Include="Vertex.cs" />
     <EmbeddedResource Include="ChartDisplayForm.resx">
       <DependentUpon>ChartDisplayForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChartForTesting1.resx">
+      <DependentUpon>ChartForTesting1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChartForTesting2.resx">
+      <DependentUpon>ChartForTesting2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

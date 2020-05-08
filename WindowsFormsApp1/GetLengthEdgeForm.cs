@@ -24,6 +24,12 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        private static bool IsNotSuitableNumber(double numb) =>
+                   numb < 0.0001 ||
+                   numb > Math.Pow(10, 4) ||
+                   double.IsInfinity(numb) ||
+                   double.IsNaN(numb);
+
         /// <summary>
         /// Обработка введённого текста,
         /// и получение итогового числа number.
@@ -36,11 +42,7 @@ namespace WindowsFormsApp1
             {
                 number = Calculator.Calculate(GetNumberTextBox.Text).Result;
 
-                if (number < 0.0001 ||
-                    number > Math.Pow(10, 4) ||
-                    double.IsInfinity(number) ||
-                    double.IsNaN(number)
-                    )
+                if (IsNotSuitableNumber(number))
                 {
                     throw new Exception();
                 }

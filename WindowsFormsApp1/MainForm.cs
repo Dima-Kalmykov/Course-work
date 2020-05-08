@@ -6,6 +6,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -25,14 +27,19 @@ namespace WindowsFormsApp1
         private Chart chartForm = new Chart();
         private Form1 chartDisplay = new Form1();
 
+        public const int width = 1359;
+
+        public const int height = 921;
+
+
         // Инструменты для рисования.
-        private ToolsForDrawingGraph toolsForDrawing;
+        public ToolsForDrawingGraph toolsForDrawing;
 
 
 
         // Списки смежности.
-        private List<Vertex> vertex;
-        private List<Edge> edges;
+        public List<Vertex> vertex;
+        public List<Edge> edges;
 
         // Номера вершин, между которым проводим ребро.
         private int ver1ForConnection = -1;
@@ -1981,18 +1988,16 @@ namespace WindowsFormsApp1
         private int totalCount = 0;
         private bool firstVertex = true;
 
-        private bool er = true;
-
-        private float coefficient = 1;
+        public float coefficient = 1;
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             chartForm.chartForm.Series["Amount of points"]
-                .Points.AddXY((int)(sp.ElapsedMilliseconds * coefficient) / 1000, totalCount);
+                .Points.AddXY((int)(sp.ElapsedMilliseconds) / 1000, totalCount);
         }
 
 
-        private void MainTick(List<Edge>[] listArr)
+        public void MainTick(List<Edge>[] listArr)
         {
             coefficient = (float)(trackBar1.Value / 10.0);
             // Если готова выпустить точку.
@@ -2000,9 +2005,9 @@ namespace WindowsFormsApp1
 
             for (var i = 0; i < vertex.Count; i++)
             {
-                if (vertex[i].hasPoint)
+                if (vertex[i].HasPoint)
                 {
-                    vertex[i].hasPoint = false;
+                    vertex[i].HasPoint = false;
 
                     if (firstVertex)
                     {
@@ -2031,7 +2036,7 @@ namespace WindowsFormsApp1
             {
                 if (timers[i].ElapsedMilliseconds * coefficient > points[i].Weight * 1000)
                 {
-                    vertex[points[i].Ver2].hasPoint = true;
+                    vertex[points[i].Ver2].HasPoint = true;
                     points.RemoveAt(i);
                     timers.RemoveAt(i);
                     i--;
@@ -2192,13 +2197,14 @@ namespace WindowsFormsApp1
             chartForm.chartForm.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisX.Minimum = 0;
+            chartForm.chartForm.ChartAreas[0].AxisX.Title = "Time";
 
             clickContinue = true;
             CheckGraphForStrongConnectionButton.PerformClick();
 
             if (responseSC)
             {
-                vertex[0].hasPoint = true;
+                vertex[0].HasPoint = true;
                 var listArr = new List<Edge>[vertex.Count];
 
                 for (var i = 0; i < vertex.Count; i++)
@@ -2226,6 +2232,8 @@ namespace WindowsFormsApp1
         /// <param name="e"> E </param>
         private void StopProcessButton_Click(object sender, EventArgs e)
         {
+            requireTime = sp.ElapsedMilliseconds;
+
             if (StopProcessButton.Text == "STOP")
             {
                 mainTimer.Stop();
@@ -2283,7 +2291,7 @@ namespace WindowsFormsApp1
                 saveGraphDialog.CheckPathExists = true;
                 saveGraphDialog.Filter = "Files(*.CSV)|*.CSV";
 
-
+                requireTime = sp.ElapsedMilliseconds;
                 saveGraphDialog.ShowHelp = true;
 
                 // Процесс сохранения файла.
@@ -2363,7 +2371,7 @@ namespace WindowsFormsApp1
 
             var openGraphDialog = new OpenFileDialog
             {
-                Filter = "Imagine Files(*.CSV)|*.CSV",  
+                Filter = "Imagine Files(*.CSV)|*.CSV",
                 ShowHelp = true
             };
 
@@ -2395,6 +2403,30 @@ namespace WindowsFormsApp1
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+
+        private ChartForTesting1 chartForTestingForm1;
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            chartForTestingForm1 = new ChartForTesting1(this);
+        }
+        private void timerFortTesting1_Tick(int number)
+        {
+        }
+
+        private int[] totalCount2 = new int[5];
+
+        private void TickForTestingProgram(List<Edge>[] listArr, int number)
+        {
+        }
+
+        public long requireTime;
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
