@@ -79,12 +79,7 @@
     <Compile Include="ChartForTesting1.Designer.cs">
       <DependentUpon>ChartForTesting1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChartForTesting2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChartForTesting2.Designer.cs">
-      <DependentUpon>ChartForTesting2.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Consts.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,9 +134,6 @@
     <EmbeddedResource Include="ChartForTesting1.resx">
       <DependentUpon>ChartForTesting1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChartForTesting2.resx">
-      <DependentUpon>ChartForTesting2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,6 +164,7 @@
     <EmbeddedResource Include="GetRandomGraphForm.resx">
       <DependentUpon>GetRandomGraphForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

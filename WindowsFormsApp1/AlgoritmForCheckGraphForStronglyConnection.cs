@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WindowsFormsApp1
 {
     public class GraphForAlg
     {
         internal int vertexCount;
-        internal List<int>[] listAdj;
+        internal List<int>[] listAdjacency;
 
         internal GraphForAlg(int vertexCount)
         {
             this.vertexCount = vertexCount;
 
-            listAdj = new List<int>[vertexCount];
+            listAdjacency = new List<int>[vertexCount];
 
-            for (int i = 0; i < vertexCount; i++)
-                listAdj[i] = new List<int>();
+            for (var i = 0; i < vertexCount; i++)
+            {
+                listAdjacency[i] = new List<int>();
+            }
         }
 
         internal void AddEdge(int v, int w) =>
-            listAdj[v].Add(w);
+            listAdjacency[v].Add(w);
 
         private void DFSUtil(int vertexNumber, bool[] visited)
         {
@@ -30,7 +28,7 @@ namespace WindowsFormsApp1
 
             int n;
 
-            foreach (var el in listAdj[vertexNumber])
+            foreach (var el in listAdjacency[vertexNumber])
             {
                 n = el;
                 if (!visited[n])
@@ -38,13 +36,13 @@ namespace WindowsFormsApp1
             }
         }
 
-        private GraphForAlg getTranspose()
+        private GraphForAlg GetTranspose()
         {
             GraphForAlg g = new GraphForAlg(vertexCount);
 
             for (int v = 0; v < vertexCount; v++)
-                foreach (var el in listAdj[v])
-                    g.listAdj[el].Add(v);
+                foreach (var el in listAdjacency[v])
+                    g.listAdjacency[el].Add(v);
 
             return g;
         }
@@ -62,7 +60,7 @@ namespace WindowsFormsApp1
                 if (!visited[i])
                     return false;
 
-            GraphForAlg gr = getTranspose();
+            GraphForAlg gr = GetTranspose();
 
             for (int i = 0; i < vertexCount; i++)
                 visited[i] = false;

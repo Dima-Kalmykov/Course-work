@@ -8,26 +8,24 @@ namespace WindowsFormsApp1
     public class ToolsForDrawingGraph
     {
         // Инструменты для рисования графа.
-        private Bitmap bitmap;
-        private Graphics cover;
+        private readonly Bitmap bitmap;
+        private readonly Graphics cover;
         private PointF point;
-        private Font font;
-        private Brush brush;
+        private readonly Font font;
+        private readonly Brush brush;
 
-        private Pen blackPen;
-        private Pen redPen;
-        private Pen bluePen;
-        private Pen greenPen;
-        private Pen whitePen;
+        private readonly Pen blackPen;
+        private readonly Pen redPen;
+        private readonly Pen bluePen;
+        private readonly Pen greenPen;
 
         // Радиус вершины.
-        internal int R = 20;
-
-        internal int PointR = 10;
+        internal const int VertexRadius = Consts.VertexRadius;
+        internal const int PointRadius = Consts.PointRadius;
 
         // Ширина и высота наконечника стрелки.
-        private int widthArrow = 10;
-        private int heightArrow = 7;
+        private const int WidthArrow = Consts.WidthArrow;
+        private const int HeightArrow = Consts.HeightArrow;
 
         private static readonly Random Rnd = new Random(DateTime.Now.Millisecond);
 
@@ -37,36 +35,33 @@ namespace WindowsFormsApp1
             bitmap = new Bitmap(width, height);
             cover = Graphics.FromImage(bitmap);
 
-            blackPen = new Pen(Color.Black, 2);
-            redPen = new Pen(Color.Red, 2);
-            bluePen = new Pen(Color.CornflowerBlue, 2);
-            greenPen = new Pen(Color.Green, 2);
-            whitePen = new Pen(Color.White, 2);
+            blackPen = new Pen(Color.Black, Consts.WidthPen);
+            redPen = new Pen(Color.Red, Consts.WidthPen);
+            bluePen = new Pen(Color.CornflowerBlue, Consts.WidthPen);
+            greenPen = new Pen(Color.Green, Consts.WidthPen);
             brush = Brushes.Black;
 
-            font = new Font("Arial", 15);
+            font = new Font("Arial", Consts.FontSize);
         }
 
-        internal void DrawAllEdges(List<Edge> edges, List<Vertex> vertex)
-        {
-            foreach (var edge in edges)
-                DrawEdge(vertex[edge.Ver1], vertex[edge.Ver2], edge);
-        }
 
         /// <summary>
         /// Заполнение матрицы смежности.
         /// </summary>
         /// <param name="amountVertex"> Количество вершин </param>
         /// <param name="edges"> Список рёбер </param>
-        /// <param name="adjMatrix"> Матрица смежности </param>
-        internal void FillAdjMatrix(int amountVertex, List<Edge> edges, double[,] adjMatrix)
+        /// <param name="adjacencyMatrix"> Матрица смежности </param>
+        internal void FillAdjMatrix(int amountVertex, List<Edge> edges, double[,] adjacencyMatrix)
         {
             // Очищаем матрицу.
-            Array.Clear(adjMatrix, 0, amountVertex);
+            Array.Clear(adjacencyMatrix, 0, amountVertex);
 
-            for (int i = 0; i < edges.Count; i++)
-                adjMatrix[edges[i].Ver1, edges[i].Ver2] =
-                    Math.Round(edges[i].Weight, 3, MidpointRounding.AwayFromZero);
+            foreach (var edge in edges)
+            {
+                adjacencyMatrix[edge.Ver1, edge.Ver2] = Math.Round(edge.Weight,
+                                                                   Consts.Accuracy,
+                                                                   MidpointRounding.AwayFromZero);
+            }
         }
 
         /// <summary>
@@ -77,70 +72,65 @@ namespace WindowsFormsApp1
         /// <param name="number"> Число в вершине </param>
         internal void DrawVertex(int x, int y, string number)
         {
-            cover.FillEllipse(Brushes.White, x - R, y - R, 2 * R, 2 * R);
-            cover.DrawEllipse(blackPen, x - R, y - R, 2 * R, 2 * R);
+            cover.FillEllipse(Brushes.White, x - VertexRadius, y - VertexRadius,
+                2 * VertexRadius, 2 * VertexRadius);
+
+            cover.DrawEllipse(blackPen, x - VertexRadius, y - VertexRadius,
+                2 * VertexRadius, 2 * VertexRadius);
+
+            var yCoordinate = y - VertexRadius / 2;
+            var xCoordinate = x - VertexRadius / 2;
 
             // Определям положение числа в вершине в зависимости от числа его знаков.
-            point = int.Parse(number) < 10 ?
-                new PointF(x - R / 2 + 2, y - R / 2) :
-                new PointF(x - R / 2 - 3, y - R / 2);
+            point = int.Parse(number) < 10
+                ? new PointF(xCoordinate + 2, yCoordinate)
+                : new PointF(xCoordinate - 3, yCoordinate);
 
             // Рисуем число в вершине.
             cover.DrawString(number, font, brush, point);
         }
 
-        internal void DeletePoint(float x, float y, Vertex ver1, Vertex ver2)
-        {
-            cover.FillEllipse(Brushes.White,
-                x - PointR / 2, y - PointR / 2, PointR, PointR);
-
-            cover.DrawEllipse(whitePen,
-                x - PointR / 2, y - PointR / 2, PointR, PointR);
-
-            DrawArrow(ver1, ver2);
-        }
-
         internal void DrawPoint(float x, float y)
         {
             cover.FillEllipse(Brushes.Blue,
-                x - PointR / 2, y - PointR / 2, PointR, PointR);
+                x - PointRadius / 2.0f, y - PointRadius / 2.0f, PointRadius, PointRadius);
 
             cover.DrawEllipse(greenPen,
-                x - PointR / 2, y - PointR / 2, PointR, PointR);
+                x - PointRadius / 2.0f, y - PointRadius / 2.0f, PointRadius, PointRadius);
         }
 
         /// <summary>
         /// Рисование ребра.
         /// </summary>
-        /// <param name="ver1"> Первая вершина </param>
-        /// <param name="ver2"> Вторая вершина </param>
+        /// <param name="vertex1"> Первая вершина </param>
+        /// <param name="vertex2"> Вторая вершина </param>
         /// <param name="edge"> Список рёбер </param>
-        internal void DrawEdge(Vertex ver1, Vertex ver2, Edge edge)
+        internal void DrawEdge(Vertex vertex1, Vertex vertex2, Edge edge)
         {
             // Если петля, то рисуем дугу.
             if (edge.Ver1 == edge.Ver2)
             {
-                cover.DrawArc(greenPen, ver1.X - 2 * R, ver1.Y - 2 * R,
-                    2 * R, 2 * R, 90, 270);
+                cover.DrawArc(greenPen, vertex1.X - 2 * VertexRadius, vertex1.Y - 2 * VertexRadius,
+                    2 * VertexRadius, 2 * VertexRadius, 90, 270);
 
                 // Дорисовываем наконечник.
                 cover.DrawLine(greenPen,
-                    ver1.X - 7, ver1.Y - R - 7,
-                    ver1.X, ver1.Y - R);
+                    vertex1.X - 7, vertex1.Y - VertexRadius - 7,
+                    vertex1.X, vertex1.Y - VertexRadius);
 
                 cover.DrawLine(greenPen,
-                    ver1.X + 7, ver1.Y - R - 7,
-                    ver2.X, ver2.Y - R);
+                    vertex1.X + 7, vertex1.Y - VertexRadius - 7,
+                    vertex2.X, vertex2.Y - VertexRadius);
 
                 // Заново отображаем вершину.
-                DrawVertex(ver1.X, ver1.Y, (edge.Ver1 + 1).ToString());
+                DrawVertex(vertex1.X, vertex1.Y, (edge.Ver1 + 1).ToString());
             }
             // Если это не петля, то рисуем стрелку.
             else
             {
-                DrawArrow(ver1, ver2);
-                DrawVertex(ver1.X, ver1.Y, (edge.Ver1 + 1).ToString());
-                DrawVertex(ver2.X, ver2.Y, (edge.Ver2 + 1).ToString());
+                DrawArrow(vertex1, vertex2);
+                DrawVertex(vertex1.X, vertex1.Y, (edge.Ver1 + 1).ToString());
+                DrawVertex(vertex2.X, vertex2.Y, (edge.Ver2 + 1).ToString());
             }
         }
 
@@ -171,7 +161,7 @@ namespace WindowsFormsApp1
                 b = Calculate.GetB(ver1, ver2);
 
                 // Вычисляем промежуточную величину.
-                double sqrtDiscriminant2 = Calculate.GetSqrtDiscriminant(ver2, k, b);
+                double sqrtDiscriminant2 = Calculate.GetSqrtOfDiscriminant(ver2, k, b);
 
                 // Мы ищем точки пересечения прямой, проходящей через 2 данные веришны,
                 // и окружности, которая описана около веришины. Их будет 2.
@@ -198,7 +188,7 @@ namespace WindowsFormsApp1
                 }
 
                 // Аналогично.
-                double sqrtDiscriminant1 = Calculate.GetSqrtDiscriminant(ver1, k, b);
+                double sqrtDiscriminant1 = Calculate.GetSqrtOfDiscriminant(ver1, k, b);
 
                 double xMaxBegin = (sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
                 double xMinBegin = (-sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
@@ -240,13 +230,13 @@ namespace WindowsFormsApp1
 
                 if (ver1.Y > ver2.Y)
                 {
-                    yBegin = ver1.Y - R;
-                    yEnd = ver2.Y + R;
+                    yBegin = ver1.Y - VertexRadius;
+                    yEnd = ver2.Y + VertexRadius;
                 }
                 else
                 {
-                    yBegin = ver1.Y + R;
-                    yEnd = ver2.Y - R;
+                    yBegin = ver1.Y + VertexRadius;
+                    yEnd = ver2.Y - VertexRadius;
                 }
             }
 
@@ -264,51 +254,51 @@ namespace WindowsFormsApp1
                 // Затем строим через эту точку перпендикуляр определённой длины.
                 // Концы этого перпендикуляра и будут точками для наконечника.
 
-                double xCoordO = Calculate.GetCoordOx(xBegin, yBegin, xEnd, yEnd);
-                double yCoordO = Calculate.GetCoordOy(xBegin, yBegin, xEnd, yEnd);
+                var xCoordinate = Calculate.GetXCoordinate(xBegin, yBegin, xEnd, yEnd);
+                var yCoordinate = Calculate.GetCoordOy(xBegin, yBegin, xEnd, yEnd);
 
-                firstEndArrowX = xCoordO + heightArrow / Math.Sqrt((1 + 1 / (k * k)));
-                firstEndArrowY = -1 / k * firstEndArrowX + yCoordO + xCoordO / k;
+                firstEndArrowX = xCoordinate + HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
+                firstEndArrowY = -1 / k * firstEndArrowX + yCoordinate + xCoordinate / k;
 
-                secondEndArrowX = xCoordO - heightArrow / Math.Sqrt((1 + 1 / (k * k)));
-                secondEndArrowY = -1 / k * secondEndArrowX + yCoordO + xCoordO / k;
+                secondEndArrowX = xCoordinate - HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
+                secondEndArrowY = -1 / k * secondEndArrowX + yCoordinate + xCoordinate / k;
             }
             else if (xBegin == xEnd)
             {
                 if (yBegin < yEnd)
                 {
-                    firstEndArrowX = xEnd - heightArrow;
-                    firstEndArrowY = yEnd - widthArrow;
+                    firstEndArrowX = xEnd - HeightArrow;
+                    firstEndArrowY = yEnd - WidthArrow;
 
-                    secondEndArrowX = xEnd + heightArrow;
-                    secondEndArrowY = yEnd - widthArrow;
+                    secondEndArrowX = xEnd + HeightArrow;
+                    secondEndArrowY = yEnd - WidthArrow;
                 }
                 else
                 {
-                    firstEndArrowX = xEnd - heightArrow;
-                    firstEndArrowY = yEnd + widthArrow;
+                    firstEndArrowX = xEnd - HeightArrow;
+                    firstEndArrowY = yEnd + WidthArrow;
 
-                    secondEndArrowX = xEnd + heightArrow;
-                    secondEndArrowY = yEnd + widthArrow;
+                    secondEndArrowX = xEnd + HeightArrow;
+                    secondEndArrowY = yEnd + WidthArrow;
                 }
             }
             else if (yBegin == yEnd)
             {
                 if (xBegin < xEnd)
                 {
-                    firstEndArrowX = xEnd - widthArrow;
-                    firstEndArrowY = yEnd - heightArrow;
+                    firstEndArrowX = xEnd - WidthArrow;
+                    firstEndArrowY = yEnd - HeightArrow;
 
-                    secondEndArrowX = xEnd - widthArrow;
-                    secondEndArrowY = yEnd + heightArrow;
+                    secondEndArrowX = xEnd - WidthArrow;
+                    secondEndArrowY = yEnd + HeightArrow;
                 }
                 else
                 {
-                    firstEndArrowX = xEnd + widthArrow;
-                    firstEndArrowY = yEnd + heightArrow;
+                    firstEndArrowX = xEnd + WidthArrow;
+                    firstEndArrowY = yEnd + HeightArrow;
 
-                    secondEndArrowX = xEnd + widthArrow;
-                    secondEndArrowY = yEnd - heightArrow;
+                    secondEndArrowX = xEnd + WidthArrow;
+                    secondEndArrowY = yEnd - HeightArrow;
                 }
             }
 
@@ -326,6 +316,32 @@ namespace WindowsFormsApp1
                 (float)xEnd, (float)yEnd);
         }
 
+        private static void CheckNearVertex(ref int i, ref List<Vertex> vertex, Point currentPoint)
+        {
+            var hasNearOtherVertex = true;
+
+            // Если это первая веришна, то просто добавляем её.
+            if (i == 0)
+            {
+                vertex.Add(new Vertex(currentPoint.X, currentPoint.Y));
+                return;
+            }
+            // Если это уже не первая вершина, то проверяем,
+            // чтобы рядом не было других
+            if (vertex.Any(ver => Math.Abs(ver.X - currentPoint.X) < 2 * VertexRadius &&
+                                  Math.Abs(ver.Y - currentPoint.Y) < 2 * VertexRadius))
+            {
+                i--;
+                hasNearOtherVertex = false;
+            }
+
+            // Если рядом нет других, то добавляем новую вершину.
+            if (hasNearOtherVertex)
+            {
+                vertex.Add(new Vertex(currentPoint.X, currentPoint.Y));
+            }
+        }
+
         /// <summary>
         /// Заполняем список вершин случайным образом.
         /// </summary>
@@ -335,41 +351,14 @@ namespace WindowsFormsApp1
         /// <returns> Список вершин </returns>
         internal List<Vertex> GetRandomVertex(double[,] adjMatrix, int maxX, int maxY)
         {
-            int xCoord;
-            int yCoord;
-            bool nearOtherVertex;
+            var vertex = new List<Vertex>();
 
-            List<Vertex> vertex = new List<Vertex>();
-
-            for (int i = 0; i < adjMatrix.GetLength(0); i++)
+            for (var i = 0; i < adjMatrix.GetLength(0); i++)
             {
-                xCoord = Rnd.Next(2 * R, maxX + 1);
-                yCoord = Rnd.Next(2 * R, maxY + 1);
+                var xCoordinate = Rnd.Next(2 * VertexRadius, maxX + 1);
+                var yCoordinate = Rnd.Next(2 * VertexRadius, maxY + 1);
 
-                nearOtherVertex = true;
-
-                // Если это первая веришна, то просто добавляем её.
-                if (i == 0)
-                {
-                    vertex.Add(new Vertex(xCoord, yCoord));
-                    continue;
-                }
-                // Если это уже не первая вершина, то проверяем,
-                // чтобы рядом не было других
-                for (int j = 0; j < vertex.Count; j++)
-                {
-                    if (Math.Abs(vertex[j].X - xCoord) < 2 * R &&
-                        Math.Abs(vertex[j].Y - yCoord) < 2 * R)
-                    {
-                        i--;
-                        nearOtherVertex = false;
-                        break;
-                    }
-                }
-
-                // Если рядом нет других, то добавляем новую вершину.
-                if (nearOtherVertex)
-                    vertex.Add(new Vertex(xCoord, yCoord));
+                CheckNearVertex(ref i, ref vertex, new Point(xCoordinate, yCoordinate));
             }
 
             return vertex;
@@ -382,13 +371,19 @@ namespace WindowsFormsApp1
         /// <returns> Список рёбер </returns>
         internal List<Edge> GetRandomEdges(double[,] adjMatrix)
         {
-            List<Edge> edges = new List<Edge>();
+            var edges = new List<Edge>();
 
             // Весом каждого ребра служит значение из матрицы смежности.
-            for (int i = 0; i < adjMatrix.GetLength(0); i++)
-                for (int j = 0; j < adjMatrix.GetLength(1); j++)
-                    if (adjMatrix[i, j] != 0)
+            for (var i = 0; i < adjMatrix.GetLength(0); i++)
+            {
+                for (var j = 0; j < adjMatrix.GetLength(1); j++)
+                {
+                    if (Math.Abs(adjMatrix[i, j]) > double.Epsilon)
+                    {
                         edges.Add(new Edge(i, j, adjMatrix[i, j]));
+                    }
+                }
+            }
 
             return edges;
         }
@@ -403,28 +398,39 @@ namespace WindowsFormsApp1
             ClearField();
 
             foreach (var edge in edges)
+            {
                 DrawEdge(vertex[edge.Ver1], vertex[edge.Ver2], edge);
+            }
 
-            for (int i = 0; i < vertex.Count; i++)
+            for (var i = 0; i < vertex.Count; i++)
+            {
                 DrawVertex(vertex[i].X, vertex[i].Y, (i + 1).ToString());
+            }
         }
 
-        private (int, int) GetRandomFreePair(double[,] matrix)
+        /// <summary>
+        /// Получаем пару индексов вершин.
+        /// </summary>
+        /// <param name="adjacencyMatrix"> Матрица смежности </param>
+        /// <returns> Кортеж вершин </returns>
+        private static (int, int) GetRandomFreePair(double[,] adjacencyMatrix)
         {
-            var freePairs = new List<(int, int)>();
+            var freePairsOfVertex = new List<(int, int)>();
 
-            for (var i = 0; i < matrix.GetLength(0); i++)
+            for (var i = 0; i < adjacencyMatrix.GetLength(0); i++)
             {
-                for (var j = 0; j < matrix.GetLength(0); j++)
+                for (var j = 0; j < adjacencyMatrix.GetLength(0); j++)
                 {
-                    if (matrix[i, j] == 0)
+                    if (Math.Abs(adjacencyMatrix[i, j]) < double.Epsilon)
                     {
-                        freePairs.Add((i, j));
+                        freePairsOfVertex.Add((i, j));
                     }
                 }
             }
 
-            return freePairs[Rnd.Next(freePairs.Count)];
+            var randomIndexOfList = Rnd.Next(freePairsOfVertex.Count);
+
+            return freePairsOfVertex[randomIndexOfList];
         }
 
         /// <summary>
@@ -435,8 +441,8 @@ namespace WindowsFormsApp1
         internal double[,] SetDistanceEdge(double[,] adjMatrix)
         {
             // Min и Max значения веса рёбер.
-            int min = 1;
-            int max = 999;
+            var min = 1;
+            var max = 999;
 
             // Пробегаемся по всем элементам и заполняем матрицу.
             for (int i = 0; i < adjMatrix.GetLength(0); i++)
@@ -533,50 +539,49 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="size"> Размер матрицы </param>
         /// <returns> Матрица смежности </returns>
-        internal double[,] GetRandomAdjMatrix(int size)
+        internal double[,] GetRandomAdjacencyMatrix(int size)
         {
-            double[,] adjMatrix = new double[size, size];
+            var adjacencyMatrix = new double[size, size];
 
             switch (size)
             {
                 // Частный случай.
                 case 1:
-                    adjMatrix[0, 0] = Rnd.Next(2);
-                    return adjMatrix;
+                    adjacencyMatrix[0, 0] = Rnd.Next(2);
+                    return adjacencyMatrix;
                 // Частный случай.
                 case 2:
-                    adjMatrix[1, 0] = 1;
-                    adjMatrix[0, 1] = 1;
-                    adjMatrix[0, 0] = Rnd.Next(2);
-                    adjMatrix[1, 1] = Rnd.Next(2);
+                    adjacencyMatrix[1, 0] = 1;
+                    adjacencyMatrix[0, 1] = 1;
+                    adjacencyMatrix[0, 0] = Rnd.Next(2);
+                    adjacencyMatrix[1, 1] = Rnd.Next(2);
 
-                    return adjMatrix;
+                    return adjacencyMatrix;
             }
 
             // Проводим рёбра по кругу (1 -> 2 -> 3 -> ... -> n-1 -> n -> 1)
             for (int i = 0; i < size; i++)
                 if (i == size - 1)
-                    adjMatrix[i, 0] = 1;
+                    adjacencyMatrix[i, 0] = 1;
                 else
-                    adjMatrix[i, i + 1] = 1;
+                    adjacencyMatrix[i, i + 1] = 1;
 
             // Из каждой веришны проводим ещё одно ребро случайным образом.
             for (int i = 0; i < size; i++)
-                adjMatrix[i, Rnd.Next(size)] = 1;
+                adjacencyMatrix[i, Rnd.Next(size)] = 1;
 
             // Случайным образом заполняем диагональ.
             for (int i = 0; i < size; i++)
-                adjMatrix[i, i] = Rnd.Next(2);
+                adjacencyMatrix[i, i] = Rnd.Next(2);
 
-            return adjMatrix;
+            return adjacencyMatrix;
         }
 
         /// <summary>
         /// Возвращаем изменения на холсте.
         /// </summary>
         /// <returns> холст </returns>
-        internal Bitmap GetBitmap() =>
-            bitmap;
+        internal Bitmap GetBitmap() => bitmap;
 
         /// <summary>
         /// Очистка холста.
@@ -590,6 +595,6 @@ namespace WindowsFormsApp1
         /// <param name="x"> x координата вершины </param>
         /// <param name="y"> y координата вершины </param>
         internal void DrawSelectedVertex(int x, int y) =>
-            cover.DrawEllipse(redPen, x - R, y - R, 2 * R, 2 * R);
+            cover.DrawEllipse(redPen, x - VertexRadius, y - VertexRadius, 2 * VertexRadius, 2 * VertexRadius);
     }
 }

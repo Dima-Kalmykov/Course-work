@@ -28,27 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.AdjMatrixListBox = new System.Windows.Forms.ListBox();
+            this.AdjacencyMatrixListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
-            // AdjMatrixListBox
+            // AdjacencyMatrixListBox
             // 
-            this.AdjMatrixListBox.FormattingEnabled = true;
-            this.AdjMatrixListBox.HorizontalScrollbar = true;
-            this.AdjMatrixListBox.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.AdjMatrixListBox.ItemHeight = 16;
-            this.AdjMatrixListBox.Location = new System.Drawing.Point(10, 7);
-            this.AdjMatrixListBox.Name = "AdjMatrixListBox";
-            this.AdjMatrixListBox.Size = new System.Drawing.Size(1329, 692);
-            this.AdjMatrixListBox.TabIndex = 0;
-            this.AdjMatrixListBox.Click += new System.EventHandler(this.AdjMatrixListBox_Click);
+            this.AdjacencyMatrixListBox.FormattingEnabled = true;
+            this.AdjacencyMatrixListBox.HorizontalScrollbar = true;
+            this.AdjacencyMatrixListBox.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.AdjacencyMatrixListBox.ItemHeight = 16;
+            this.AdjacencyMatrixListBox.Location = new System.Drawing.Point(10, 7);
+            this.AdjacencyMatrixListBox.Name = "AdjacencyMatrixListBox";
+            this.AdjacencyMatrixListBox.Size = new System.Drawing.Size(1329, 692);
+            this.AdjacencyMatrixListBox.TabIndex = 0;
+            this.AdjacencyMatrixListBox.Click += new System.EventHandler(this.AdjacencyMatrixListBox_Click);
             // 
             // ShowAdjacencyMatrixForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1364, 708);
-            this.Controls.Add(this.AdjMatrixListBox);
+            this.Controls.Add(this.AdjacencyMatrixListBox);
             this.Name = "ShowAdjacencyMatrixForm";
             this.Text = "AdjacencyMatrix";
             this.ResumeLayout(false);
@@ -57,6 +57,6 @@
 
         #endregion
 
-        internal System.Windows.Forms.ListBox AdjMatrixListBox;
+        internal System.Windows.Forms.ListBox AdjacencyMatrixListBox;
     }
 }

@@ -6,8 +6,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -16,30 +14,23 @@ namespace WindowsFormsApp1
     public partial class MainForm : Form
     {
         // Диалоговые формы.
-        private ChooseEdgeForm chooseEdgeFormForm = new ChooseEdgeForm();
-        private GetLengthEdgeForm getEdgeLengthForm = new GetLengthEdgeForm();
-        private GetRandomGraphForm getRandomGraphForm = new GetRandomGraphForm();
+        private readonly ChooseEdgeForm chooseEdgeFormForm = new ChooseEdgeForm();
+        private readonly GetLengthEdgeForm getEdgeLengthForm = new GetLengthEdgeForm();
+        private readonly GetRandomGraphForm getRandomGraphForm = new GetRandomGraphForm();
 
-        private CheckGraphForStronglyConnectionForm checkGraphForStronglyConnectionForm =
+        private readonly CheckGraphForStronglyConnectionForm checkGraphForStronglyConnectionForm =
             new CheckGraphForStronglyConnectionForm();
 
-        private ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
-        private Chart chartForm = new Chart();
-        private Form1 chartDisplay = new Form1();
-
-        public const int width = 1359;
-
-        public const int height = 921;
-
+        private readonly ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
+        private readonly Chart chartForm = new Chart();
+        private readonly Form1 chartDisplay = new Form1();
 
         // Инструменты для рисования.
-        public ToolsForDrawingGraph toolsForDrawing;
-
-
+        public ToolsForDrawingGraph ToolsForDrawing;
 
         // Списки смежности.
-        public List<Vertex> vertex;
-        public List<Edge> edges;
+        public List<Vertex> Vertex;
+        public List<Edge> Edges;
 
         // Номера вершин, между которым проводим ребро.
         private int ver1ForConnection = -1;
@@ -62,17 +53,55 @@ namespace WindowsFormsApp1
         {
             // Устанавливаем необходимые параметры.
             InitializeComponent();
-            toolsForDrawing = new ToolsForDrawingGraph(field.Width, field.Height);
-            vertex = new List<Vertex>();
-            edges = new List<Edge>();
+            ToolsForDrawing = new ToolsForDrawingGraph(field.Width, field.Height);
+            Vertex = new List<Vertex>();
+            Edges = new List<Edge>();
 
             chooseEdgeFormForm.Owner = this;
             getEdgeLengthForm.Owner = this;
             getRandomGraphForm.Owner = this;
             checkGraphForStronglyConnectionForm.Owner = this;
 
-            toolsForDrawing.ClearField();
-            field.Image = toolsForDrawing.GetBitmap();
+            ToolsForDrawing.ClearField();
+            field.Image = ToolsForDrawing.GetBitmap();
+        }
+
+        private void HideAdjacencyMatrix()
+        {
+           
+            // Если есть веришны, то появляется возможность открыть матрицу смежности.
+            if (Vertex.Count != 0)
+                ShowOrHideAdjMatrix.Enabled = true;
+            else
+            {
+                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                showAdjacencyMatrixForm.Hide();
+                ShowOrHideAdjMatrix.Enabled = false;
+            }
+        }
+
+        private void RedrawSelectedVertex()
+        {
+            // Если была выбрана вершина для перемещения, то перекрашиваем её.
+            if (indexVertexForMove != -1)
+            {
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+
+                firstPress = true;
+                field.Image = ToolsForDrawing.GetBitmap();
+            }
+
+            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
+            if (ver1ForConnection != -1)
+            {
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+
+                ver1ForConnection = -1;
+
+                field.Image = ToolsForDrawing.GetBitmap();
+            }
         }
 
         /// <summary>
@@ -85,41 +114,40 @@ namespace WindowsFormsApp1
             // Делаем эту кнопку неактивной.
             DrawVertexButton.Enabled = false;
 
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-
-                firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = toolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем остальные кнопки активными.
             DeleteElementButton.Enabled = true;
             DrawEdgeButton.Enabled = true;
             ChangeEdgeLengthButton.Enabled = true;
 
-            // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
-                ShowOrHideAdjMatrix.Enabled = true;
-            else
-            {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Enabled = false;
-            }
+            HideAdjacencyMatrix();
+        }
+
+        public void DeleteGraph()
+        {
+            Vertex.Clear();
+            Edges.Clear();
+            showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
+            ToolsForDrawing.ClearField();
+            field.Image = ToolsForDrawing.GetBitmap();
+        }
+
+        public DialogResult GetConfirmCancellation()
+        {
+            DrawVertexButton.Enabled = true;
+            DeleteElementButton.Enabled = true;
+            DrawEdgeButton.Enabled = true;
+            ChangeEdgeLengthButton.Enabled = true;
+
+            var message = "Вы действительно хотите удалить весь граф?";
+            var caption = "Delete";
+
+            // Диалоговое окно для подтверждения удаления.
+            var confirmCancellation = MessageBox.Show(message, caption,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            return confirmCancellation;
         }
 
         /// <summary>
@@ -129,52 +157,18 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void DeleteAllGraphButton_Click(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-
-                toolsForDrawing.DrawFullGraph(edges, vertex);
-                field.Image = toolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = toolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Проверяем, есть ли какой-то элемент для удаления.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
             {
-                // Делаем остальные кнопки активными.
-                DrawVertexButton.Enabled = true;
-                DeleteElementButton.Enabled = true;
-                DrawEdgeButton.Enabled = true;
-                ChangeEdgeLengthButton.Enabled = true;
 
-                string message = "Вы действительно хотите удалить весь граф?";
-                string caption = "Delete";
-
-                // Диалоговое окно для подтверждения удаления.
-                var ConfirmCancel = MessageBox.Show(message, caption,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var confirmCancellation = GetConfirmCancellation();
 
                 // Если подтверилось удаление, удаляем.
-                if (ConfirmCancel == DialogResult.Yes)
+                if (confirmCancellation == DialogResult.Yes)
                 {
-                    vertex.Clear();
-                    edges.Clear();
-                    showAdjacencyMatrixForm.AdjMatrixListBox.Items.Clear();
-                    toolsForDrawing.ClearField();
-                    field.Image = toolsForDrawing.GetBitmap();
+                    DeleteGraph();
                 }
             }
             else
@@ -182,15 +176,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Вам нечего удалять");
             }
 
-            // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
-                ShowOrHideAdjMatrix.Enabled = true;
-            else
-            {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Enabled = false;
-            }
+            HideAdjacencyMatrix();
         }
 
         /// <summary>
@@ -209,38 +195,13 @@ namespace WindowsFormsApp1
             ChangeEdgeLengthButton.Enabled = true;
 
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = toolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Номера вершин, между которыми будем проводить ребро.
             ver1ForConnection = -1;
             ver2ForConnection = -1;
 
-            // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
-                ShowOrHideAdjMatrix.Enabled = true;
-            else
-            {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Enabled = false;
-            }
+            HideAdjacencyMatrix();
         }
 
         /// <summary>
@@ -255,21 +216,21 @@ namespace WindowsFormsApp1
                 // Если была выбрана вершина для перемещения, то перекрашиваем её.
                 if (indexVertexForMove != -1)
                 {
-                    toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                        vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                    ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                        Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                     firstPress = true;
-                    field.Image = toolsForDrawing.GetBitmap();
+                    field.Image = ToolsForDrawing.GetBitmap();
                 }
 
                 // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
                 if (ver1ForConnection != -1)
                 {
-                    toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                        vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                    ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                        Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                     ver1ForConnection = -1;
 
-                    field.Image = toolsForDrawing.GetBitmap();
+                    field.Image = ToolsForDrawing.GetBitmap();
                 }
 
                 // Делаем остальные кнопки активными.
@@ -284,9 +245,9 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    GraphForAlg graphForCheck = new GraphForAlg(vertex.Count);
+                    GraphForAlg graphForCheck = new GraphForAlg(Vertex.Count);
 
-                    foreach (var edge in edges)
+                    foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
 
                     // Проверяем граф на сильносвязность.
@@ -308,7 +269,7 @@ namespace WindowsFormsApp1
                 }
 
                 // Если есть веришны, то появляется возможность открыть матрицу смежности.
-                if (vertex.Count != 0)
+                if (Vertex.Count != 0)
                     ShowOrHideAdjMatrix.Enabled = true;
                 else
                 {
@@ -325,9 +286,9 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    GraphForAlg graphForCheck = new GraphForAlg(vertex.Count);
+                    GraphForAlg graphForCheck = new GraphForAlg(Vertex.Count);
 
-                    foreach (var edge in edges)
+                    foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
 
                     // Проверяем граф на сильносвязность.
@@ -367,21 +328,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.
@@ -398,34 +359,34 @@ namespace WindowsFormsApp1
                 // Количество вершин.
                 int size = getRandomGraphForm.amount;
 
-                toolsForDrawing.ClearField();
+                ToolsForDrawing.ClearField();
 
                 // Генерируем матрицу смежности.
                 //adjMatrix = graph.GetRandomAdjMatrix(size);
-                adjMatrix = toolsForDrawing.GetRandomAdjMatrix(size);
+                adjMatrix = ToolsForDrawing.GetRandomAdjacencyMatrix(size);
 
                 // Устанавливаем вес рёбер.
-                adjMatrix = toolsForDrawing.SetDistanceEdge(adjMatrix);
+                adjMatrix = ToolsForDrawing.SetDistanceEdge(adjMatrix);
 
                 // Генерируем координаты вершин.
-                vertex = toolsForDrawing.GetRandomVertex(adjMatrix,
-                    field.Size.Width - 2 * toolsForDrawing.R,
-                    field.Size.Height - 2 * toolsForDrawing.R);
+                Vertex = ToolsForDrawing.GetRandomVertex(adjMatrix,
+                    field.Size.Width - 2 * Consts.VertexRadius,
+                    field.Size.Height - 2 * Consts.VertexRadius);
 
                 // Заполняем лист рёбер.
-                edges = toolsForDrawing.GetRandomEdges(adjMatrix);
+                Edges = ToolsForDrawing.GetRandomEdges(adjMatrix);
 
                 // Отрисовываем полный граф.
-                toolsForDrawing.DrawFullGraph(edges, vertex);
+                ToolsForDrawing.DrawFullGraph(Edges, Vertex);
 
                 // Выводим матрицу смежности.
                 PrintAdjMatrix();
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -445,21 +406,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем эту кнопку неактивной.
@@ -471,7 +432,7 @@ namespace WindowsFormsApp1
             ChangeEdgeLengthButton.Enabled = true;
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -491,21 +452,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.
@@ -551,7 +512,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Нарисуйте что-нибудь");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -571,21 +532,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.
@@ -618,9 +579,9 @@ namespace WindowsFormsApp1
 
                     PrintAdjMatrix();
 
-                    toolsForDrawing.ClearField();
-                    toolsForDrawing.DrawFullGraph(edges, vertex);
-                    field.Image = toolsForDrawing.GetBitmap();
+                    ToolsForDrawing.ClearField();
+                    ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+                    field.Image = ToolsForDrawing.GetBitmap();
                 }
                 catch (Exception)
                 {
@@ -630,7 +591,7 @@ namespace WindowsFormsApp1
             }
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -650,25 +611,25 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если нет рёбер, пишем об этом.
-            if (edges.Count != 0)
+            if (Edges.Count != 0)
             {
                 // Делаем эту кнопку активной.
                 ChangeEdgeLengthButton.Enabled = false;
@@ -682,7 +643,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Рёбер нет");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -702,21 +663,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.
@@ -726,7 +687,7 @@ namespace WindowsFormsApp1
             ChangeEdgeLengthButton.Enabled = true;
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -746,21 +707,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.
@@ -812,13 +773,13 @@ namespace WindowsFormsApp1
                     if (firstPress)
                     {
                         // Ищем вершину, на которую нажали и выделяем её.
-                        for (int i = 0; i < vertex.Count; i++)
+                        for (int i = 0; i < Vertex.Count; i++)
                         {
-                            if (Math.Pow(vertex[i].X - e.X, 2) + Math.Pow(vertex[i].Y - e.Y, 2) <=
-                                toolsForDrawing.R * toolsForDrawing.R)
+                            if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                                Math.Pow(Consts.VertexRadius, 2))
                             {
-                                toolsForDrawing.DrawSelectedVertex(vertex[i].X, vertex[i].Y);
-                                field.Image = toolsForDrawing.GetBitmap();
+                                ToolsForDrawing.DrawSelectedVertex(Vertex[i].X, Vertex[i].Y);
+                                field.Image = ToolsForDrawing.GetBitmap();
 
                                 indexVertexForMove = i;
                                 firstPress = false;
@@ -831,11 +792,11 @@ namespace WindowsFormsApp1
                             firstPress = true;
 
                             // Проверяем, чтобы вершина при переносе не перекрывала другую.
-                            for (int i = 0; i < vertex.Count; i++)
+                            for (int i = 0; i < Vertex.Count; i++)
                             {
                                 if (i != indexVertexForMove)
-                                    if (Math.Abs(e.X - vertex[i].X) < 2 * toolsForDrawing.R
-                                        && Math.Abs(e.Y - vertex[i].Y) < 2 * toolsForDrawing.R)
+                                    if (Math.Abs(e.X - Vertex[i].X) < 2 * Consts.VertexRadius
+                                        && Math.Abs(e.Y - Vertex[i].Y) < 2 * Consts.VertexRadius)
                                     {
                                         MessageBox.Show("Вершины не должны пересекаться", "Error",
                                             MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -846,16 +807,16 @@ namespace WindowsFormsApp1
                             }
 
                             // Тогда двигаем точку и перерисовываем граф.
-                            vertex[indexVertexForMove].X = e.X;
-                            vertex[indexVertexForMove].Y = e.Y;
+                            Vertex[indexVertexForMove].X = e.X;
+                            Vertex[indexVertexForMove].Y = e.Y;
 
-                            toolsForDrawing.ClearField();
+                            ToolsForDrawing.ClearField();
 
                             indexVertexForMove = -1;
 
-                            toolsForDrawing.DrawFullGraph(edges, vertex);
+                            ToolsForDrawing.DrawFullGraph(Edges, Vertex);
 
-                            field.Image = toolsForDrawing.GetBitmap();
+                            field.Image = ToolsForDrawing.GetBitmap();
                         }
                     }
                 }
@@ -864,38 +825,38 @@ namespace WindowsFormsApp1
                 if (!ChangeEdgeLengthButton.Enabled)
                 {
                     // Если мы нажали на вершину, то ничего не происходит.
-                    for (int i = 0; i < vertex.Count; i++)
+                    for (int i = 0; i < Vertex.Count; i++)
                     {
-                        if (Math.Pow(vertex[i].X - e.X, 2) + Math.Pow(vertex[i].Y - e.Y, 2) <=
-                            toolsForDrawing.R * toolsForDrawing.R)
+                        if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                            Math.Pow(Consts.VertexRadius, 2))
                             return;
                     }
 
-                    for (int i = 0; i < edges.Count; i++)
+                    for (int i = 0; i < Edges.Count; i++)
                     {
                         // Если это петля
-                        if (edges[i].Ver1 == edges[i].Ver2)
+                        if (Edges[i].Ver1 == Edges[i].Ver2)
                         {
                             // Петля - это круг. и +- ширина кисти/2 к радиусу. 
                             // У нас центр окружности петли смещён на -R -R.
                             // Если клик попал в тор, то предлагаем изменить длину.
 
-                            if ((Math.Pow(vertex[edges[i].Ver1].X - toolsForDrawing.R - e.X, 2) +
-                                 Math.Pow(vertex[edges[i].Ver1].Y - toolsForDrawing.R - e.Y, 2)) <=
-                                Math.Pow(toolsForDrawing.R + 4, 2)
+                            if ((Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2) +
+                                 Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) <=
+                                Math.Pow(Consts.VertexRadius + 4, 2)
 
                                 &&
 
-                                (Math.Pow(vertex[edges[i].Ver1].X - toolsForDrawing.R - e.X, 2) +
-                                 Math.Pow(vertex[edges[i].Ver1].Y - toolsForDrawing.R - e.Y, 2)) >=
-                                Math.Pow(toolsForDrawing.R - 4, 2))
+                                (Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2) +
+                                 Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) >=
+                                Math.Pow(Consts.VertexRadius - 4, 2))
                             {
                                 getEdgeLengthForm.ShowDialog();
 
                                 // Если мы не нажади отмену, то меняем вес.
                                 if (!getEdgeLengthForm.cancel)
                                 {
-                                    edges[i].Weight = getEdgeLengthForm.number;
+                                    Edges[i].Weight = getEdgeLengthForm.number;
                                     PrintAdjMatrix();
                                 }
                             }
@@ -903,15 +864,15 @@ namespace WindowsFormsApp1
                         else
                         {
                             // Если x координаты двух вершин ребра не совпадают.
-                            if (vertex[edges[i].Ver1].X != vertex[edges[i].Ver2].X)
+                            if (Vertex[Edges[i].Ver1].X != Vertex[Edges[i].Ver2].X)
                             {
                                 // Вычисляем коэффициенты в уравнении прямой,
                                 // проходящей через две вершины этого ребра, вида y = kx + b.
                                 double k = Calculate.GetK(
-                                    vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
+                                    Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
                                 double b = Calculate.GetB(
-                                    vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
+                                    Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
                                 // Проводим прямую между двумя веришнами ребра,
                                 // и "расширяем" её на ширину кисти/2.
@@ -919,19 +880,19 @@ namespace WindowsFormsApp1
                                 if (e.Y <= k * e.X + b + 4 && e.Y >= k * e.X + b - 4)
                                 {
                                     // Если есть обратный путь, то выбираем, какой меняем.
-                                    if (adjMatrix[edges[i].Ver1, edges[i].Ver2] != 0 &&
-                                        adjMatrix[edges[i].Ver2, edges[i].Ver1] != 0)
+                                    if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
+                                        adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                     {
                                         chooseEdgeFormForm.TextForUnderstandingLabel.Text =
                                             "Длину какого пути Вы хотите изменить:";
 
                                         chooseEdgeFormForm.FirstOptionButton.Text =
-                                            $"Изменить длину пути из {edges[i].Ver1 + 1} в " +
-                                            $"{edges[i].Ver2 + 1}";
+                                            $"Изменить длину пути из {Edges[i].Ver1 + 1} в " +
+                                            $"{Edges[i].Ver2 + 1}";
 
                                         chooseEdgeFormForm.SecondOptionButton.Text =
-                                            $"Изменить длину пути из {edges[i].Ver2 + 1} в " +
-                                            $"{edges[i].Ver1 + 1}";
+                                            $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
+                                            $"{Edges[i].Ver1 + 1}";
 
                                         chooseEdgeFormForm.ShowDialog();
 
@@ -944,7 +905,7 @@ namespace WindowsFormsApp1
 
                                                 if (!getEdgeLengthForm.cancel)
                                                 {
-                                                    edges[i].Weight = getEdgeLengthForm.number;
+                                                    Edges[i].Weight = getEdgeLengthForm.number;
 
                                                     PrintAdjMatrix();
 
@@ -958,12 +919,12 @@ namespace WindowsFormsApp1
 
                                             if (!getEdgeLengthForm.cancel)
                                             {
-                                                for (int j = i; j < edges.Count; j++)
+                                                for (int j = i; j < Edges.Count; j++)
                                                 {
-                                                    if (edges[j].Ver1 == edges[i].Ver2 &&
-                                                        edges[j].Ver2 == edges[i].Ver1)
+                                                    if (Edges[j].Ver1 == Edges[i].Ver2 &&
+                                                        Edges[j].Ver2 == Edges[i].Ver1)
                                                     {
-                                                        edges[j].Weight = getEdgeLengthForm.number;
+                                                        Edges[j].Weight = getEdgeLengthForm.number;
 
                                                         PrintAdjMatrix();
                                                         return;
@@ -983,7 +944,7 @@ namespace WindowsFormsApp1
 
                                         if (!getEdgeLengthForm.cancel)
                                         {
-                                            edges[i].Weight = getEdgeLengthForm.number;
+                                            Edges[i].Weight = getEdgeLengthForm.number;
 
                                             PrintAdjMatrix();
 
@@ -999,30 +960,30 @@ namespace WindowsFormsApp1
                                 // Если x координаты вершин ребра совпали, 
                                 // то проводим между ними прямую, и 
                                 // "расширяем" её вверх и вниз на ширину кисти/2.
-                                if (e.X <= vertex[edges[i].Ver1].X + 4 &&
-                                    e.X >= vertex[edges[i].Ver1].X - 4 &&
+                                if (e.X <= Vertex[Edges[i].Ver1].X + 4 &&
+                                    e.X >= Vertex[Edges[i].Ver1].X - 4 &&
                                     e.Y < Math.Max(
-                                        vertex[edges[i].Ver1].Y,
-                                        vertex[edges[i].Ver2].Y) - toolsForDrawing.R &&
+                                        Vertex[Edges[i].Ver1].Y,
+                                        Vertex[Edges[i].Ver2].Y) - Consts.VertexRadius &&
                                     e.Y > Math.Min(
-                                        vertex[edges[i].Ver1].Y,
-                                        vertex[edges[i].Ver2].Y) + toolsForDrawing.R)
+                                        Vertex[Edges[i].Ver1].Y,
+                                        Vertex[Edges[i].Ver2].Y) + Consts.VertexRadius)
                                 {
                                     // Если есть обратное ребро, то даём выбрать, 
                                     // длину какого пути надо изменить.
-                                    if (adjMatrix[edges[i].Ver1, edges[i].Ver2] != 0 &&
-                                        adjMatrix[edges[i].Ver2, edges[i].Ver1] != 0)
+                                    if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
+                                        adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                     {
                                         chooseEdgeFormForm.TextForUnderstandingLabel.Text =
                                             "Длину какого пути Вы хотите изменить:";
 
                                         chooseEdgeFormForm.FirstOptionButton.Text =
-                                            $"Изменить длину пути из {edges[i].Ver1 + 1} в " +
-                                            $"{edges[i].Ver2 + 1}";
+                                            $"Изменить длину пути из {Edges[i].Ver1 + 1} в " +
+                                            $"{Edges[i].Ver2 + 1}";
 
                                         chooseEdgeFormForm.SecondOptionButton.Text =
-                                            $"Изменить длину пути из {edges[i].Ver2 + 1} в " +
-                                            $"{edges[i].Ver1 + 1}";
+                                            $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
+                                            $"{Edges[i].Ver1 + 1}";
 
                                         chooseEdgeFormForm.ShowDialog();
 
@@ -1035,7 +996,7 @@ namespace WindowsFormsApp1
 
                                                 if (!getEdgeLengthForm.cancel)
                                                 {
-                                                    edges[i].Weight = getEdgeLengthForm.number;
+                                                    Edges[i].Weight = getEdgeLengthForm.number;
 
                                                     PrintAdjMatrix();
 
@@ -1049,12 +1010,12 @@ namespace WindowsFormsApp1
 
                                             if (!getEdgeLengthForm.cancel)
                                             {
-                                                for (int j = i; j < edges.Count; j++)
+                                                for (int j = i; j < Edges.Count; j++)
                                                 {
-                                                    if (edges[j].Ver1 == edges[i].Ver2 &&
-                                                        edges[j].Ver2 == edges[i].Ver1)
+                                                    if (Edges[j].Ver1 == Edges[i].Ver2 &&
+                                                        Edges[j].Ver2 == Edges[i].Ver1)
                                                     {
-                                                        edges[j].Weight = getEdgeLengthForm.number;
+                                                        Edges[j].Weight = getEdgeLengthForm.number;
 
                                                         PrintAdjMatrix();
                                                         return;
@@ -1074,7 +1035,7 @@ namespace WindowsFormsApp1
 
                                         if (!getEdgeLengthForm.cancel)
                                         {
-                                            edges[i].Weight = getEdgeLengthForm.number;
+                                            Edges[i].Weight = getEdgeLengthForm.number;
 
                                             PrintAdjMatrix();
 
@@ -1093,10 +1054,10 @@ namespace WindowsFormsApp1
                 if (!DrawVertexButton.Enabled)
                 {
                     // Проверяем, не попадаем ли мы на другую вершину.
-                    for (int i = 0; i < vertex.Count; i++)
+                    for (int i = 0; i < Vertex.Count; i++)
                     {
-                        if (Math.Abs(e.X - vertex[i].X) < 2 * toolsForDrawing.R
-                            && Math.Abs(e.Y - vertex[i].Y) < 2 * toolsForDrawing.R)
+                        if (Math.Abs(e.X - Vertex[i].X) < 2 * Consts.VertexRadius
+                            && Math.Abs(e.Y - Vertex[i].Y) < 2 * Consts.VertexRadius)
                         {
                             MessageBox.Show("Вершины не должны пересекаться", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1104,9 +1065,9 @@ namespace WindowsFormsApp1
                         }
                     }
 
-                    vertex.Add(new Vertex(e.X, e.Y));
-                    toolsForDrawing.DrawVertex(e.X, e.Y, vertex.Count.ToString());
-                    field.Image = toolsForDrawing.GetBitmap();
+                    Vertex.Add(new Vertex(e.X, e.Y));
+                    ToolsForDrawing.DrawVertex(e.X, e.Y, Vertex.Count.ToString());
+                    field.Image = ToolsForDrawing.GetBitmap();
 
                     PrintAdjMatrix();
                 }
@@ -1115,26 +1076,26 @@ namespace WindowsFormsApp1
                 if (!DrawEdgeButton.Enabled)
                 {
                     // Смотрим, на какую вершину нажали, затем выделяем её.
-                    for (int i = 0; i < vertex.Count; i++)
+                    for (int i = 0; i < Vertex.Count; i++)
                     {
-                        if (Math.Pow(vertex[i].X - e.X, 2) + Math.Pow(vertex[i].Y - e.Y, 2) <=
-                            toolsForDrawing.R * toolsForDrawing.R)
+                        if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                            Math.Pow(Consts.VertexRadius, 2))
                         {
                             // Если это первая вершина.
                             if (ver1ForConnection == -1)
                             {
-                                toolsForDrawing.DrawSelectedVertex(vertex[i].X, vertex[i].Y);
+                                ToolsForDrawing.DrawSelectedVertex(Vertex[i].X, Vertex[i].Y);
                                 ver1ForConnection = i;
-                                field.Image = toolsForDrawing.GetBitmap();
+                                field.Image = ToolsForDrawing.GetBitmap();
                                 break;
                             }
 
                             // Если это вторая веришна.
                             if (ver2ForConnection == -1)
                             {
-                                toolsForDrawing.DrawSelectedVertex(vertex[i].X, vertex[i].Y);
+                                ToolsForDrawing.DrawSelectedVertex(Vertex[i].X, Vertex[i].Y);
                                 ver2ForConnection = i;
-                                field.Image = toolsForDrawing.GetBitmap();
+                                field.Image = ToolsForDrawing.GetBitmap();
 
                                 // Если между ними уже есть ребро, то предупреждаем об этом.
                                 if (adjMatrix[ver1ForConnection, ver2ForConnection] == 0)
@@ -1144,14 +1105,14 @@ namespace WindowsFormsApp1
                                     // Если решили отменить рисование ребра.
                                     if (getEdgeLengthForm.cancel)
                                     {
-                                        toolsForDrawing.DrawVertex(
-                                            vertex[ver1ForConnection].X,
-                                            vertex[ver1ForConnection].Y,
+                                        ToolsForDrawing.DrawVertex(
+                                            Vertex[ver1ForConnection].X,
+                                            Vertex[ver1ForConnection].Y,
                                             (ver1ForConnection + 1).ToString());
 
-                                        toolsForDrawing.DrawVertex(
-                                            vertex[ver2ForConnection].X,
-                                            vertex[ver2ForConnection].Y,
+                                        ToolsForDrawing.DrawVertex(
+                                            Vertex[ver2ForConnection].X,
+                                            Vertex[ver2ForConnection].Y,
                                             (ver2ForConnection + 1).ToString());
 
                                         getEdgeLengthForm.cancel = false;
@@ -1160,15 +1121,15 @@ namespace WindowsFormsApp1
                                     }
                                     else
                                     {
-                                        edges.Add(new Edge(
+                                        Edges.Add(new Edge(
                                             ver1ForConnection,
                                             ver2ForConnection,
                                             getEdgeLengthForm.number));
 
-                                        toolsForDrawing.DrawEdge(
-                                            vertex[ver1ForConnection],
-                                            vertex[ver2ForConnection],
-                                            edges[edges.Count - 1]);
+                                        ToolsForDrawing.DrawEdge(
+                                            Vertex[ver1ForConnection],
+                                            Vertex[ver2ForConnection],
+                                            Edges[Edges.Count - 1]);
 
                                         ver1ForConnection = -1;
                                         ver2ForConnection = -1;
@@ -1178,7 +1139,7 @@ namespace WindowsFormsApp1
                                         DrawVertexButton.Enabled = true;
                                     }
 
-                                    field.Image = toolsForDrawing.GetBitmap();
+                                    field.Image = ToolsForDrawing.GetBitmap();
 
                                     break;
                                 }
@@ -1187,19 +1148,19 @@ namespace WindowsFormsApp1
                                                 $"в вершину {ver2ForConnection + 1} уже есть!");
 
                                 // Убираем выделение с вершин.
-                                toolsForDrawing.DrawVertex(
-                                    vertex[ver1ForConnection].X,
-                                    vertex[ver1ForConnection].Y,
+                                ToolsForDrawing.DrawVertex(
+                                    Vertex[ver1ForConnection].X,
+                                    Vertex[ver1ForConnection].Y,
                                     (ver1ForConnection + 1).ToString());
 
-                                toolsForDrawing.DrawVertex(
-                                    vertex[ver2ForConnection].X,
-                                    vertex[ver2ForConnection].Y,
+                                ToolsForDrawing.DrawVertex(
+                                    Vertex[ver2ForConnection].X,
+                                    Vertex[ver2ForConnection].Y,
                                     (ver2ForConnection + 1).ToString());
 
                                 ver1ForConnection = ver2ForConnection = -1;
 
-                                field.Image = toolsForDrawing.GetBitmap();
+                                field.Image = ToolsForDrawing.GetBitmap();
                             }
                         }
                     }
@@ -1212,10 +1173,10 @@ namespace WindowsFormsApp1
 
                     // Если удаляем вершину.
                     // Предлагаем также отказаться от удаления.
-                    for (int i = 0; i < vertex.Count; i++)
+                    for (int i = 0; i < Vertex.Count; i++)
                     {
-                        if (Math.Pow(vertex[i].X - e.X, 2) + Math.Pow(vertex[i].Y - e.Y, 2) <=
-                            toolsForDrawing.R * toolsForDrawing.R)
+                        if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                            Math.Pow(Consts.VertexRadius, 2))
                         {
                             string message = "Это действие является необратимым," +
                                              " Вы уверены, что хотите продолжить?";
@@ -1227,11 +1188,11 @@ namespace WindowsFormsApp1
 
                             if (confirm == DialogResult.Yes)
                             {
-                                for (int j = 0; j < edges.Count; j++)
+                                for (int j = 0; j < Edges.Count; j++)
                                 {
-                                    if (edges[j].Ver1 == i || edges[j].Ver2 == i)
+                                    if (Edges[j].Ver1 == i || Edges[j].Ver2 == i)
                                     {
-                                        edges.RemoveAt(j);
+                                        Edges.RemoveAt(j);
                                         j--;
                                     }
                                     else
@@ -1239,15 +1200,15 @@ namespace WindowsFormsApp1
                                         // Уменьшаем номер веришны у рёбер,
                                         // которые соединены с вершинами,
                                         // у которых ноер больше
-                                        if (edges[j].Ver1 > i)
-                                            edges[j].Ver1--;
+                                        if (Edges[j].Ver1 > i)
+                                            Edges[j].Ver1--;
 
-                                        if (edges[j].Ver2 > i)
-                                            edges[j].Ver2--;
+                                        if (Edges[j].Ver2 > i)
+                                            Edges[j].Ver2--;
                                     }
                                 }
 
-                                vertex.RemoveAt(i);
+                                Vertex.RemoveAt(i);
                                 somethingDeleted = true;
                                 break;
                             }
@@ -1261,27 +1222,27 @@ namespace WindowsFormsApp1
                     // Предлагаем также отказаться от удаления.
                     if (!somethingDeleted)
                     {
-                        for (var i = 0; i < edges.Count; i++)
+                        for (var i = 0; i < Edges.Count; i++)
                         {
                             // Если это петля
-                            if (edges[i].Ver1 == edges[i].Ver2)
+                            if (Edges[i].Ver1 == Edges[i].Ver2)
                             {
                                 // Петля - это круг. и +- ширина кисти/2 к радиусу. 
                                 // У нас центр окружности петли смещён на -R -R.
                                 // Если клик попал в тор, то предлагаем изменить длину.
-                                if ((Math.Pow(vertex[edges[i].Ver1].X - toolsForDrawing.R - e.X, 2)
+                                if ((Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
                                      +
-                                     Math.Pow(vertex[edges[i].Ver1].Y - toolsForDrawing.R - e.Y, 2))
+                                     Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2))
                                     <=
-                                    Math.Pow(toolsForDrawing.R + 4, 2)
+                                    Math.Pow(Consts.VertexRadius + 4, 2)
 
                                     &&
 
-                                    (Math.Pow(vertex[edges[i].Ver1].X - toolsForDrawing.R - e.X, 2)
+                                    (Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
                                      +
-                                     Math.Pow(vertex[edges[i].Ver1].Y - toolsForDrawing.R - e.Y, 2))
+                                     Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2))
                                     >=
-                                    Math.Pow(toolsForDrawing.R - 4, 2))
+                                    Math.Pow(Consts.VertexRadius - 4, 2))
                                 {
                                     var message = "Это действие является необратимым," +
                                                   " Вы уверены, что хотите продолжить?";
@@ -1292,7 +1253,7 @@ namespace WindowsFormsApp1
 
                                     if (confirm == DialogResult.Yes)
                                     {
-                                        edges.RemoveAt(i);
+                                        Edges.RemoveAt(i);
                                         somethingDeleted = true;
                                     }
 
@@ -1302,15 +1263,15 @@ namespace WindowsFormsApp1
                             else
                             {
                                 // Если x координаты вершин ребра не совпдадают.
-                                if (vertex[edges[i].Ver1].X != vertex[edges[i].Ver2].X)
+                                if (Vertex[Edges[i].Ver1].X != Vertex[Edges[i].Ver2].X)
                                 {
                                     // Вычисляем коэффициенты в уравнении прямой,
                                     // проходящей через две вершины этого ребра, вида y = kx + b.
                                     double k = Calculate.GetK(
-                                        vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
+                                        Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
                                     double b = Calculate.GetB(
-                                        vertex[edges[i].Ver1], vertex[edges[i].Ver2]);
+                                        Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
                                     // Проводим прямую между двумя веришнами ребра,
                                     // и "расширяем" её на ширину кисти/2.
@@ -1319,11 +1280,11 @@ namespace WindowsFormsApp1
                                     {
                                         // Если есть обратный путь, то предлагаем выбрать путь,
                                         // который надо удалить.
-                                        if (adjMatrix[edges[i].Ver1, edges[i].Ver2] != 0 &&
-                                            adjMatrix[edges[i].Ver2, edges[i].Ver1] != 0)
+                                        if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
+                                            adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
                                             SetTextInButtonFromChooseEdgeForm(
-                                                edges[i].Ver1, edges[i].Ver2);
+                                                Edges[i].Ver1, Edges[i].Ver2);
 
                                             chooseEdgeFormForm.ShowDialog();
 
@@ -1332,19 +1293,19 @@ namespace WindowsFormsApp1
                                             {
                                                 if (chooseEdgeFormForm.firstOption)
                                                 {
-                                                    edges.RemoveAt(i);
+                                                    Edges.RemoveAt(i);
                                                     somethingDeleted = true;
 
                                                     chooseEdgeFormForm.firstOption = false;
                                                     break;
                                                 }
 
-                                                for (int j = 0; j < edges.Count; j++)
+                                                for (int j = 0; j < Edges.Count; j++)
                                                 {
-                                                    if (edges[j].Ver1 == edges[i].Ver2 &&
-                                                        edges[j].Ver2 == edges[i].Ver1)
+                                                    if (Edges[j].Ver1 == Edges[i].Ver2 &&
+                                                        Edges[j].Ver2 == Edges[i].Ver1)
                                                     {
-                                                        edges.RemoveAt(j);
+                                                        Edges.RemoveAt(j);
                                                         break;
                                                     }
                                                 }
@@ -1365,7 +1326,7 @@ namespace WindowsFormsApp1
 
                                         if (confirm == DialogResult.Yes)
                                         {
-                                            edges.RemoveAt(i);
+                                            Edges.RemoveAt(i);
                                             somethingDeleted = true;
                                         }
 
@@ -1374,27 +1335,27 @@ namespace WindowsFormsApp1
                                 }
 
                                 // Если x координаты вершин ребра совпадают.
-                                if (vertex[edges[i].Ver1].X == vertex[edges[i].Ver2].X)
+                                if (Vertex[Edges[i].Ver1].X == Vertex[Edges[i].Ver2].X)
                                 {
                                     // Если x координаты вершин ребра совпали, 
                                     // то проводим между ними прямую, и 
                                     // "расширяем" её вверх и вниз на ширину кисти/2.
-                                    if (e.X <= vertex[edges[i].Ver1].X + 4 &&
-                                        e.X >= vertex[edges[i].Ver1].X - 4 &&
+                                    if (e.X <= Vertex[Edges[i].Ver1].X + 4 &&
+                                        e.X >= Vertex[Edges[i].Ver1].X - 4 &&
                                         e.Y < Math.Max(
-                                            vertex[edges[i].Ver1].Y,
-                                            vertex[edges[i].Ver2].Y) - toolsForDrawing.R &&
+                                            Vertex[Edges[i].Ver1].Y,
+                                            Vertex[Edges[i].Ver2].Y) - Consts.VertexRadius &&
                                         e.Y > Math.Min(
-                                            vertex[edges[i].Ver1].Y,
-                                            vertex[edges[i].Ver2].Y) + toolsForDrawing.R)
+                                            Vertex[Edges[i].Ver1].Y,
+                                            Vertex[Edges[i].Ver2].Y) + Consts.VertexRadius)
                                     {
                                         // Если есть обратный путь, то предлагаем выбрать путь,
                                         // который надо удалить. 
-                                        if (adjMatrix[edges[i].Ver1, edges[i].Ver2] != 0 &&
-                                            adjMatrix[edges[i].Ver2, edges[i].Ver1] != 0)
+                                        if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
+                                            adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
                                             SetTextInButtonFromChooseEdgeForm(
-                                                edges[i].Ver1, edges[i].Ver2);
+                                                Edges[i].Ver1, Edges[i].Ver2);
 
                                             chooseEdgeFormForm.ShowDialog();
 
@@ -1403,17 +1364,17 @@ namespace WindowsFormsApp1
                                             {
                                                 if (chooseEdgeFormForm.firstOption)
                                                 {
-                                                    edges.RemoveAt(i);
+                                                    Edges.RemoveAt(i);
                                                     somethingDeleted = true;
                                                     chooseEdgeFormForm.firstOption = false;
                                                     break;
                                                 }
 
-                                                for (int j = 0; j < edges.Count; j++)
+                                                for (int j = 0; j < Edges.Count; j++)
                                                 {
-                                                    if (edges[j].Ver1 == edges[i].Ver2)
+                                                    if (Edges[j].Ver1 == Edges[i].Ver2)
                                                     {
-                                                        edges.RemoveAt(j);
+                                                        Edges.RemoveAt(j);
                                                         break;
                                                     }
                                                 }
@@ -1435,7 +1396,7 @@ namespace WindowsFormsApp1
 
                                         if (confirm == DialogResult.Yes)
                                         {
-                                            edges.RemoveAt(i);
+                                            Edges.RemoveAt(i);
                                             somethingDeleted = true;
                                         }
 
@@ -1449,15 +1410,15 @@ namespace WindowsFormsApp1
                     // Если что-то удалили, то перерисовываем граф.
                     if (somethingDeleted)
                     {
-                        toolsForDrawing.ClearField();
-                        toolsForDrawing.DrawFullGraph(edges, vertex);
-                        field.Image = toolsForDrawing.GetBitmap();
+                        ToolsForDrawing.ClearField();
+                        ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+                        field.Image = ToolsForDrawing.GetBitmap();
                         PrintAdjMatrix();
                     }
                 }
 
                 // В зависимости от текста открываем/закрываем матрицу смежности.
-                if (vertex.Count != 0)
+                if (Vertex.Count != 0)
                     ShowOrHideAdjMatrix.Enabled = true;
                 else
                 {
@@ -1476,19 +1437,19 @@ namespace WindowsFormsApp1
             File.WriteAllText(pathForSaveFile, default);
 
             // Сначала число вершин, затем сами вершины.
-            File.AppendAllText(pathForSaveFile, vertex.Count + Environment.NewLine);
+            File.AppendAllText(pathForSaveFile, Vertex.Count + Environment.NewLine);
 
-            for (int i = 0; i < vertex.Count; i++)
-                File.AppendAllText(pathForSaveFile, vertex[i] + Environment.NewLine);
+            for (int i = 0; i < Vertex.Count; i++)
+                File.AppendAllText(pathForSaveFile, Vertex[i] + Environment.NewLine);
 
             // Сначала число рёбер, потом сами рёбра.
-            File.AppendAllText(pathForSaveFile, edges.Count + Environment.NewLine);
+            File.AppendAllText(pathForSaveFile, Edges.Count + Environment.NewLine);
 
-            for (int i = 0; i < edges.Count; i++)
-                if (i != edges.Count - 1)
-                    File.AppendAllText(pathForSaveFile, edges[i] + Environment.NewLine);
+            for (int i = 0; i < Edges.Count; i++)
+                if (i != Edges.Count - 1)
+                    File.AppendAllText(pathForSaveFile, Edges[i] + Environment.NewLine);
                 else
-                    File.AppendAllText(pathForSaveFile, edges[i].ToString());
+                    File.AppendAllText(pathForSaveFile, Edges[i].ToString());
         }
 
         /// <summary>
@@ -1503,9 +1464,9 @@ namespace WindowsFormsApp1
             if (ver1ForConnection != -1 && ver2ForConnection == -1)
                 if (e.KeyChar == (char)Keys.Escape)
                 {
-                    toolsForDrawing.DrawVertex(
-                        vertex[ver1ForConnection].X,
-                        vertex[ver1ForConnection].Y,
+                    ToolsForDrawing.DrawVertex(
+                        Vertex[ver1ForConnection].X,
+                        Vertex[ver1ForConnection].Y,
                         (ver1ForConnection + 1).ToString());
                     ver1ForConnection = -1;
                 }
@@ -1515,9 +1476,9 @@ namespace WindowsFormsApp1
             {
                 if (e.KeyChar == (char)Keys.Escape)
                 {
-                    toolsForDrawing.DrawVertex(
-                        vertex[indexVertexForMove].X,
-                        vertex[indexVertexForMove].Y,
+                    ToolsForDrawing.DrawVertex(
+                        Vertex[indexVertexForMove].X,
+                        Vertex[indexVertexForMove].Y,
                         (indexVertexForMove + 1).ToString());
                     indexVertexForMove = -1;
 
@@ -1525,7 +1486,7 @@ namespace WindowsFormsApp1
                 }
             }
 
-            field.Image = toolsForDrawing.GetBitmap();
+            field.Image = ToolsForDrawing.GetBitmap();
         }
 
         // Methods for work with files.
@@ -1538,8 +1499,8 @@ namespace WindowsFormsApp1
             int vertexCount;
             int edgesCount;
 
-            vertex.Clear();
-            edges.Clear();
+            Vertex.Clear();
+            Edges.Clear();
 
             string[] lines = File.ReadAllLines(pathForOpenFile);
 
@@ -1552,7 +1513,7 @@ namespace WindowsFormsApp1
                 int xCoord = int.Parse(lines[i].Split(' ')[0]);
                 int yCoord = int.Parse(lines[i].Split(' ')[1]);
 
-                vertex.Add(new Vertex(xCoord, yCoord));
+                Vertex.Add(new Vertex(xCoord, yCoord));
             }
 
             // Количество рёбер.
@@ -1565,7 +1526,7 @@ namespace WindowsFormsApp1
                 int ver2 = int.Parse(lines[i].Split(' ')[1]);
                 double disctance = double.Parse(lines[i].Split(' ')[2]);
 
-                edges.Add(new Edge(ver1, ver2, disctance));
+                Edges.Add(new Edge(ver1, ver2, disctance));
             }
         }
 
@@ -1583,11 +1544,11 @@ namespace WindowsFormsApp1
         public void PrintAdjMatrix()
         {
             // Создаём и заполняем матрицу по листам смежности.
-            adjMatrix = new double[vertex.Count, vertex.Count];
+            adjMatrix = new double[Vertex.Count, Vertex.Count];
 
-            toolsForDrawing.FillAdjMatrix(vertex.Count, edges, adjMatrix);
+            ToolsForDrawing.FillAdjMatrix(Vertex.Count, Edges, adjMatrix);
 
-            showAdjacencyMatrixForm.AdjMatrixListBox.Items.Clear();
+            showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
 
             string curStrForPrint;
             string caption;
@@ -1609,7 +1570,7 @@ namespace WindowsFormsApp1
 
             // В зависимости от maxDigitsInMatrix и от длины
             // текущего числа формируем матрицу смежности.
-            for (int i = 0; i < vertex.Count; i++)
+            for (int i = 0; i < Vertex.Count; i++)
             {
                 // Отдельно высчитываем расстояние между столбцами для двузначных чисел.
                 if (i < 9)
@@ -1617,7 +1578,7 @@ namespace WindowsFormsApp1
                 else
                     curStrForPrint = (i + 1) + GetSpaces(1) + "|" + GetSpaces(3);
 
-                for (int j = 0; j < vertex.Count; j++)
+                for (int j = 0; j < Vertex.Count; j++)
                 {
                     switch (maxDigitsInMatrix)
                     {
@@ -1895,23 +1856,23 @@ namespace WindowsFormsApp1
                 firstRaw = false;
 
                 // Добавляем сформированную строку в ListBox/
-                showAdjacencyMatrixForm.AdjMatrixListBox.Items.Add(curStrForPrint);
+                showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Add(curStrForPrint);
 
                 // Делаем пропуск строки, если это не последняя строка.
-                if (i != vertex.Count - 1)
-                    showAdjacencyMatrixForm.AdjMatrixListBox.Items.Add(GetSpaces(5) + "|");
+                if (i != Vertex.Count - 1)
+                    showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Add(GetSpaces(5) + "|");
 
             }
 
             // Вставляем первую и вторую строки в ListBox.
-            showAdjacencyMatrixForm.AdjMatrixListBox.Items.Insert(0, caption);
-            showAdjacencyMatrixForm.AdjMatrixListBox.Items.Insert(1, strFromHyphen);
+            showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Insert(0, caption);
+            showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Insert(1, strFromHyphen);
 
             // Если вершин нет, закрываем матрицу.
             // Если есть, то выводим матрицу, при этом оставляем фокус на этом окне.
-            if (vertex.Count == 0)
+            if (Vertex.Count == 0)
             {
-                showAdjacencyMatrixForm.AdjMatrixListBox.Items.Clear();
+                showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
                 showAdjacencyMatrixForm.Hide();
             }
             else if (ShowOrHideAdjMatrix.Text == "Закрыть матрицу")
@@ -2003,11 +1964,11 @@ namespace WindowsFormsApp1
             // Если готова выпустить точку.
             var count = points.Count;
 
-            for (var i = 0; i < vertex.Count; i++)
+            for (var i = 0; i < Vertex.Count; i++)
             {
-                if (vertex[i].HasPoint)
+                if (Vertex[i].HasPoint)
                 {
-                    vertex[i].HasPoint = false;
+                    Vertex[i].HasPoint = false;
 
                     if (firstVertex)
                     {
@@ -2030,28 +1991,28 @@ namespace WindowsFormsApp1
                 timers[i].Start();
             }
 
-            toolsForDrawing.DrawFullGraph(edges, vertex);
+            ToolsForDrawing.DrawFullGraph(Edges, Vertex);
 
             for (var i = 0; i < points.Count; i++)
             {
                 if (timers[i].ElapsedMilliseconds * coefficient > points[i].Weight * 1000)
                 {
-                    vertex[points[i].Ver2].HasPoint = true;
+                    Vertex[points[i].Ver2].HasPoint = true;
                     points.RemoveAt(i);
                     timers.RemoveAt(i);
                     i--;
                     continue;
                 }
 
-                PointF point = GetPoint(vertex[points[i].Ver1],
-                    vertex[points[i].Ver2], points[i].Weight, timers[i]);
+                PointF point = GetPoint(Vertex[points[i].Ver1],
+                    Vertex[points[i].Ver2], points[i].Weight, timers[i]);
 
-                toolsForDrawing.DrawPoint(point.X, point.Y);
+                ToolsForDrawing.DrawPoint(point.X, point.Y);
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
-            field.Image = toolsForDrawing.GetBitmap();
+            field.Image = ToolsForDrawing.GetBitmap();
         }
 
         private PointF GetPoint(Vertex ver1, Vertex ver2, double allTime, Stopwatch timer)
@@ -2204,12 +2165,12 @@ namespace WindowsFormsApp1
 
             if (responseSC)
             {
-                vertex[0].HasPoint = true;
-                var listArr = new List<Edge>[vertex.Count];
+                Vertex[0].HasPoint = true;
+                var listArr = new List<Edge>[Vertex.Count];
 
-                for (var i = 0; i < vertex.Count; i++)
+                for (var i = 0; i < Vertex.Count; i++)
                 {
-                    List<Edge> curEdges = edges.Where(el => el.Ver1 == i).ToList();
+                    List<Edge> curEdges = Edges.Where(el => el.Ver1 == i).ToList();
                     listArr[i] = new List<Edge>();
                     listArr[i].AddRange(curEdges);
                 }
@@ -2259,21 +2220,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.
@@ -2314,7 +2275,7 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Нарисуйте что-нибудь");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (vertex.Count != 0)
+            if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -2346,21 +2307,21 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[indexVertexForMove].X,
-                    vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
+                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                toolsForDrawing.DrawVertex(vertex[ver1ForConnection].X,
-                    vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
+                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
-                field.Image = toolsForDrawing.GetBitmap();
+                field.Image = ToolsForDrawing.GetBitmap();
             }
 
             // Делаем остальные кнопки активными.

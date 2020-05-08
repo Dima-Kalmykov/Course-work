@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace WindowsFormsApp1
 {
@@ -14,10 +8,10 @@ namespace WindowsFormsApp1
     internal static class Calculate
     {
         // Радиус вершины.
-        private static int R = 20;
+        private const int VertexRadius = Consts.VertexRadius;
 
         // Ширина наконечника стрелки.
-        private static int widthArrow = 10;
+        private const int WidthArrow = Consts.WidthArrow;
 
         /// <summary>
         /// Вычисление расстояния между двумя точками.
@@ -55,8 +49,8 @@ namespace WindowsFormsApp1
         /// <param name="k"> Наклонный коэффициент прямой y = kx + b</param>
         /// <param name="b"> Член b прямой y = kx + b </param>
         /// <returns> Дискриминант квадратного уравнения с заданными коэффициентами </returns>
-        internal static double GetSqrtDiscriminant(Vertex ver, double k, double b) =>
-           Math.Sqrt(R * R * (1 + k * k) - ver.Y * ver.Y + 2 * b * ver.Y -
+        internal static double GetSqrtOfDiscriminant(Vertex ver, double k, double b) =>
+           Math.Sqrt(VertexRadius * VertexRadius * (1 + k * k) - ver.Y * ver.Y + 2 * b * ver.Y -
             b * b + 2 * k * ver.X * (ver.Y - b) - k * k * ver.X * ver.X);
 
         /// <summary>
@@ -114,13 +108,10 @@ namespace WindowsFormsApp1
             }
 
             // Считаем число знаков целой части числа.
-            //while ((int)number > 0)
-            //{
-            //    number /= 10;
-            //    result++;
-            //}
-            if (number != 0)
+            if (Math.Abs(number) > double.Epsilon)
+            {
                 result = (int)Math.Log10(number) + 1;
+            }
             // Если число было дробным, то
             // возвращаем сумму числа знаков дробной и целой частей + запятую.
             if (digitsFraction != 0)
@@ -139,10 +130,10 @@ namespace WindowsFormsApp1
         /// <param name="x2"> x координата второй точки </param>
         /// <param name="y2"> y координата второй точки </param>
         /// <returns> x координата точки, делящей отрезок в заданном отношении </returns>
-        internal static double GetCoordOx(double x1, double y1, double x2, double y2)
+        internal static double GetXCoordinate(double x1, double y1, double x2, double y2)
         {
             // Отношение, в котором делится отрезок точкой.
-            double delta = (GetDistance(x1, y1, x2, y2) - widthArrow) / widthArrow;
+            var delta = (GetDistance(x1, y1, x2, y2) - WidthArrow) / WidthArrow;
 
             return (x1 + delta * x2) / (1 + delta);
         }
@@ -158,7 +149,7 @@ namespace WindowsFormsApp1
         internal static double GetCoordOy(double x1, double y1, double x2, double y2)
         {
             // Отношение, в котором делится отрезок точкой.
-            double delta = (GetDistance(x1, y1, x2, y2) - widthArrow) / widthArrow;
+            var delta = (GetDistance(x1, y1, x2, y2) - WidthArrow) / WidthArrow;
 
             return (y1 + delta * y2) / (1 + delta);
         }

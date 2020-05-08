@@ -32,10 +32,10 @@ namespace WindowsFormsApp1
         public void Set(MainForm _mf)
         {
             mf = _mf;
-            vertex = _mf.vertex.GetRange(0, _mf.vertex.Count);
-            edges = _mf.edges.GetRange(0, _mf.edges.Count);
+            vertex = _mf.Vertex.GetRange(0, _mf.Vertex.Count);
+            edges = _mf.Edges.GetRange(0, _mf.Edges.Count);
             coefficient = _mf.coefficient;
-            toolsForDrawing = _mf.toolsForDrawing;
+            toolsForDrawing = _mf.ToolsForDrawing;
             requireTime = _mf.requireTime;
 
             foreach (var vertex1 in vertex)
