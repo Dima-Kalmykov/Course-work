@@ -245,7 +245,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    GraphForAlg graphForCheck = new GraphForAlg(Vertex.Count);
+                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
 
                     foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
@@ -286,7 +286,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    GraphForAlg graphForCheck = new GraphForAlg(Vertex.Count);
+                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
 
                     foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
