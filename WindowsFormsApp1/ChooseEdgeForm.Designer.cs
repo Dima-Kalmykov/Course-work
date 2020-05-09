@@ -43,7 +43,7 @@
             this.FirstOptionButton.Size = new System.Drawing.Size(250, 50);
             this.FirstOptionButton.TabIndex = 0;
             this.FirstOptionButton.UseVisualStyleBackColor = false;
-            this.FirstOptionButton.Click += new System.EventHandler(this.FirstOptionButton_Click);
+            this.FirstOptionButton.Click += new System.EventHandler(this.FirstActionButton_Click);
             // 
             // SecondOptionButton
             // 
@@ -54,7 +54,7 @@
             this.SecondOptionButton.Size = new System.Drawing.Size(250, 50);
             this.SecondOptionButton.TabIndex = 1;
             this.SecondOptionButton.UseVisualStyleBackColor = false;
-            this.SecondOptionButton.Click += new System.EventHandler(this.SecondOptionButton_Click);
+            this.SecondOptionButton.Click += new System.EventHandler(this.SecondActionButton_Click);
             // 
             // TextForUnderstandingLabel
             // 

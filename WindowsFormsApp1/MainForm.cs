@@ -263,7 +263,7 @@ namespace WindowsFormsApp1
 
                         checkGraphForStronglyConnectionForm.ShowDialog();
 
-                        if (checkGraphForStronglyConnectionForm.generate)
+                        if (checkGraphForStronglyConnectionForm.MustBeGenerated)
                             GetRandomGraphButton.PerformClick();
                     }
                 }
@@ -309,7 +309,7 @@ namespace WindowsFormsApp1
 
                         checkGraphForStronglyConnectionForm.ShowDialog();
 
-                        if (checkGraphForStronglyConnectionForm.generate)
+                        if (checkGraphForStronglyConnectionForm.MustBeGenerated)
                             GetRandomGraphButton.PerformClick();
                     }
                 }
@@ -854,9 +854,9 @@ namespace WindowsFormsApp1
                                 getEdgeLengthForm.ShowDialog();
 
                                 // Если мы не нажади отмену, то меняем вес.
-                                if (!getEdgeLengthForm.cancel)
+                                if (!getEdgeLengthForm.WasCancel)
                                 {
-                                    Edges[i].Weight = getEdgeLengthForm.number;
+                                    Edges[i].Weight = getEdgeLengthForm.Weight;
                                     PrintAdjMatrix();
                                 }
                             }
@@ -897,15 +897,15 @@ namespace WindowsFormsApp1
                                         chooseEdgeFormForm.ShowDialog();
 
                                         // Если не отменили изменение длины, то меняем.
-                                        if (!chooseEdgeFormForm.cancel)
+                                        if (!chooseEdgeFormForm.WasCancel)
                                         {
-                                            if (chooseEdgeFormForm.firstOption)
+                                            if (chooseEdgeFormForm.IsFirstAction)
                                             {
                                                 getEdgeLengthForm.ShowDialog();
 
-                                                if (!getEdgeLengthForm.cancel)
+                                                if (!getEdgeLengthForm.WasCancel)
                                                 {
-                                                    Edges[i].Weight = getEdgeLengthForm.number;
+                                                    Edges[i].Weight = getEdgeLengthForm.Weight;
 
                                                     PrintAdjMatrix();
 
@@ -917,14 +917,14 @@ namespace WindowsFormsApp1
 
                                             getEdgeLengthForm.ShowDialog();
 
-                                            if (!getEdgeLengthForm.cancel)
+                                            if (!getEdgeLengthForm.WasCancel)
                                             {
                                                 for (int j = i; j < Edges.Count; j++)
                                                 {
                                                     if (Edges[j].Ver1 == Edges[i].Ver2 &&
                                                         Edges[j].Ver2 == Edges[i].Ver1)
                                                     {
-                                                        Edges[j].Weight = getEdgeLengthForm.number;
+                                                        Edges[j].Weight = getEdgeLengthForm.Weight;
 
                                                         PrintAdjMatrix();
                                                         return;
@@ -942,9 +942,9 @@ namespace WindowsFormsApp1
                                     {
                                         getEdgeLengthForm.ShowDialog();
 
-                                        if (!getEdgeLengthForm.cancel)
+                                        if (!getEdgeLengthForm.WasCancel)
                                         {
-                                            Edges[i].Weight = getEdgeLengthForm.number;
+                                            Edges[i].Weight = getEdgeLengthForm.Weight;
 
                                             PrintAdjMatrix();
 
@@ -988,15 +988,15 @@ namespace WindowsFormsApp1
                                         chooseEdgeFormForm.ShowDialog();
 
                                         // Если не отменили, то меняем длину. 
-                                        if (!chooseEdgeFormForm.cancel)
+                                        if (!chooseEdgeFormForm.WasCancel)
                                         {
-                                            if (chooseEdgeFormForm.firstOption)
+                                            if (chooseEdgeFormForm.IsFirstAction)
                                             {
                                                 getEdgeLengthForm.ShowDialog();
 
-                                                if (!getEdgeLengthForm.cancel)
+                                                if (!getEdgeLengthForm.WasCancel)
                                                 {
-                                                    Edges[i].Weight = getEdgeLengthForm.number;
+                                                    Edges[i].Weight = getEdgeLengthForm.Weight;
 
                                                     PrintAdjMatrix();
 
@@ -1008,14 +1008,14 @@ namespace WindowsFormsApp1
 
                                             getEdgeLengthForm.ShowDialog();
 
-                                            if (!getEdgeLengthForm.cancel)
+                                            if (!getEdgeLengthForm.WasCancel)
                                             {
                                                 for (int j = i; j < Edges.Count; j++)
                                                 {
                                                     if (Edges[j].Ver1 == Edges[i].Ver2 &&
                                                         Edges[j].Ver2 == Edges[i].Ver1)
                                                     {
-                                                        Edges[j].Weight = getEdgeLengthForm.number;
+                                                        Edges[j].Weight = getEdgeLengthForm.Weight;
 
                                                         PrintAdjMatrix();
                                                         return;
@@ -1033,9 +1033,9 @@ namespace WindowsFormsApp1
                                     {
                                         getEdgeLengthForm.ShowDialog();
 
-                                        if (!getEdgeLengthForm.cancel)
+                                        if (!getEdgeLengthForm.WasCancel)
                                         {
-                                            Edges[i].Weight = getEdgeLengthForm.number;
+                                            Edges[i].Weight = getEdgeLengthForm.Weight;
 
                                             PrintAdjMatrix();
 
@@ -1103,7 +1103,7 @@ namespace WindowsFormsApp1
                                     getEdgeLengthForm.ShowDialog();
 
                                     // Если решили отменить рисование ребра.
-                                    if (getEdgeLengthForm.cancel)
+                                    if (getEdgeLengthForm.WasCancel)
                                     {
                                         ToolsForDrawing.DrawVertex(
                                             Vertex[ver1ForConnection].X,
@@ -1115,7 +1115,7 @@ namespace WindowsFormsApp1
                                             Vertex[ver2ForConnection].Y,
                                             (ver2ForConnection + 1).ToString());
 
-                                        getEdgeLengthForm.cancel = false;
+                                        getEdgeLengthForm.WasCancel = false;
 
                                         ver1ForConnection = ver2ForConnection = -1;
                                     }
@@ -1124,7 +1124,7 @@ namespace WindowsFormsApp1
                                         Edges.Add(new Edge(
                                             ver1ForConnection,
                                             ver2ForConnection,
-                                            getEdgeLengthForm.number));
+                                            getEdgeLengthForm.Weight));
 
                                         ToolsForDrawing.DrawEdge(
                                             Vertex[ver1ForConnection],
@@ -1289,14 +1289,14 @@ namespace WindowsFormsApp1
                                             chooseEdgeFormForm.ShowDialog();
 
                                             // Если не нажали отмену, то удаляем.
-                                            if (!chooseEdgeFormForm.cancel)
+                                            if (!chooseEdgeFormForm.WasCancel)
                                             {
-                                                if (chooseEdgeFormForm.firstOption)
+                                                if (chooseEdgeFormForm.IsFirstAction)
                                                 {
                                                     Edges.RemoveAt(i);
                                                     somethingDeleted = true;
 
-                                                    chooseEdgeFormForm.firstOption = false;
+                                                    chooseEdgeFormForm.IsFirstAction = false;
                                                     break;
                                                 }
 
@@ -1360,13 +1360,13 @@ namespace WindowsFormsApp1
                                             chooseEdgeFormForm.ShowDialog();
 
                                             // Если не нажали отмену, то удаляем.
-                                            if (!chooseEdgeFormForm.cancel)
+                                            if (!chooseEdgeFormForm.WasCancel)
                                             {
-                                                if (chooseEdgeFormForm.firstOption)
+                                                if (chooseEdgeFormForm.IsFirstAction)
                                                 {
                                                     Edges.RemoveAt(i);
                                                     somethingDeleted = true;
-                                                    chooseEdgeFormForm.firstOption = false;
+                                                    chooseEdgeFormForm.IsFirstAction = false;
                                                     break;
                                                 }
 

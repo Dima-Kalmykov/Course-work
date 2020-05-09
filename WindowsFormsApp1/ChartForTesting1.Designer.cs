@@ -101,7 +101,6 @@
             this.Controls.Add(this.chart1);
             this.Name = "ChartForTesting1";
             this.Text = "ChartForTesting1";
-            this.Load += new System.EventHandler(this.ChartForTesting1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

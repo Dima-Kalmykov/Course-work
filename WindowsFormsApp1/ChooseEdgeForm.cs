@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -16,10 +9,11 @@ namespace WindowsFormsApp1
     public partial class ChooseEdgeForm : Form
     {
         // Флаг, который показывает, нажали мы кнопку отмены, или нет.
-        public bool cancel;
+        public bool WasCancel;
 
         // Флаг, который показывает, какой вариант мы выбрали.
-        public bool firstOption;
+        public bool IsFirstAction;
+
         public ChooseEdgeForm()
         {
             InitializeComponent();
@@ -30,10 +24,10 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void FirstOptionButton_Click(object sender, EventArgs e)
+        private void FirstActionButton_Click(object sender, EventArgs e)
         {
-            firstOption = true;
-            cancel = false;
+            IsFirstAction = true;
+            WasCancel = false;
 
             Close();
         }
@@ -43,10 +37,10 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SecondOptionButton_Click(object sender, EventArgs e)
+        private void SecondActionButton_Click(object sender, EventArgs e)
         {
-            firstOption = false;
-            cancel = false;
+            IsFirstAction = false;
+            WasCancel = false;
 
             Close();
         }
@@ -56,7 +50,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ChooseEdgeForm_Load(object sender, EventArgs e)=>
+        private void ChooseEdgeForm_Load(object sender, EventArgs e) =>
             ControlBox = false;
 
         /// <summary>
@@ -66,7 +60,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            cancel = true;
+            WasCancel = true;
 
             Close();
         }

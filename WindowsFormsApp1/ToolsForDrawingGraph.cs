@@ -161,7 +161,7 @@ namespace WindowsFormsApp1
                 b = Calculate.GetB(ver1, ver2);
 
                 // Вычисляем промежуточную величину.
-                double sqrtDiscriminant2 = Calculate.GetSqrtOfDiscriminant(ver2, k, b);
+                var sqrtDiscriminant2 = Calculate.GetSqrtOfDiscriminant(ver2, k, b);
 
                 // Мы ищем точки пересечения прямой, проходящей через 2 данные веришны,
                 // и окружности, которая описана около веришины. Их будет 2.
@@ -170,11 +170,11 @@ namespace WindowsFormsApp1
 
                 // Ищем соответсвующие точки, и получаем координаты xEnd, yEnd
                 // в зависимости от расположения вершин.
-                double xMaxEnd = (sqrtDiscriminant2 + ver2.X + k * (ver2.Y - b)) / (k * k + 1);
-                double xMinEnd = (-sqrtDiscriminant2 + ver2.X + k * (ver2.Y - b)) / (k * k + 1);
+                var xMaxEnd = (sqrtDiscriminant2 + ver2.X + k * (ver2.Y - b)) / (k * k + 1);
+                var xMinEnd = (-sqrtDiscriminant2 + ver2.X + k * (ver2.Y - b)) / (k * k + 1);
 
-                double yMinEnd = k * xMaxEnd + b;
-                double yMaxEnd = k * xMinEnd + b;
+                var yMinEnd = k * xMaxEnd + b;
+                var yMaxEnd = k * xMinEnd + b;
 
                 if (ver2.X > ver1.X)
                 {
@@ -188,40 +188,19 @@ namespace WindowsFormsApp1
                 }
 
                 // Аналогично.
-                double sqrtDiscriminant1 = Calculate.GetSqrtOfDiscriminant(ver1, k, b);
+                var sqrtDiscriminant1 = Calculate.GetSqrtOfDiscriminant(ver1, k, b);
 
-                double xMaxBegin = (sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
-                double xMinBegin = (-sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
+                var xMaxBegin = (sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
+                var xMinBegin = (-sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
 
-                double yMinBegin = k * xMaxBegin + b;
-                double yMaxBegin = k * xMinBegin + b;
+                var yMinBegin = k * xMaxBegin + b;
+                var yMaxBegin = k * xMinBegin + b;
 
-                if (ver2.X > ver1.X)
-                {
-                    if (ver2.Y < ver1.Y)
-                    {
-                        xBegin = xMaxBegin;
-                        yBegin = yMinBegin;
-                    }
-                    else
-                    {
-                        xBegin = xMaxBegin;
-                        yBegin = yMinBegin;
-                    }
-                }
-                else
-                {
-                    if (ver2.Y < ver1.Y)
-                    {
-                        xBegin = xMinBegin;
-                        yBegin = yMaxBegin;
-                    }
-                    else
-                    {
-                        xBegin = xMinBegin;
-                        yBegin = yMaxBegin;
-                    }
-                }
+                var beginPoint = GetXBeginAndYBegin(ver1, ver2, xMaxBegin, yMaxBegin, xMinBegin, yMinBegin);
+
+                xBegin = beginPoint.X;
+                yBegin = beginPoint.Y;
+
             }
             // Случай, когда у вершин одинаковые x коориднаты.
             else
@@ -241,68 +220,142 @@ namespace WindowsFormsApp1
             }
 
 
-            // Две точки с координатами наконечника.
-            double firstEndArrowX = 0;
-            double firstEndArrowY = 0;
-            double secondEndArrowX = 0;
-            double secondEndArrowY = 0;
+            var (firstPoint, secondPoint) = GetArrowHeadPoints(xBegin, yBegin, xEnd, yEnd, k);
 
-            // В зависимости от расположения вершин, ищем эти координаты.
-            if (xBegin != xEnd && yBegin != yEnd)
+            var firstEndArrowX = firstPoint.X;
+            var firstEndArrowY = firstPoint.Y;
+            var secondEndArrowX = secondPoint.X;
+            var secondEndArrowY = secondPoint.Y;
+
+            // Рисуем ребро + наконечник.
+            DrawArrowhead(xBegin, yBegin, xEnd, yEnd, firstEndArrowX, firstEndArrowY, secondEndArrowX, secondEndArrowY);
+        }
+
+        private PointF GetXBeginAndYBegin(Vertex ver1, Vertex ver2, double xMaxBegin,
+            double yMaxBegin, double xMinBegin,double yMinBegin)
+        {
+
+            double xBegin = 0;
+            double yBegin = 0;
+
+            if (ver2.X > ver1.X)
             {
-                // Ищем координаты точки, делящей отрезок в отношении.
-                // Затем строим через эту точку перпендикуляр определённой длины.
-                // Концы этого перпендикуляра и будут точками для наконечника.
-
-                var xCoordinate = Calculate.GetXCoordinate(xBegin, yBegin, xEnd, yEnd);
-                var yCoordinate = Calculate.GetCoordOy(xBegin, yBegin, xEnd, yEnd);
-
-                firstEndArrowX = xCoordinate + HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
-                firstEndArrowY = -1 / k * firstEndArrowX + yCoordinate + xCoordinate / k;
-
-                secondEndArrowX = xCoordinate - HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
-                secondEndArrowY = -1 / k * secondEndArrowX + yCoordinate + xCoordinate / k;
-            }
-            else if (xBegin == xEnd)
-            {
-                if (yBegin < yEnd)
+                if (ver2.Y < ver1.Y)
                 {
-                    firstEndArrowX = xEnd - HeightArrow;
-                    firstEndArrowY = yEnd - WidthArrow;
-
-                    secondEndArrowX = xEnd + HeightArrow;
-                    secondEndArrowY = yEnd - WidthArrow;
+                    xBegin = xMaxBegin;
+                    yBegin = yMinBegin;
                 }
                 else
                 {
-                    firstEndArrowX = xEnd - HeightArrow;
-                    firstEndArrowY = yEnd + WidthArrow;
-
-                    secondEndArrowX = xEnd + HeightArrow;
-                    secondEndArrowY = yEnd + WidthArrow;
+                    xBegin = xMaxBegin;
+                    yBegin = yMinBegin;
                 }
+            }
+            else
+            {
+                if (ver2.Y < ver1.Y)
+                {
+                    xBegin = xMinBegin;
+                    yBegin = yMaxBegin;
+                }
+                else
+                {
+                    xBegin = xMinBegin;
+                    yBegin = yMaxBegin;
+                }
+            }
+
+            return new PointF((float)xBegin, (float)yBegin);
+        }
+
+        private (PointF, PointF) GetArrowHeadPoints(double xBegin, double yBegin, double xEnd, double yEnd, double k)
+        {
+            var xCoordinate = Calculate.GetXCoordinate(xBegin, yBegin, xEnd, yEnd);
+            var yCoordinate = Calculate.GetCoordOy(xBegin, yBegin, xEnd, yEnd);
+
+            // Две точки с координатами наконечника.
+            var firstEndArrowX = xCoordinate + HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
+            var firstEndArrowY = -1 / k * firstEndArrowX + yCoordinate + xCoordinate / k;
+
+            var secondEndArrowX = xCoordinate - HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
+            var secondEndArrowY = -1 / k * secondEndArrowX + yCoordinate + xCoordinate / k;
+
+            PointF p1 = new PointF((float)firstEndArrowX, (float)firstEndArrowY);
+            PointF p2 = new PointF((float)secondEndArrowX, (float)secondEndArrowY);
+
+            (PointF firstPoint, PointF secondPoint) arrowHeadPoints = (p1, p2);
+            // В зависимости от расположения вершин, ищем эти координаты.
+            if (xBegin == xEnd)
+            {
+                arrowHeadPoints = GetEndOfArrowHead2(yEnd, yBegin, xEnd);
             }
             else if (yBegin == yEnd)
             {
-                if (xBegin < xEnd)
-                {
-                    firstEndArrowX = xEnd - WidthArrow;
-                    firstEndArrowY = yEnd - HeightArrow;
-
-                    secondEndArrowX = xEnd - WidthArrow;
-                    secondEndArrowY = yEnd + HeightArrow;
-                }
-                else
-                {
-                    firstEndArrowX = xEnd + WidthArrow;
-                    firstEndArrowY = yEnd + HeightArrow;
-
-                    secondEndArrowX = xEnd + WidthArrow;
-                    secondEndArrowY = yEnd - HeightArrow;
-                }
+                arrowHeadPoints = GetEndOfArrowHead(xBegin, xEnd, yEnd);
             }
 
-            // Рисуем ребро + наконечник.
+            return arrowHeadPoints;
+        }
+
+        private (PointF, PointF) GetEndOfArrowHead(double xBegin, double xEnd, double yEnd)
+        {
+            double firstEndArrowX;
+            double firstEndArrowY;
+            double secondEndArrowX;
+            double secondEndArrowY;
+
+            if (xBegin < xEnd)
+            {
+                firstEndArrowX = xEnd - WidthArrow;
+                firstEndArrowY = yEnd - HeightArrow;
+
+                secondEndArrowX = xEnd - WidthArrow;
+                secondEndArrowY = yEnd + HeightArrow;
+            }
+            else
+            {
+                firstEndArrowX = xEnd + WidthArrow;
+                firstEndArrowY = yEnd + HeightArrow;
+
+                secondEndArrowX = xEnd + WidthArrow;
+                secondEndArrowY = yEnd - HeightArrow;
+            }
+
+            return (new PointF((float)firstEndArrowX, (float)firstEndArrowY),
+                    new PointF((float)secondEndArrowX, (float)secondEndArrowY));
+        }
+
+        private (PointF, PointF) GetEndOfArrowHead2(double yEnd, double yBegin, double xEnd)
+        {
+            double firstEndArrowX;
+            double firstEndArrowY;
+            double secondEndArrowX;
+            double secondEndArrowY;
+
+            if (yBegin < yEnd)
+            {
+                firstEndArrowX = xEnd - HeightArrow;
+                firstEndArrowY = yEnd - WidthArrow;
+
+                secondEndArrowX = xEnd + HeightArrow;
+                secondEndArrowY = yEnd - WidthArrow;
+            }
+            else
+            {
+                firstEndArrowX = xEnd - HeightArrow;
+                firstEndArrowY = yEnd + WidthArrow;
+
+                secondEndArrowX = xEnd + HeightArrow;
+                secondEndArrowY = yEnd + WidthArrow;
+            }
+
+            return (new PointF((float)firstEndArrowX, (float)firstEndArrowY),
+                    new PointF((float)secondEndArrowX, (float)secondEndArrowY));
+        }
+
+        private void DrawArrowhead(double xBegin, double yBegin, double xEnd, double yEnd, double firstEndArrowX,
+            double firstEndArrowY, double secondEndArrowX, double secondEndArrowY)
+        {
             cover.DrawLine(bluePen,
                 (float)xBegin, (float)yBegin,
                 (float)xEnd, (float)yEnd);
@@ -471,6 +524,10 @@ namespace WindowsFormsApp1
             var counter = 1;
 
             var randomVertexIndex = Rnd.Next(vertex.Count);
+            if (vertex.Count == 1)
+            {
+                return edgesForChoice;
+            }
 
             while (curVertexIndex == randomVertexIndex)
             {
@@ -533,6 +590,67 @@ namespace WindowsFormsApp1
             return newEdges;
         }
 
+        private static double[,] SpecialCaseAdjacencyMatrix(int size)
+        {
+            var adjacencyMatrix = new double[size, size];
+
+            switch (size)
+            {
+                case 1:
+                    adjacencyMatrix[0, 0] = Rnd.Next(2);
+                    return adjacencyMatrix;
+
+                case 2:
+                    adjacencyMatrix[1, 0] = 1;
+                    adjacencyMatrix[0, 1] = 1;
+                    adjacencyMatrix[0, 0] = Rnd.Next(2);
+                    adjacencyMatrix[1, 1] = Rnd.Next(2);
+                    return adjacencyMatrix;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private static void FillAdjacencyMatrix(ref double[,] adjacencyMatrix, int i)
+        {
+            var size = adjacencyMatrix.GetLength(0);
+
+            if (i == size - 1)
+            {
+                adjacencyMatrix[i, 0] = 1;
+            }
+            else
+            {
+                adjacencyMatrix[i, i + 1] = 1;
+            }
+        }
+
+        private static double[,] GetAdjacencyMatrix(int size)
+        {
+            var adjacencyMatrix = new double[size, size];
+
+            // Проводим рёбра по кругу (1 -> 2 -> 3 -> ... -> n-1 -> n -> 1)
+            for (var i = 0; i < size; i++)
+            {
+                FillAdjacencyMatrix(ref adjacencyMatrix, i);
+            }
+
+            // Из каждой веришны проводим ещё одно ребро случайным образом.
+            for (var i = 0; i < size; i++)
+            {
+                adjacencyMatrix[i, Rnd.Next(size)] = 1;
+            }
+
+            // Случайным образом заполняем диагональ.
+            for (var i = 0; i < size; i++)
+            {
+                adjacencyMatrix[i, i] = Rnd.Next(2);
+            }
+
+            return adjacencyMatrix;
+        }
+
         /// <summary>
         /// Заполняем матрицу смежности случайным образом.
         /// При этом граф должен получиться сильносвязным.
@@ -541,38 +659,12 @@ namespace WindowsFormsApp1
         /// <returns> Матрица смежности </returns>
         internal double[,] GetRandomAdjacencyMatrix(int size)
         {
-            var adjacencyMatrix = new double[size, size];
-
-            switch (size)
+            if (size == 1 || size == 2)
             {
-                // Частный случай.
-                case 1:
-                    adjacencyMatrix[0, 0] = Rnd.Next(2);
-                    return adjacencyMatrix;
-                // Частный случай.
-                case 2:
-                    adjacencyMatrix[1, 0] = 1;
-                    adjacencyMatrix[0, 1] = 1;
-                    adjacencyMatrix[0, 0] = Rnd.Next(2);
-                    adjacencyMatrix[1, 1] = Rnd.Next(2);
-
-                    return adjacencyMatrix;
+                return SpecialCaseAdjacencyMatrix(size);
             }
 
-            // Проводим рёбра по кругу (1 -> 2 -> 3 -> ... -> n-1 -> n -> 1)
-            for (int i = 0; i < size; i++)
-                if (i == size - 1)
-                    adjacencyMatrix[i, 0] = 1;
-                else
-                    adjacencyMatrix[i, i + 1] = 1;
-
-            // Из каждой веришны проводим ещё одно ребро случайным образом.
-            for (int i = 0; i < size; i++)
-                adjacencyMatrix[i, Rnd.Next(size)] = 1;
-
-            // Случайным образом заполняем диагональ.
-            for (int i = 0; i < size; i++)
-                adjacencyMatrix[i, i] = Rnd.Next(2);
+            double[,] adjacencyMatrix = GetAdjacencyMatrix(size);
 
             return adjacencyMatrix;
         }
