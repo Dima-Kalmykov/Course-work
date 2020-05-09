@@ -73,11 +73,11 @@
     <Compile Include="ChartDisplayForm.Designer.cs">
       <DependentUpon>ChartDisplayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChartForTesting1.cs">
+    <Compile Include="ChartForTestingProgram.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChartForTesting1.Designer.cs">
-      <DependentUpon>ChartForTesting1.cs</DependentUpon>
+    <Compile Include="ChartForTestingProgram.Designer.cs">
+      <DependentUpon>ChartForTestingProgram.cs</DependentUpon>
     </Compile>
     <Compile Include="Consts.cs" />
     <Compile Include="Form1.cs">
@@ -92,7 +92,7 @@
     <Compile Include="ShowAdjacencyMatrixForm.Designer.cs">
       <DependentUpon>ShowAdjacencyMatrixForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Calculate.cs" />
+    <Compile Include="MyMath.cs" />
     <Compile Include="CheckGraphForStronglyConnectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,8 +131,8 @@
     <EmbeddedResource Include="ChartDisplayForm.resx">
       <DependentUpon>ChartDisplayForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChartForTesting1.resx">
-      <DependentUpon>ChartForTesting1.cs</DependentUpon>
+    <EmbeddedResource Include="ChartForTestingProgram.resx">
+      <DependentUpon>ChartForTestingProgram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

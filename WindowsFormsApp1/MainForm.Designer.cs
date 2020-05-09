@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.field = new System.Windows.Forms.PictureBox();
             this.DrawVertexButton = new System.Windows.Forms.Button();
             this.DeleteAllGraphButton = new System.Windows.Forms.Button();
             this.DrawEdgeButton = new System.Windows.Forms.Button();
@@ -49,52 +48,70 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.field)).BeginInit();
+            this.drawingPanel = new System.Windows.Forms.Panel();
+            this.drawingSubPanel = new System.Windows.Forms.Panel();
+            this.drawingButton = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.field = new System.Windows.Forms.PictureBox();
+            this.changeParametersSubPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.drawingPanel.SuspendLayout();
+            this.drawingSubPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.field)).BeginInit();
+            this.changeParametersSubPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // field
-            // 
-            this.field.Location = new System.Drawing.Point(154, 5);
-            this.field.Name = "field";
-            this.field.Size = new System.Drawing.Size(1021, 718);
-            this.field.TabIndex = 1;
-            this.field.TabStop = false;
-            this.field.MouseClick += new System.Windows.Forms.MouseEventHandler(this.field_MouseClick);
             // 
             // DrawVertexButton
             // 
-            this.DrawVertexButton.Location = new System.Drawing.Point(12, 43);
+            this.DrawVertexButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.DrawVertexButton.FlatAppearance.BorderSize = 0;
+            this.DrawVertexButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DrawVertexButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DrawVertexButton.Location = new System.Drawing.Point(0, 150);
             this.DrawVertexButton.Name = "DrawVertexButton";
-            this.DrawVertexButton.Size = new System.Drawing.Size(135, 55);
+            this.DrawVertexButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.DrawVertexButton.Size = new System.Drawing.Size(200, 50);
             this.DrawVertexButton.TabIndex = 2;
             this.DrawVertexButton.Text = "Нарисовать вершину";
+            this.DrawVertexButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.DrawVertexButton.UseVisualStyleBackColor = true;
             this.DrawVertexButton.Click += new System.EventHandler(this.DrawVertexButton_Click);
             // 
             // DeleteAllGraphButton
             // 
-            this.DeleteAllGraphButton.Location = new System.Drawing.Point(1181, 189);
+            this.DeleteAllGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.DeleteAllGraphButton.FlatAppearance.BorderSize = 0;
+            this.DeleteAllGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteAllGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DeleteAllGraphButton.Location = new System.Drawing.Point(0, 50);
             this.DeleteAllGraphButton.Name = "DeleteAllGraphButton";
-            this.DeleteAllGraphButton.Size = new System.Drawing.Size(135, 55);
+            this.DeleteAllGraphButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.DeleteAllGraphButton.Size = new System.Drawing.Size(200, 50);
             this.DeleteAllGraphButton.TabIndex = 4;
             this.DeleteAllGraphButton.Text = "Удалить весь граф";
+            this.DeleteAllGraphButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.DeleteAllGraphButton.UseVisualStyleBackColor = true;
             this.DeleteAllGraphButton.Click += new System.EventHandler(this.DeleteAllGraphButton_Click);
             // 
             // DrawEdgeButton
             // 
-            this.DrawEdgeButton.Location = new System.Drawing.Point(12, 114);
+            this.DrawEdgeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.DrawEdgeButton.FlatAppearance.BorderSize = 0;
+            this.DrawEdgeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DrawEdgeButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DrawEdgeButton.Location = new System.Drawing.Point(0, 100);
             this.DrawEdgeButton.Name = "DrawEdgeButton";
-            this.DrawEdgeButton.Size = new System.Drawing.Size(135, 55);
+            this.DrawEdgeButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.DrawEdgeButton.Size = new System.Drawing.Size(200, 50);
             this.DrawEdgeButton.TabIndex = 5;
             this.DrawEdgeButton.Text = "Нарисовать ребро";
+            this.DrawEdgeButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.DrawEdgeButton.UseVisualStyleBackColor = true;
             this.DrawEdgeButton.Click += new System.EventHandler(this.DrawEdgeButton_Click);
             // 
             // CheckGraphForStrongConnectionButton
             // 
-            this.CheckGraphForStrongConnectionButton.Location = new System.Drawing.Point(-3, 502);
+            this.CheckGraphForStrongConnectionButton.Location = new System.Drawing.Point(249, 677);
             this.CheckGraphForStrongConnectionButton.Name = "CheckGraphForStrongConnectionButton";
             this.CheckGraphForStrongConnectionButton.Size = new System.Drawing.Size(150, 60);
             this.CheckGraphForStrongConnectionButton.TabIndex = 11;
@@ -104,27 +121,39 @@
             // 
             // GetRandomGraphButton
             // 
-            this.GetRandomGraphButton.Location = new System.Drawing.Point(12, 189);
+            this.GetRandomGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.GetRandomGraphButton.FlatAppearance.BorderSize = 0;
+            this.GetRandomGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GetRandomGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.GetRandomGraphButton.Location = new System.Drawing.Point(0, 50);
             this.GetRandomGraphButton.Name = "GetRandomGraphButton";
-            this.GetRandomGraphButton.Size = new System.Drawing.Size(135, 55);
+            this.GetRandomGraphButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.GetRandomGraphButton.Size = new System.Drawing.Size(200, 50);
             this.GetRandomGraphButton.TabIndex = 13;
             this.GetRandomGraphButton.Text = "Сгенерировать граф";
+            this.GetRandomGraphButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.GetRandomGraphButton.UseVisualStyleBackColor = true;
             this.GetRandomGraphButton.Click += new System.EventHandler(this.GetRandomGraphButton_Click);
             // 
             // DeleteElementButton
             // 
-            this.DeleteElementButton.Location = new System.Drawing.Point(1181, 114);
+            this.DeleteElementButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.DeleteElementButton.FlatAppearance.BorderSize = 0;
+            this.DeleteElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteElementButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DeleteElementButton.Location = new System.Drawing.Point(0, 0);
             this.DeleteElementButton.Name = "DeleteElementButton";
-            this.DeleteElementButton.Size = new System.Drawing.Size(135, 55);
+            this.DeleteElementButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.DeleteElementButton.Size = new System.Drawing.Size(200, 50);
             this.DeleteElementButton.TabIndex = 14;
             this.DeleteElementButton.Text = "Удалить элемент";
+            this.DeleteElementButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.DeleteElementButton.UseVisualStyleBackColor = true;
             this.DeleteElementButton.Click += new System.EventHandler(this.DeleteElementButton_Click);
             // 
             // SaveGraphButton
             // 
-            this.SaveGraphButton.Location = new System.Drawing.Point(1181, 431);
+            this.SaveGraphButton.Location = new System.Drawing.Point(1349, 469);
             this.SaveGraphButton.Name = "SaveGraphButton";
             this.SaveGraphButton.Size = new System.Drawing.Size(135, 55);
             this.SaveGraphButton.TabIndex = 15;
@@ -134,7 +163,7 @@
             // 
             // OpenGraphButton
             // 
-            this.OpenGraphButton.Location = new System.Drawing.Point(1181, 502);
+            this.OpenGraphButton.Location = new System.Drawing.Point(1349, 554);
             this.OpenGraphButton.Name = "OpenGraphButton";
             this.OpenGraphButton.Size = new System.Drawing.Size(135, 55);
             this.OpenGraphButton.TabIndex = 16;
@@ -144,28 +173,40 @@
             // 
             // ChangeEdgeLengthButton
             // 
-            this.ChangeEdgeLengthButton.Location = new System.Drawing.Point(1181, 43);
+            this.ChangeEdgeLengthButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ChangeEdgeLengthButton.FlatAppearance.BorderSize = 0;
+            this.ChangeEdgeLengthButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ChangeEdgeLengthButton.ForeColor = System.Drawing.Color.LightGray;
+            this.ChangeEdgeLengthButton.Location = new System.Drawing.Point(0, 100);
             this.ChangeEdgeLengthButton.Name = "ChangeEdgeLengthButton";
-            this.ChangeEdgeLengthButton.Size = new System.Drawing.Size(135, 55);
+            this.ChangeEdgeLengthButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.ChangeEdgeLengthButton.Size = new System.Drawing.Size(200, 50);
             this.ChangeEdgeLengthButton.TabIndex = 17;
             this.ChangeEdgeLengthButton.Text = "Изменить длину ребра";
+            this.ChangeEdgeLengthButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ChangeEdgeLengthButton.UseVisualStyleBackColor = true;
             this.ChangeEdgeLengthButton.Click += new System.EventHandler(this.ChangeLengthButton_Click);
             // 
             // StopDrawingButton
             // 
-            this.StopDrawingButton.Location = new System.Drawing.Point(12, 260);
+            this.StopDrawingButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.StopDrawingButton.FlatAppearance.BorderSize = 0;
+            this.StopDrawingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StopDrawingButton.ForeColor = System.Drawing.Color.LightGray;
+            this.StopDrawingButton.Location = new System.Drawing.Point(0, 0);
             this.StopDrawingButton.Name = "StopDrawingButton";
-            this.StopDrawingButton.Size = new System.Drawing.Size(135, 55);
+            this.StopDrawingButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.StopDrawingButton.Size = new System.Drawing.Size(200, 50);
             this.StopDrawingButton.TabIndex = 18;
             this.StopDrawingButton.Text = "Прекратить рисование";
+            this.StopDrawingButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.StopDrawingButton.UseVisualStyleBackColor = true;
             this.StopDrawingButton.Click += new System.EventHandler(this.StopDrawingButton_Click);
             // 
             // ShowOrHideAdjMatrix
             // 
             this.ShowOrHideAdjMatrix.Enabled = false;
-            this.ShowOrHideAdjMatrix.Location = new System.Drawing.Point(-2, 431);
+            this.ShowOrHideAdjMatrix.Location = new System.Drawing.Point(470, 683);
             this.ShowOrHideAdjMatrix.Name = "ShowOrHideAdjMatrix";
             this.ShowOrHideAdjMatrix.Size = new System.Drawing.Size(150, 60);
             this.ShowOrHideAdjMatrix.TabIndex = 19;
@@ -175,7 +216,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1194, 714);
+            this.button1.Location = new System.Drawing.Point(1286, 661);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(86, 92);
             this.button1.TabIndex = 20;
@@ -185,7 +226,7 @@
             // 
             // StopProcessButton
             // 
-            this.StopProcessButton.Location = new System.Drawing.Point(1095, 729);
+            this.StopProcessButton.Location = new System.Drawing.Point(1378, 643);
             this.StopProcessButton.Name = "StopProcessButton";
             this.StopProcessButton.Size = new System.Drawing.Size(91, 62);
             this.StopProcessButton.TabIndex = 21;
@@ -210,7 +251,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(29, 607);
+            this.button2.Location = new System.Drawing.Point(30, 804);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(117, 48);
             this.button2.TabIndex = 24;
@@ -225,7 +266,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(19, 361);
+            this.button3.Location = new System.Drawing.Point(729, 684);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(107, 46);
             this.button3.TabIndex = 25;
@@ -235,7 +276,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(1211, 295);
+            this.button4.Location = new System.Drawing.Point(1378, 383);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(104, 80);
             this.button4.TabIndex = 26;
@@ -243,12 +284,92 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // drawingPanel
+            // 
+            this.drawingPanel.AutoScroll = true;
+            this.drawingPanel.Controls.Add(this.changeParametersSubPanel);
+            this.drawingPanel.Controls.Add(this.button5);
+            this.drawingPanel.Controls.Add(this.drawingSubPanel);
+            this.drawingPanel.Controls.Add(this.drawingButton);
+            this.drawingPanel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.drawingPanel.Location = new System.Drawing.Point(0, 0);
+            this.drawingPanel.Name = "drawingPanel";
+            this.drawingPanel.Size = new System.Drawing.Size(200, 755);
+            this.drawingPanel.TabIndex = 27;
+            // 
+            // drawingSubPanel
+            // 
+            this.drawingSubPanel.Controls.Add(this.DrawVertexButton);
+            this.drawingSubPanel.Controls.Add(this.DrawEdgeButton);
+            this.drawingSubPanel.Controls.Add(this.GetRandomGraphButton);
+            this.drawingSubPanel.Controls.Add(this.StopDrawingButton);
+            this.drawingSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.drawingSubPanel.Location = new System.Drawing.Point(0, 69);
+            this.drawingSubPanel.Name = "drawingSubPanel";
+            this.drawingSubPanel.Size = new System.Drawing.Size(200, 214);
+            this.drawingSubPanel.TabIndex = 2;
+            // 
+            // drawingButton
+            // 
+            this.drawingButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.drawingButton.FlatAppearance.BorderSize = 0;
+            this.drawingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drawingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.drawingButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.drawingButton.Location = new System.Drawing.Point(0, 0);
+            this.drawingButton.Name = "drawingButton";
+            this.drawingButton.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.drawingButton.Size = new System.Drawing.Size(200, 69);
+            this.drawingButton.TabIndex = 1;
+            this.drawingButton.Text = "Drawing";
+            this.drawingButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.drawingButton.UseVisualStyleBackColor = true;
+            this.drawingButton.Click += new System.EventHandler(this.drawingButton_Click);
+            // 
+            // button5
+            // 
+            this.button5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button5.FlatAppearance.BorderSize = 0;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button5.ForeColor = System.Drawing.Color.Gainsboro;
+            this.button5.Location = new System.Drawing.Point(0, 283);
+            this.button5.Name = "button5";
+            this.button5.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.button5.Size = new System.Drawing.Size(200, 71);
+            this.button5.TabIndex = 0;
+            this.button5.Text = "Change parameters";
+            this.button5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // field
+            // 
+            this.field.Location = new System.Drawing.Point(204, -42);
+            this.field.Name = "field";
+            this.field.Size = new System.Drawing.Size(1020, 720);
+            this.field.TabIndex = 1;
+            this.field.TabStop = false;
+            this.field.MouseClick += new System.Windows.Forms.MouseEventHandler(this.field_MouseClick);
+            // 
+            // changeParametersSubPanel
+            // 
+            this.changeParametersSubPanel.Controls.Add(this.ChangeEdgeLengthButton);
+            this.changeParametersSubPanel.Controls.Add(this.DeleteAllGraphButton);
+            this.changeParametersSubPanel.Controls.Add(this.DeleteElementButton);
+            this.changeParametersSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.changeParametersSubPanel.Location = new System.Drawing.Point(0, 354);
+            this.changeParametersSubPanel.Name = "changeParametersSubPanel";
+            this.changeParametersSubPanel.Size = new System.Drawing.Size(200, 154);
+            this.changeParametersSubPanel.TabIndex = 3;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(1341, 874);
+            this.ClientSize = new System.Drawing.Size(1497, 755);
+            this.Controls.Add(this.drawingPanel);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -256,31 +377,26 @@
             this.Controls.Add(this.StopProcessButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ShowOrHideAdjMatrix);
-            this.Controls.Add(this.StopDrawingButton);
-            this.Controls.Add(this.ChangeEdgeLengthButton);
             this.Controls.Add(this.OpenGraphButton);
             this.Controls.Add(this.SaveGraphButton);
-            this.Controls.Add(this.DeleteElementButton);
-            this.Controls.Add(this.GetRandomGraphButton);
             this.Controls.Add(this.CheckGraphForStrongConnectionButton);
-            this.Controls.Add(this.DrawEdgeButton);
-            this.Controls.Add(this.DeleteAllGraphButton);
-            this.Controls.Add(this.DrawVertexButton);
             this.Controls.Add(this.field);
             this.KeyPreview = true;
             this.Name = "MainForm";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Click += new System.EventHandler(this.MainForm_Click);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
-            ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.drawingPanel.ResumeLayout(false);
+            this.drawingSubPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
+            this.changeParametersSubPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        public System.Windows.Forms.PictureBox field;
         private System.Windows.Forms.Button DrawVertexButton;
         private System.Windows.Forms.Button DeleteAllGraphButton;
         private System.Windows.Forms.Button DrawEdgeButton;
@@ -300,6 +416,12 @@
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Panel drawingPanel;
+        private System.Windows.Forms.Panel drawingSubPanel;
+        private System.Windows.Forms.Button drawingButton;
+        public System.Windows.Forms.PictureBox field;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Panel changeParametersSubPanel;
     }
 }
 

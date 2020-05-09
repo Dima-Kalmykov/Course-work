@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
     {
         // Инструменты для рисования графа.
         private readonly Bitmap bitmap;
-        private readonly Graphics cover;
+        private  Graphics cover;
         private PointF point;
         private readonly Font font;
         private readonly Brush brush;
@@ -31,9 +31,12 @@ namespace WindowsFormsApp1
 
         internal ToolsForDrawingGraph(int width, int height)
         {
-            // Установка необходимых параметров.
+            // Установка необходимых параметров
+            // @"C:\Users\Dmitry\Desktop".
             bitmap = new Bitmap(width, height);
+            //bitmap = new Bitmap(@"C:\Users\Dmitry\Desktop\1561182897_3.jpg");
             cover = Graphics.FromImage(bitmap);
+            
 
             blackPen = new Pen(Color.Black, Consts.WidthPen);
             redPen = new Pen(Color.Red, Consts.WidthPen);
@@ -157,11 +160,11 @@ namespace WindowsFormsApp1
             if (ver2.X != ver1.X)
             {
                 // Вычисляем коэффициенты прямой y = kx + b.
-                k = Calculate.GetK(ver1, ver2);
-                b = Calculate.GetB(ver1, ver2);
+                k = MyMath.GetK(ver1, ver2);
+                b = MyMath.GetB(ver1, ver2);
 
                 // Вычисляем промежуточную величину.
-                var sqrtDiscriminant2 = Calculate.GetSqrtOfDiscriminant(ver2, k, b);
+                var sqrtDiscriminant2 = MyMath.GetSqrtOfDiscriminant(ver2, k, b);
 
                 // Мы ищем точки пересечения прямой, проходящей через 2 данные веришны,
                 // и окружности, которая описана около веришины. Их будет 2.
@@ -188,7 +191,7 @@ namespace WindowsFormsApp1
                 }
 
                 // Аналогично.
-                var sqrtDiscriminant1 = Calculate.GetSqrtOfDiscriminant(ver1, k, b);
+                var sqrtDiscriminant1 = MyMath.GetSqrtOfDiscriminant(ver1, k, b);
 
                 var xMaxBegin = (sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
                 var xMinBegin = (-sqrtDiscriminant1 + ver1.X + k * (ver1.Y - b)) / (k * k + 1);
@@ -220,7 +223,8 @@ namespace WindowsFormsApp1
             }
 
 
-            var (firstPoint, secondPoint) = GetArrowHeadPoints(xBegin, yBegin, xEnd, yEnd, k);
+            var (firstPoint, secondPoint) = GetArrowHeadPoints(new PointF((float)xBegin, (float)yBegin),
+                new PointF((float)xEnd, (float)yEnd), k);
 
             var firstEndArrowX = firstPoint.X;
             var firstEndArrowY = firstPoint.Y;
@@ -232,7 +236,7 @@ namespace WindowsFormsApp1
         }
 
         private PointF GetXBeginAndYBegin(Vertex ver1, Vertex ver2, double xMaxBegin,
-            double yMaxBegin, double xMinBegin,double yMinBegin)
+            double yMaxBegin, double xMinBegin, double yMinBegin)
         {
 
             double xBegin = 0;
@@ -268,10 +272,13 @@ namespace WindowsFormsApp1
             return new PointF((float)xBegin, (float)yBegin);
         }
 
-        private (PointF, PointF) GetArrowHeadPoints(double xBegin, double yBegin, double xEnd, double yEnd, double k)
+        private (PointF, PointF) GetArrowHeadPoints(PointF pointBegin, PointF pointEnd, double k)
         {
-            var xCoordinate = Calculate.GetXCoordinate(xBegin, yBegin, xEnd, yEnd);
-            var yCoordinate = Calculate.GetCoordOy(xBegin, yBegin, xEnd, yEnd);
+            var (xBegin, yBegin) = (pointBegin.X, pointBegin.Y);
+            var (xEnd, yEnd) = (pointEnd.X, pointEnd.Y);
+
+            var xCoordinate = MyMath.GetXCoordinate(pointBegin, pointEnd);
+            var yCoordinate = MyMath.GetYCoordinate(pointBegin, pointEnd);
 
             // Две точки с координатами наконечника.
             var firstEndArrowX = xCoordinate + HeightArrow / Math.Sqrt((1 + 1 / (k * k)));
@@ -449,7 +456,6 @@ namespace WindowsFormsApp1
         internal void DrawFullGraph(List<Edge> edges, List<Vertex> vertex)
         {
             ClearField();
-
             foreach (var edge in edges)
             {
                 DrawEdge(vertex[edge.Ver1], vertex[edge.Ver2], edge);
@@ -678,8 +684,8 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Очистка холста.
         /// </summary>
-        internal void ClearField() =>
-            cover.Clear(Color.White);
+        internal void ClearField() => 
+        cover.Clear(Color.SlateGray);
 
         /// <summary>
         /// Выделение вершины.

@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -53,7 +54,7 @@ namespace WindowsFormsApp1
         {
             // Устанавливаем необходимые параметры.
             InitializeComponent();
-            ToolsForDrawing = new ToolsForDrawingGraph(field.Width, field.Height);
+            ToolsForDrawing = new ToolsForDrawingGraph(Consts.GraphPictureBoxWidth, Consts.GraphPictureBoxHeight);
             Vertex = new List<Vertex>();
             Edges = new List<Edge>();
 
@@ -64,6 +65,8 @@ namespace WindowsFormsApp1
 
             ToolsForDrawing.ClearField();
             field.Image = ToolsForDrawing.GetBitmap();
+
+            CustomizeDesign();
         }
 
         private void HideAdjacencyMatrix()
@@ -123,6 +126,8 @@ namespace WindowsFormsApp1
 
             HideAdjacencyMatrix();
         }
+
+        // Todo сделать текущий режим рисования где-нибудь
 
         public void DeleteGraph()
         {
@@ -325,25 +330,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void GetRandomGraphButton_Click(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
@@ -385,15 +372,7 @@ namespace WindowsFormsApp1
                 field.Image = ToolsForDrawing.GetBitmap();
             }
 
-            // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
-                ShowOrHideAdjMatrix.Enabled = true;
-            else
-            {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Enabled = false;
-            }
+            HideAdjacencyMatrix();
         }
 
         /// <summary>
@@ -660,25 +639,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void StopDrawingButton_Click(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
@@ -686,15 +647,7 @@ namespace WindowsFormsApp1
             DrawEdgeButton.Enabled = true;
             ChangeEdgeLengthButton.Enabled = true;
 
-            // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
-                ShowOrHideAdjMatrix.Enabled = true;
-            else
-            {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Enabled = false;
-            }
+            HideAdjacencyMatrix();
         }
 
         /// <summary>
@@ -868,10 +821,10 @@ namespace WindowsFormsApp1
                             {
                                 // Вычисляем коэффициенты в уравнении прямой,
                                 // проходящей через две вершины этого ребра, вида y = kx + b.
-                                double k = Calculate.GetK(
+                                double k = MyMath.GetK(
                                     Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
-                                double b = Calculate.GetB(
+                                double b = MyMath.GetB(
                                     Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
                                 // Проводим прямую между двумя веришнами ребра,
@@ -1267,10 +1220,10 @@ namespace WindowsFormsApp1
                                 {
                                     // Вычисляем коэффициенты в уравнении прямой,
                                     // проходящей через две вершины этого ребра, вида y = kx + b.
-                                    double k = Calculate.GetK(
+                                    double k = MyMath.GetK(
                                         Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
-                                    double b = Calculate.GetB(
+                                    double b = MyMath.GetB(
                                         Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
 
                                     // Проводим прямую между двумя веришнами ребра,
@@ -1606,7 +1559,7 @@ namespace WindowsFormsApp1
                             break;
 
                         case 2:
-                            switch (Calculate.GetDigits(adjMatrix[i, j]))
+                            switch (MyMath.GetAmountOfDigits(adjMatrix[i, j]))
                             {
                                 case 0:
                                 case 1:
@@ -1637,7 +1590,7 @@ namespace WindowsFormsApp1
                             break;
 
                         case 3:
-                            switch (Calculate.GetDigits(adjMatrix[i, j]))
+                            switch (MyMath.GetAmountOfDigits(adjMatrix[i, j]))
                             {
                                 case 0:
                                 case 1:
@@ -1674,7 +1627,7 @@ namespace WindowsFormsApp1
                             break;
 
                         case 4:
-                            switch (Calculate.GetDigits(adjMatrix[i, j]))
+                            switch (MyMath.GetAmountOfDigits(adjMatrix[i, j]))
                             {
                                 case 0:
                                 case 1:
@@ -1714,7 +1667,7 @@ namespace WindowsFormsApp1
                             break;
 
                         case 5:
-                            switch (Calculate.GetDigits(adjMatrix[i, j]))
+                            switch (MyMath.GetAmountOfDigits(adjMatrix[i, j]))
                             {
                                 case 0:
                                 case 1:
@@ -1757,7 +1710,7 @@ namespace WindowsFormsApp1
                             break;
 
                         case 6:
-                            switch (Calculate.GetDigits(adjMatrix[i, j]))
+                            switch (MyMath.GetAmountOfDigits(adjMatrix[i, j]))
                             {
                                 case 0:
                                 case 1:
@@ -1803,7 +1756,7 @@ namespace WindowsFormsApp1
                             break;
 
                         case 7:
-                            switch (Calculate.GetDigits(adjMatrix[i, j]))
+                            switch (MyMath.GetAmountOfDigits(adjMatrix[i, j]))
                             {
                                 case 0:
                                 case 1:
@@ -1925,8 +1878,8 @@ namespace WindowsFormsApp1
 
             for (int i = 0; i < adjMatrix.GetLength(1); i++)
                 for (int j = 0; j < adjMatrix.GetLength(0); j++)
-                    if (Calculate.GetDigits(adjMatrix[i, j]) > maxDigitsCount)
-                        maxDigitsCount = Calculate.GetDigits(adjMatrix[i, j]);
+                    if (MyMath.GetAmountOfDigits(adjMatrix[i, j]) > maxDigitsCount)
+                        maxDigitsCount = MyMath.GetAmountOfDigits(adjMatrix[i, j]);
 
             return maxDigitsCount;
         }
@@ -1937,7 +1890,7 @@ namespace WindowsFormsApp1
         /// <param name="val"> Число </param>
         /// <returns> true, если число целое,
         ///           false, если нет </returns>
-        private bool IsInt(double val) =>
+        private static bool IsInt(double val) =>
             int.TryParse(val.ToString(), out var temp);
 
 
@@ -2155,6 +2108,9 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            RedrawSelectedVertex();
+            HideAdjacencyMatrix();
+
             chartForm.chartForm.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisX.Minimum = 0;
@@ -2217,25 +2173,7 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
@@ -2367,27 +2305,59 @@ namespace WindowsFormsApp1
         }
 
 
-        private ChartForTesting1 chartForTestingForm1;
+        private ChartForTestingProgram chartForTestingForm1;
 
         private void button4_Click(object sender, EventArgs e)
         {
-            chartForTestingForm1 = new ChartForTesting1(this);
-        }
-        private void timerFortTesting1_Tick(int number)
-        {
-        }
-
-        private int[] totalCount2 = new int[5];
-
-        private void TickForTestingProgram(List<Edge>[] listArr, int number)
-        {
+            chartForTestingForm1 = new ChartForTestingProgram(this);
         }
 
         public long requireTime;
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            field.Location = new Point(Consts.FieldInitialPositionX, Consts.FieldInitialPositionY);
+
+            drawingPanel.BackColor = Color.FromArgb(11, 17, 20);
+            drawingSubPanel.BackColor = Color.FromArgb(35, 32, 39);
+            changeParametersSubPanel.BackColor = Color.FromArgb(35, 32, 39);
+
+            field.Width = Consts.GraphPictureBoxWidth;
+            field.Height = Consts.GraphPictureBoxHeight;
+        }
+
+        private void CustomizeDesign()
+        {
+            drawingSubPanel.Visible = false;
+            changeParametersSubPanel.Visible = false;
+        }
+
+        private void HideSubMenu()
+        {
+            if (drawingSubPanel.Visible)
+            {
+                drawingSubPanel.Visible = false;
+            }
+
+            if (changeParametersSubPanel.Visible)
+            {
+                changeParametersSubPanel.Visible = false;
+            }
+        }
+
+        private static void ShowSubMenu(Panel subMenu)
+        {
+            subMenu.Visible = !subMenu.Visible;
+        }
+
+        private void drawingButton_Click(object sender, EventArgs e)
+        {
+            ShowSubMenu(drawingSubPanel);
+        }
+
         private void button5_Click(object sender, EventArgs e)
         {
-
+            ShowSubMenu(changeParametersSubPanel);
         }
     }
 }

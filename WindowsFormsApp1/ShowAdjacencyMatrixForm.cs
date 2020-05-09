@@ -1,18 +1,24 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Drawing;
 
 namespace WindowsFormsApp1
 {
     /// <summary>
     /// Форма для отображения матрицы смежности.
     /// </summary>
-    public partial class ShowAdjacencyMatrixForm : Form
+    public partial class ShowAdjacencyMatrixForm : MetroFramework.Forms.MetroForm
     {
         internal ShowAdjacencyMatrixForm()
         {
             InitializeComponent();
 
+            AdjacencyMatrixListBox.Width = Width;
+            AdjacencyMatrixListBox.Height = Height + 10;
+            AdjacencyMatrixListBox.Location = new Point(0, 0);
+
             // Убираем верхнюю панель.
+            AdjacencyMatrixListBox.BackColor = Color.FromArgb(31, 30, 68);
+            AdjacencyMatrixListBox.ForeColor = Color.LightGray;
             ControlBox = false;
         }
 

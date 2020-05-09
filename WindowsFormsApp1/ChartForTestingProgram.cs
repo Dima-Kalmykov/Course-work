@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -8,51 +7,70 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class ChartForTesting1 : Form
+    public partial class ChartForTestingProgram : Form
     {
-        public ChartForTesting1(MainForm mf)
+        public ChartForTestingProgram(MainForm mf)
         {
             InitializeComponent();
-            Set(mf);
+            SetAllTools(mf);
         }
 
-        ToolsForDrawingGraph toolsForDrawing;
+        private ToolsForDrawingGraph toolsForDrawing;
         private readonly List<Stopwatch> timers = new List<Stopwatch>();
         private readonly List<Edge> points = new List<Edge>();
-        private Timer timer = new Timer();
-        private Stopwatch sp = new Stopwatch();
+        private readonly Stopwatch pastTimeTimer = new Stopwatch();
         private bool firstVertex;
         private Timer mainTimer = new Timer();
-        private MainForm mf;
+        private MainForm mainForm;
 
         private List<Vertex> vertex = new List<Vertex>();
         private List<Edge> edges = new List<Edge>();
+
         private float coefficient;
+        private int totalCountOfPoints;
 
-        public void Set(MainForm _mf)
+        private void SetUpChart()
         {
-            mf = _mf;
-            vertex = _mf.Vertex.GetRange(0, _mf.Vertex.Count);
-            edges = _mf.Edges.GetRange(0, _mf.Edges.Count);
-            coefficient = _mf.coefficient;
-            toolsForDrawing = _mf.ToolsForDrawing;
-            requireTime = _mf.requireTime;
+            chart.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
+            chart.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
+            chart.ChartAreas[0].AxisX.Minimum = 0;
+            chart.ChartAreas[0].AxisX.Title = "Time";
+        }
 
-            foreach (var vertex1 in vertex)
+        private void SetUpMainTools(MainForm mf)
+        {
+            mainForm = mf;
+            vertex = mf.Vertex.GetRange(0, mf.Vertex.Count);
+            edges = mf.Edges.GetRange(0, mf.Edges.Count);
+            coefficient = mf.coefficient;
+            toolsForDrawing = mf.ToolsForDrawing;
+            requireTime = mf.requireTime;
+        }
+
+        public void SetAllTools(MainForm mf)
+        {
+            SetUpMainTools(mf);
+
+            SetUpChart();
+
+            foreach (var item in vertex)
             {
-                vertex1.HasPoint = false;
+                item.HasPoint = false;
             }
-
-            chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
-            chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
-            chart1.ChartAreas[0].AxisX.Minimum = 0;
-            chart1.ChartAreas[0].AxisX.Title = "Time";
 
             vertex[0].HasPoint = true;
             firstVertex = true;
-            var listArr = new List<Edge>[vertex.Count];
 
             edges = toolsForDrawing.GetOtherGraphWithGivenAmountOfEdgesAndVertex(vertex, edges);
+
+            SetUpTimers();
+        }
+
+
+        private void SetUpTimers()
+        {
+            var listArr = new List<Edge>[vertex.Count];
+
             for (var i = 0; i < vertex.Count; i++)
             {
                 List<Edge> curEdges = edges.Where(el => el.Ver1 == i).ToList();
@@ -60,21 +78,25 @@ namespace WindowsFormsApp1
                 listArr[i].AddRange(curEdges);
             }
 
+            RunTimers(listArr);
+        }
+
+        private void RunTimers(List<Edge>[] listArr)
+        {
             mainTimer = new Timer { Interval = 2 };
             mainTimer.Tick += (x, y) => MainTick(listArr);
             mainTimer.Start();
-            timer1.Start();
-            sp.Start();
+            timerForPlotting.Start();
+            pastTimeTimer.Start();
             Show();
         }
 
-        private int totalCount;
-
         public void MainTick(List<Edge>[] listArr)
         {
-            label1.Text = $@"Time in millisecond: {sp.ElapsedMilliseconds}";
+            timeLabel.Text = $@"Time in millisecond: {pastTimeTimer.ElapsedMilliseconds}";
             // Если готова выпустить точку.
             var count = points.Count;
+            coefficient = (float)(coefficientTrackBar.Value / 10.0);
 
             for (var i = 0; i < vertex.Count; i++)
             {
@@ -85,11 +107,11 @@ namespace WindowsFormsApp1
                     if (firstVertex)
                     {
                         firstVertex = false;
-                        totalCount += listArr[i].Count;
+                        totalCountOfPoints += listArr[i].Count;
                     }
                     else
                     {
-                        totalCount += listArr[i].Count - 1;
+                        totalCountOfPoints += listArr[i].Count - 1;
                     }
 
                     points.AddRange(listArr[i]);
@@ -121,10 +143,10 @@ namespace WindowsFormsApp1
 
                 toolsForDrawing.DrawPoint(point.X, point.Y);
 
-                pictureBox1.Image = toolsForDrawing.GetBitmap();
+                field.Image = toolsForDrawing.GetBitmap();
             }
 
-            pictureBox1.Image = toolsForDrawing.GetBitmap();
+            field.Image = toolsForDrawing.GetBitmap();
         }
 
         private PointF GetPoint(Vertex ver1, Vertex ver2, double allTime, Stopwatch timer)
@@ -260,25 +282,49 @@ namespace WindowsFormsApp1
 
         private long requireTime;
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void TimerForPlotting_Tick(object sender, EventArgs e)
         {
-            if (sp.ElapsedMilliseconds > requireTime)
+            if (pastTimeTimer.ElapsedMilliseconds > requireTime)
             {
-                timer.Stop();
-                timer1.Stop();
+                timerForPlotting.Stop();
                 mainTimer.Stop();
-                ChartForTesting1 cft2 = new ChartForTesting1(mf);
+                var newForm = new ChartForTestingProgram(mainForm);
                 return;
             }
-            chart1.Series["Amount of points"]
-                .Points.AddXY((int)(sp.ElapsedMilliseconds) / 1000, totalCount);
+
+            var xValue = (int)pastTimeTimer.ElapsedMilliseconds / 1000;
+
+            chart.Series["Amount of points"].Points.AddXY(xValue, totalCountOfPoints);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void StopTestingButton_Click(object sender, EventArgs e)
         {
-            timer.Stop();
-            timer1.Stop();
+            timerForPlotting.Stop();
             mainTimer.Stop();
+        }
+
+        private void ChartForTestingProgram_Load(object sender, EventArgs e)
+        {
+            TopMost = true;
+            WindowState = FormWindowState.Maximized;
+            chart.Width = Consts.ChartTestingFormWidth;
+            chart.Height = Consts.ChartTestingFormHeight;
+
+            field.Location = new Point(0, 0);
+            field.Width = Consts.GraphPictureBoxWidth;
+            field.Height = Consts.GraphPictureBoxHeight;
+
+            chart.Location = new Point(field.Width, 0);
+
+            timeLabel.Location = new Point(Consts.TimeLabelLocationX, Consts.TimeLabelLocationY);
+
+            label1.Location = new Point(Consts.LeftValueTrackBarLocationX, Consts.LeftValueTrackBarLocationY);
+            label2.Location = new Point(Consts.RightValueTrackBarLocationX, Consts.RightValueTrackBarLocationY);
+
+            coefficientTrackBar.Location = new Point(Consts.CoefficientTrackBarLocationX,
+                                                     Consts.CoefficientTrackBarLocationY);
+            stopTestingButton.Location = new Point(Consts.StopTestingProgramButtonLocationX,
+                                                   Consts.StopTestingProgramButtonLocationY);
         }
     }
 }
