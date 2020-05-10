@@ -69,6 +69,7 @@
             this.drawingSubPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.field)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.toolsSubPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -400,9 +401,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button8);
-            this.panel1.Controls.Add(this.button7);
-            this.panel1.Controls.Add(this.button6);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.graphInfoButton);
             this.panel1.Controls.Add(this.toolsSubPanel);
@@ -419,7 +417,7 @@
             this.button8.FlatAppearance.BorderSize = 0;
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.ForeColor = System.Drawing.Color.LightGray;
-            this.button8.Location = new System.Drawing.Point(0, 624);
+            this.button8.Location = new System.Drawing.Point(0, 120);
             this.button8.Name = "button8";
             this.button8.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.button8.Size = new System.Drawing.Size(200, 60);
@@ -434,7 +432,7 @@
             this.button7.FlatAppearance.BorderSize = 0;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.ForeColor = System.Drawing.Color.LightGray;
-            this.button7.Location = new System.Drawing.Point(0, 564);
+            this.button7.Location = new System.Drawing.Point(0, 0);
             this.button7.Name = "button7";
             this.button7.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.button7.Size = new System.Drawing.Size(200, 60);
@@ -449,7 +447,7 @@
             this.button6.FlatAppearance.BorderSize = 0;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.ForeColor = System.Drawing.Color.LightGray;
-            this.button6.Location = new System.Drawing.Point(0, 504);
+            this.button6.Location = new System.Drawing.Point(0, 60);
             this.button6.Name = "button6";
             this.button6.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.button6.Size = new System.Drawing.Size(200, 60);
@@ -460,10 +458,13 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.button8);
+            this.panel2.Controls.Add(this.button6);
+            this.panel2.Controls.Add(this.button7);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 404);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 100);
+            this.panel2.Size = new System.Drawing.Size(200, 250);
             this.panel2.TabIndex = 3;
             // 
             // graphInfoButton
@@ -542,6 +543,7 @@
             this.drawingSubPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.toolsSubPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
