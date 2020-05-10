@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class GetRandomGraphForm : Form
+    public partial class GetRandomGraphForm : MetroFramework.Forms.MetroForm
     {
         // Выбранная кнопка.
         private RadioButton selectedRb = new RadioButton();
@@ -56,6 +57,16 @@ namespace WindowsFormsApp1
 
             if (resultRb.Checked)
                 selectedRb = resultRb;
+        }
+
+        public (DialogResult, bool, int) MyShow()
+        {
+            var rg = new GetRandomGraphForm
+            {
+                cancelGraph = true
+            };
+
+            return (rg.ShowDialog(), rg.cancelGraph, rg.amount);
         }
 
         /// <summary>
@@ -120,7 +131,10 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GetRandomGraphForm_Load(object sender, EventArgs e) =>
+        private void GetRandomGraphForm_Load(object sender, EventArgs e)
+        {
+            Theme = MetroThemeStyle.Dark;
             ControlBox = false;
+        }
     }
 }

@@ -36,34 +36,39 @@
             // Caption
             // 
             this.Caption.AutoSize = true;
-            this.Caption.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Caption.Location = new System.Drawing.Point(71, 53);
+            this.Caption.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Caption.ForeColor = System.Drawing.Color.Gainsboro;
+            this.Caption.Location = new System.Drawing.Point(60, 81);
             this.Caption.Name = "Caption";
-            this.Caption.Size = new System.Drawing.Size(262, 18);
+            this.Caption.Size = new System.Drawing.Size(274, 25);
             this.Caption.TabIndex = 0;
-            this.Caption.Text = "Выберите дальнейшие действия";
+            this.Caption.Text = "Select the following actions";
             // 
             // ContinueButton
             // 
-            this.ContinueButton.BackColor = System.Drawing.Color.LightGray;
+            this.ContinueButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ContinueButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ContinueButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ContinueButton.Location = new System.Drawing.Point(31, 106);
+            this.ContinueButton.ForeColor = System.Drawing.Color.LightGray;
+            this.ContinueButton.Location = new System.Drawing.Point(31, 142);
             this.ContinueButton.Name = "ContinueButton";
             this.ContinueButton.Size = new System.Drawing.Size(190, 75);
             this.ContinueButton.TabIndex = 1;
-            this.ContinueButton.Text = "Продолжить редактирование";
+            this.ContinueButton.Text = "Continue editing";
             this.ContinueButton.UseVisualStyleBackColor = false;
             this.ContinueButton.Click += new System.EventHandler(this.ContinueButton_Click);
             // 
             // GenerateGraphButton
             // 
-            this.GenerateGraphButton.BackColor = System.Drawing.Color.LightGray;
+            this.GenerateGraphButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.GenerateGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GenerateGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.GenerateGraphButton.Location = new System.Drawing.Point(228, 106);
+            this.GenerateGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.GenerateGraphButton.Location = new System.Drawing.Point(227, 142);
             this.GenerateGraphButton.Name = "GenerateGraphButton";
             this.GenerateGraphButton.Size = new System.Drawing.Size(190, 75);
             this.GenerateGraphButton.TabIndex = 2;
-            this.GenerateGraphButton.Text = "Сгенерировать сильносвязный граф";
+            this.GenerateGraphButton.Text = "Generate strongly directed graph";
             this.GenerateGraphButton.UseVisualStyleBackColor = false;
             this.GenerateGraphButton.Click += new System.EventHandler(this.GenerateGraphButton_Click);
             // 
@@ -71,14 +76,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(440, 208);
+            this.ClientSize = new System.Drawing.Size(440, 261);
             this.Controls.Add(this.GenerateGraphButton);
             this.Controls.Add(this.ContinueButton);
             this.Controls.Add(this.Caption);
             this.Name = "CheckGraphForStronglyConnectionForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CheckGraphForStronglyConnection";
+            this.Text = "Check graph";
             this.Load += new System.EventHandler(this.CheckGraphForStronglyConnection_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

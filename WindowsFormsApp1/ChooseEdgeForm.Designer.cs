@@ -36,9 +36,11 @@
             // 
             // FirstOptionButton
             // 
-            this.FirstOptionButton.BackColor = System.Drawing.Color.LightGray;
+            this.FirstOptionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.FirstOptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FirstOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.FirstOptionButton.Location = new System.Drawing.Point(76, 91);
+            this.FirstOptionButton.ForeColor = System.Drawing.Color.LightGray;
+            this.FirstOptionButton.Location = new System.Drawing.Point(70, 145);
             this.FirstOptionButton.Name = "FirstOptionButton";
             this.FirstOptionButton.Size = new System.Drawing.Size(250, 50);
             this.FirstOptionButton.TabIndex = 0;
@@ -47,9 +49,11 @@
             // 
             // SecondOptionButton
             // 
-            this.SecondOptionButton.BackColor = System.Drawing.Color.LightGray;
+            this.SecondOptionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.SecondOptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SecondOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SecondOptionButton.Location = new System.Drawing.Point(76, 162);
+            this.SecondOptionButton.ForeColor = System.Drawing.Color.LightGray;
+            this.SecondOptionButton.Location = new System.Drawing.Point(70, 215);
             this.SecondOptionButton.Name = "SecondOptionButton";
             this.SecondOptionButton.Size = new System.Drawing.Size(250, 50);
             this.SecondOptionButton.TabIndex = 1;
@@ -59,22 +63,25 @@
             // TextForUnderstandingLabel
             // 
             this.TextForUnderstandingLabel.AutoSize = true;
-            this.TextForUnderstandingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TextForUnderstandingLabel.Location = new System.Drawing.Point(16, 55);
+            this.TextForUnderstandingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextForUnderstandingLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.TextForUnderstandingLabel.Location = new System.Drawing.Point(9, 90);
             this.TextForUnderstandingLabel.Name = "TextForUnderstandingLabel";
-            this.TextForUnderstandingLabel.Size = new System.Drawing.Size(331, 18);
+            this.TextForUnderstandingLabel.Size = new System.Drawing.Size(439, 25);
             this.TextForUnderstandingLabel.TabIndex = 2;
             this.TextForUnderstandingLabel.Text = "Выберите путь, который хотите удалить:";
             // 
             // CancelButton
             // 
-            this.CancelButton.BackColor = System.Drawing.Color.LightGray;
+            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CancelButton.Location = new System.Drawing.Point(76, 234);
+            this.CancelButton.ForeColor = System.Drawing.Color.LightGray;
+            this.CancelButton.Location = new System.Drawing.Point(70, 285);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(250, 50);
             this.CancelButton.TabIndex = 3;
-            this.CancelButton.Text = "Отмена";
+            this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
@@ -82,15 +89,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(406, 296);
+            this.ClientSize = new System.Drawing.Size(405, 375);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.TextForUnderstandingLabel);
             this.Controls.Add(this.SecondOptionButton);
             this.Controls.Add(this.FirstOptionButton);
             this.Name = "ChooseEdgeForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ChooseEdge";
+            this.Text = "Choose edge";
             this.Load += new System.EventHandler(this.ChooseEdgeForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

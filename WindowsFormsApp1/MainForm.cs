@@ -5,9 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -253,29 +251,23 @@ namespace WindowsFormsApp1
                     // или продолжить редактирование
                     if (graphForCheck.IsStronglyConnection())
                     {
-                        myMessageBox.ShowGraphIsStronglyDirection("Graph is strongly direction");
+                        myMessageBox.ShowGraphIsStronglyDirection("Graph is strongly directed");
                     }
                     else
                     {
-                        checkGraphForStronglyConnectionForm.Caption.Text =
-                            "Граф не является сильносвязным";
+                        //checkGraphForStronglyConnectionForm.Caption.Text =
+                        //    "Граф не является сильносвязным";
 
-                        checkGraphForStronglyConnectionForm.ShowDialog();
+                        var res = checkGraphForStronglyConnectionForm.MyShow();
+
+                        checkGraphForStronglyConnectionForm.MustBeGenerated = res.Item2;
 
                         if (checkGraphForStronglyConnectionForm.MustBeGenerated)
                             GetRandomGraphButton.PerformClick();
                     }
                 }
 
-                // Если есть веришны, то появляется возможность открыть матрицу смежности.
-                if (Vertex.Count != 0)
-                    ShowOrHideAdjMatrix.Enabled = true;
-                else
-                {
-                    ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                    showAdjacencyMatrixForm.Hide();
-                    ShowOrHideAdjMatrix.Enabled = false;
-                }
+                HideAdjacencyMatrix();
             }
             else
             {
@@ -304,10 +296,9 @@ namespace WindowsFormsApp1
                         DrawEdgeButton.Enabled = true;
                         ChangeEdgeLengthButton.Enabled = true;
                         responseSC = false;
-                        checkGraphForStronglyConnectionForm.Caption.Text =
-                            "Граф не является сильносвязным";
+                        var res = checkGraphForStronglyConnectionForm.MyShow();
 
-                        checkGraphForStronglyConnectionForm.ShowDialog();
+                        checkGraphForStronglyConnectionForm.MustBeGenerated = res.Item2;
 
                         if (checkGraphForStronglyConnectionForm.MustBeGenerated)
                             GetRandomGraphButton.PerformClick();
@@ -333,7 +324,11 @@ namespace WindowsFormsApp1
             ChangeEdgeLengthButton.Enabled = true;
             DeleteElementButton.Enabled = true;
 
-            getRandomGraphForm.ShowDialog();
+            //getRandomGraphForm.ShowDialog();
+
+            var res = getRandomGraphForm.MyShow();
+            getRandomGraphForm.cancelGraph = res.Item2;
+            getRandomGraphForm.amount = res.Item3;
 
             // Если нажали отмену, то ничего не происходит.
             if (!getRandomGraphForm.cancelGraph)
@@ -671,11 +666,15 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="ver1"> Номер первой вершины </param>
         /// <param name="ver2"> Номер второй веришны </param>
-        private void SetTextInButtonFromChooseEdgeForm(int ver1, int ver2)
+        private (string, string, string) SetTextInButtonFromChooseEdgeForm(int ver1, int ver2)
         {
-            chooseEdgeFormForm.TextForUnderstandingLabel.Text = "Выберите путь, который хотите удалить:";
-            chooseEdgeFormForm.FirstOptionButton.Text = $"Удалить путь из {ver1 + 1} в {ver2 + 1}";
-            chooseEdgeFormForm.SecondOptionButton.Text = $"Удалить путь из {ver2 + 1} в {ver1 + 1}";
+            //chooseEdgeFormForm.TextForUnderstandingLabel.Text = @"Select the edge you want to delete";
+            //chooseEdgeFormForm.FirstOptionButton.Text = $@"Delete edge from {ver1 + 1} to {ver2 + 1}";
+            //chooseEdgeFormForm.SecondOptionButton.Text = $@"Delete edge from {ver2 + 1} to {ver1 + 1}";
+
+            return (@"Select the edge you want to delete",
+                $@"Delete edge from {ver1 + 1} to {ver2 + 1}",
+                $@"Delete edge from {ver2 + 1} to {ver1 + 1}");
         }
 
         /// <summary>
@@ -742,11 +741,10 @@ namespace WindowsFormsApp1
                 if (!ChangeEdgeLengthButton.Enabled)
                 {
                     // Если мы нажали на вершину, то ничего не происходит.
-                    for (int i = 0; i < Vertex.Count; i++)
+                    if (Vertex.Any(t => Math.Pow(t.X - e.X, 2) + Math.Pow(t.Y - e.Y, 2) <=
+                                        Math.Pow(Consts.VertexRadius, 2)))
                     {
-                        if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
-                            Math.Pow(Consts.VertexRadius, 2))
-                            return;
+                        return;
                     }
 
                     for (int i = 0; i < Edges.Count; i++)
@@ -768,7 +766,11 @@ namespace WindowsFormsApp1
                                  Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) >=
                                 Math.Pow(Consts.VertexRadius - 4, 2))
                             {
-                                getEdgeLengthForm.ShowDialog();
+                                //getEdgeLengthForm.ShowDialog();
+                                var result = getEdgeLengthForm.MyShow();
+
+                                getEdgeLengthForm.WasCancel = result.Item2;
+                                getEdgeLengthForm.Weight = result.Item3;
 
                                 // Если мы не нажади отмену, то меняем вес.
                                 if (!getEdgeLengthForm.WasCancel)
@@ -800,25 +802,38 @@ namespace WindowsFormsApp1
                                     if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                         adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                     {
-                                        chooseEdgeFormForm.TextForUnderstandingLabel.Text =
-                                            "Длину какого пути Вы хотите изменить:";
+                                        //chooseEdgeFormForm.TextForUnderstandingLabel.Text =
+                                        //    "Длину какого пути Вы хотите изменить:";
 
-                                        chooseEdgeFormForm.FirstOptionButton.Text =
-                                            $"Изменить длину пути из {Edges[i].Ver1 + 1} в " +
-                                            $"{Edges[i].Ver2 + 1}";
+                                        //chooseEdgeFormForm.FirstOptionButton.Text =
+                                        //    $"Изменить длину пути из {Edges[i].Ver1 + 1} в " +
+                                        //    $"{Edges[i].Ver2 + 1}";
 
-                                        chooseEdgeFormForm.SecondOptionButton.Text =
-                                            $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
-                                            $"{Edges[i].Ver1 + 1}";
+                                        //chooseEdgeFormForm.SecondOptionButton.Text =
+                                        //    $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
+                                        //    $"{Edges[i].Ver1 + 1}";
 
-                                        chooseEdgeFormForm.ShowDialog();
+                                        //chooseEdgeFormForm.ShowDialog();
 
+                                        var res = chooseEdgeFormForm.MyShowChangeLength(
+                                            "Choose the edge whose length\n          you want to change",
+                                            $"Change edge length from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
+                                            $"Change edge length from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
+                                            );
+
+                                        chooseEdgeFormForm.WasCancel = res.Item2;
+                                        chooseEdgeFormForm.IsFirstAction = res.Item3;
                                         // Если не отменили изменение длины, то меняем.
                                         if (!chooseEdgeFormForm.WasCancel)
                                         {
                                             if (chooseEdgeFormForm.IsFirstAction)
                                             {
-                                                getEdgeLengthForm.ShowDialog();
+                                                //getEdgeLengthForm.ShowDialog();
+
+                                                var result1 = getEdgeLengthForm.MyShow();
+
+                                                getEdgeLengthForm.WasCancel = result1.Item2;
+                                                getEdgeLengthForm.Weight = result1.Item3;
 
                                                 if (!getEdgeLengthForm.WasCancel)
                                                 {
@@ -832,8 +847,11 @@ namespace WindowsFormsApp1
                                                 return;
                                             }
 
-                                            getEdgeLengthForm.ShowDialog();
+                                            //getEdgeLengthForm.ShowDialog();
+                                            var result = getEdgeLengthForm.MyShow();
 
+                                            getEdgeLengthForm.WasCancel = result.Item2;
+                                            getEdgeLengthForm.Weight = result.Item3;
                                             if (!getEdgeLengthForm.WasCancel)
                                             {
                                                 for (int j = i; j < Edges.Count; j++)
@@ -857,8 +875,11 @@ namespace WindowsFormsApp1
                                     }
                                     else
                                     {
-                                        getEdgeLengthForm.ShowDialog();
+                                        //getEdgeLengthForm.ShowDialog();
+                                        var result = getEdgeLengthForm.MyShow();
 
+                                        getEdgeLengthForm.WasCancel = result.Item2;
+                                        getEdgeLengthForm.Weight = result.Item3;
                                         if (!getEdgeLengthForm.WasCancel)
                                         {
                                             Edges[i].Weight = getEdgeLengthForm.Weight;
@@ -891,25 +912,35 @@ namespace WindowsFormsApp1
                                     if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                         adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                     {
-                                        chooseEdgeFormForm.TextForUnderstandingLabel.Text =
-                                            "Длину какого пути Вы хотите изменить:";
+                                        //chooseEdgeFormForm.TextForUnderstandingLabel.Text =
+                                        //    "Длину какого пути Вы хотите изменить:";
 
-                                        chooseEdgeFormForm.FirstOptionButton.Text =
-                                            $"Изменить длину пути из {Edges[i].Ver1 + 1} в " +
-                                            $"{Edges[i].Ver2 + 1}";
+                                        //chooseEdgeFormForm.FirstOptionButton.Text =
+                                        //    $"Изменить длину пути из {Edges[i].Ver1 + 1} в " +
+                                        //    $"{Edges[i].Ver2 + 1}";
 
-                                        chooseEdgeFormForm.SecondOptionButton.Text =
-                                            $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
-                                            $"{Edges[i].Ver1 + 1}";
+                                        //chooseEdgeFormForm.SecondOptionButton.Text =
+                                        //    $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
+                                        //    $"{Edges[i].Ver1 + 1}";
 
-                                        chooseEdgeFormForm.ShowDialog();
+                                        var res = chooseEdgeFormForm.MyShowChangeLength(
+                                            "Choose the edge whose length\n          you want to change",
+                                            $"Change edge length from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
+                                            $"Change edge length from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
+                                        );
+
+                                        chooseEdgeFormForm.WasCancel = res.Item2;
+                                        chooseEdgeFormForm.IsFirstAction = res.Item3;
 
                                         // Если не отменили, то меняем длину. 
                                         if (!chooseEdgeFormForm.WasCancel)
                                         {
                                             if (chooseEdgeFormForm.IsFirstAction)
                                             {
-                                                getEdgeLengthForm.ShowDialog();
+                                                var result2 = getEdgeLengthForm.MyShow();
+
+                                                getEdgeLengthForm.WasCancel = result2.Item2;
+                                                getEdgeLengthForm.Weight = result2.Item3;
 
                                                 if (!getEdgeLengthForm.WasCancel)
                                                 {
@@ -923,7 +954,10 @@ namespace WindowsFormsApp1
                                                 return;
                                             }
 
-                                            getEdgeLengthForm.ShowDialog();
+                                            var result = getEdgeLengthForm.MyShow();
+
+                                            getEdgeLengthForm.WasCancel = result.Item2;
+                                            getEdgeLengthForm.Weight = result.Item3;
 
                                             if (!getEdgeLengthForm.WasCancel)
                                             {
@@ -948,7 +982,10 @@ namespace WindowsFormsApp1
                                     }
                                     else
                                     {
-                                        getEdgeLengthForm.ShowDialog();
+                                        var result = getEdgeLengthForm.MyShow();
+
+                                        getEdgeLengthForm.WasCancel = result.Item2;
+                                        getEdgeLengthForm.Weight = result.Item3;
 
                                         if (!getEdgeLengthForm.WasCancel)
                                         {
@@ -1013,7 +1050,10 @@ namespace WindowsFormsApp1
                                 // Если между ними уже есть ребро, то предупреждаем об этом.
                                 if (adjMatrix[ver1ForConnection, ver2ForConnection] == 0)
                                 {
-                                    getEdgeLengthForm.ShowDialog();
+                                    var result = getEdgeLengthForm.MyShow();
+
+                                    getEdgeLengthForm.WasCancel = result.Item2;
+                                    getEdgeLengthForm.Weight = result.Item3;
 
                                     // Если решили отменить рисование ребра.
                                     if (getEdgeLengthForm.WasCancel)
@@ -1192,11 +1232,13 @@ namespace WindowsFormsApp1
                                         if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                             adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
-                                            SetTextInButtonFromChooseEdgeForm(
+                                           var (caption, text1, text2) =  SetTextInButtonFromChooseEdgeForm(
                                                 Edges[i].Ver1, Edges[i].Ver2);
 
-                                            chooseEdgeFormForm.ShowDialog();
-
+                                            //chooseEdgeFormForm.ShowDialog();
+                                            var res = chooseEdgeFormForm.MyShow(caption, text1, text2);
+                                            chooseEdgeFormForm.WasCancel = res.Item2;
+                                            chooseEdgeFormForm.IsFirstAction = res.Item3;
                                             // Если не нажали отмену, то удаляем.
                                             if (!chooseEdgeFormForm.WasCancel)
                                             {
@@ -1260,10 +1302,12 @@ namespace WindowsFormsApp1
                                         if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                             adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
-                                            SetTextInButtonFromChooseEdgeForm(
+                                            var (caption, text1, text2) = SetTextInButtonFromChooseEdgeForm(
                                                 Edges[i].Ver1, Edges[i].Ver2);
 
-                                            chooseEdgeFormForm.ShowDialog();
+                                            var res = chooseEdgeFormForm.MyShow(caption, text1, text2);
+                                            chooseEdgeFormForm.WasCancel = res.Item2;
+                                            chooseEdgeFormForm.IsFirstAction = res.Item3;
 
                                             // Если не нажали отмену, то удаляем.
                                             if (!chooseEdgeFormForm.WasCancel)
@@ -1319,15 +1363,7 @@ namespace WindowsFormsApp1
                     }
                 }
 
-                // В зависимости от текста открываем/закрываем матрицу смежности.
-                if (Vertex.Count != 0)
-                    ShowOrHideAdjMatrix.Enabled = true;
-                else
-                {
-                    ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                    showAdjacencyMatrixForm.Hide();
-                    ShowOrHideAdjMatrix.Enabled = false;
-                }
+                HideAdjacencyMatrix();
             }
         }
 
@@ -2263,7 +2299,8 @@ namespace WindowsFormsApp1
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            HideSubMenu();
+            ShowAllSubMenu();
+            //chooseEdgeFormForm.ShowDialog();
             button2.Location = new Point(800, 30);
 
             //trackBar1.Location = new Point(800, 30);
@@ -2285,6 +2322,13 @@ namespace WindowsFormsApp1
         {
             drawingSubPanel.Visible = false;
             changeParametersSubPanel.Visible = false;
+        }
+
+        private void ShowAllSubMenu()
+        {
+            toolsSubPanel.Visible = true;
+            changeParametersSubPanel.Visible = true;
+            drawingSubPanel.Visible = true;
         }
 
         private void HideSubMenu()

@@ -37,42 +37,47 @@
             // TextForUnderstandingLabel
             // 
             this.TextForUnderstandingLabel.AutoSize = true;
-            this.TextForUnderstandingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TextForUnderstandingLabel.Location = new System.Drawing.Point(88, 47);
+            this.TextForUnderstandingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextForUnderstandingLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.TextForUnderstandingLabel.Location = new System.Drawing.Point(63, 95);
             this.TextForUnderstandingLabel.Name = "TextForUnderstandingLabel";
-            this.TextForUnderstandingLabel.Size = new System.Drawing.Size(180, 18);
+            this.TextForUnderstandingLabel.Size = new System.Drawing.Size(204, 26);
             this.TextForUnderstandingLabel.TabIndex = 0;
-            this.TextForUnderstandingLabel.Text = "Введите длину ребра:";
+            this.TextForUnderstandingLabel.Text = "Enter edge weight";
             // 
             // GetNumberTextBox
             // 
-            this.GetNumberTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.GetNumberTextBox.Location = new System.Drawing.Point(111, 96);
+            this.GetNumberTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.GetNumberTextBox.Location = new System.Drawing.Point(98, 145);
             this.GetNumberTextBox.Name = "GetNumberTextBox";
-            this.GetNumberTextBox.Size = new System.Drawing.Size(150, 24);
+            this.GetNumberTextBox.Size = new System.Drawing.Size(150, 28);
             this.GetNumberTextBox.TabIndex = 1;
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.BackColor = System.Drawing.Color.LightGray;
+            this.ConfirmButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ConfirmButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ConfirmButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ConfirmButton.Location = new System.Drawing.Point(44, 137);
+            this.ConfirmButton.ForeColor = System.Drawing.Color.LightGray;
+            this.ConfirmButton.Location = new System.Drawing.Point(31, 191);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(135, 50);
             this.ConfirmButton.TabIndex = 2;
-            this.ConfirmButton.Text = "Продолжить";
+            this.ConfirmButton.Text = "Continue";
             this.ConfirmButton.UseVisualStyleBackColor = false;
             this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
             // CancelButton
             // 
-            this.CancelButton.BackColor = System.Drawing.Color.LightGray;
+            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CancelButton.Location = new System.Drawing.Point(196, 137);
+            this.CancelButton.ForeColor = System.Drawing.Color.LightGray;
+            this.CancelButton.Location = new System.Drawing.Point(183, 191);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(135, 50);
             this.CancelButton.TabIndex = 3;
-            this.CancelButton.Text = "Отмена";
+            this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
@@ -80,15 +85,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(364, 238);
+            this.ClientSize = new System.Drawing.Size(353, 264);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.GetNumberTextBox);
             this.Controls.Add(this.TextForUnderstandingLabel);
             this.Name = "GetLengthEdgeForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "GetLengthEdge";
+            this.Text = "Get edge weight";
             this.Load += new System.EventHandler(this.GetLengthEdgeForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

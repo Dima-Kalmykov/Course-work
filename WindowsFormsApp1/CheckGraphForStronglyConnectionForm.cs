@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using MetroFramework;
 
 namespace WindowsFormsApp1
 {
@@ -7,7 +8,7 @@ namespace WindowsFormsApp1
     /// Форма оповещения пользователя о сильносвязности графа,
     /// и предлагающая варианты развития событий.
     /// </summary>
-    public partial class CheckGraphForStronglyConnectionForm : Form
+    public partial class CheckGraphForStronglyConnectionForm : MetroFramework.Forms.MetroForm
     {
         // Флаг для определения того, нужно генерировать граф, или нет.
         internal bool MustBeGenerated;
@@ -15,6 +16,22 @@ namespace WindowsFormsApp1
         internal CheckGraphForStronglyConnectionForm()
         {
             InitializeComponent();
+        }
+
+        public (DialogResult, bool) MyShow()
+        {
+            var cf = new CheckGraphForStronglyConnectionForm
+            {
+                Text = "Warning", 
+                Caption = {Text = "Graph is not strongly directed"},
+                MustBeGenerated = false
+            };
+
+
+
+            var res = cf.ShowDialog();
+
+            return (res, cf.MustBeGenerated);
         }
 
         /// <summary>
@@ -44,7 +61,11 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckGraphForStronglyConnection_Load(object sender, EventArgs e) =>
+        private void CheckGraphForStronglyConnection_Load(object sender, EventArgs e)
+        {
+            Style = MetroColorStyle.Orange;
+            Theme = MetroThemeStyle.Dark;
             ControlBox = false;
+        }
     }
 }

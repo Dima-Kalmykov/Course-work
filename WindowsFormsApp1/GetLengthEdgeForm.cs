@@ -1,10 +1,11 @@
 ﻿using Dangl.Calculator;
 using System;
 using System.Windows.Forms;
+using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class GetLengthEdgeForm : Form
+    public partial class GetLengthEdgeForm : MetroFramework.Forms.MetroForm
     {
         // Флаг, который показывает, нажали мы кнопку отмены, или нет.
         internal bool WasCancel;
@@ -28,9 +29,19 @@ namespace WindowsFormsApp1
             var myMessageBox = new MyMessageBox();
             myMessageBox.ShowNumberInRange("Number must be in range\n" +
                                            "          [0.0001; 10^4]");
-            //MessageBox.Show("Number must be in range [0.0001 - 10^4]");
             GetNumberTextBox.Text = string.Empty;
             GetNumberTextBox.Focus();
+        }
+
+        public (DialogResult, bool, double) MyShow()
+        {
+            var gl = new GetLengthEdgeForm
+            {
+                WasCancel = false,
+                Weight = 0
+            };
+
+            return (gl.ShowDialog(), gl.WasCancel, gl.Weight);
         }
 
         /// <summary>
@@ -84,7 +95,10 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GetLengthEdgeForm_Load(object sender, EventArgs e) =>
+        private void GetLengthEdgeForm_Load(object sender, EventArgs e)
+        {
+            Theme = MetroThemeStyle.Dark;
             ControlBox = false;
+        }
     }
 }
