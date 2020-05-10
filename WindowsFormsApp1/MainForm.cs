@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -25,6 +26,8 @@ namespace WindowsFormsApp1
         private readonly ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
         private readonly Chart chartForm = new Chart();
         private readonly Form1 chartDisplay = new Form1();
+
+        private MyMessageBox myMessageBox = new MyMessageBox();
 
         // Инструменты для рисования.
         public ToolsForDrawingGraph ToolsForDrawing;
@@ -71,7 +74,7 @@ namespace WindowsFormsApp1
 
         private void HideAdjacencyMatrix()
         {
-           
+
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
@@ -127,7 +130,7 @@ namespace WindowsFormsApp1
             HideAdjacencyMatrix();
         }
 
-        // Todo сделать текущий режим рисования где-нибудь
+        // Todo сделать текущий режим рисования где-нибудь красным цветом на самой кнопке
 
         public void DeleteGraph()
         {
@@ -145,12 +148,12 @@ namespace WindowsFormsApp1
             DrawEdgeButton.Enabled = true;
             ChangeEdgeLengthButton.Enabled = true;
 
-            var message = "Вы действительно хотите удалить весь граф?";
-            var caption = "Delete";
+            var message = "Are you sure you want to delete the graph?";
+            var caption = "Confirmation";
 
             // Диалоговое окно для подтверждения удаления.
-            var confirmCancellation = MessageBox.Show(message, caption,
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            var confirmCancellation = myMessageBox.ShowDeleteAllGraph(message, caption);
 
             return confirmCancellation;
         }
@@ -178,8 +181,13 @@ namespace WindowsFormsApp1
             }
             else
             {
-                MessageBox.Show("Вам нечего удалять");
+                myMessageBox.ShowGraphIsEmpty("Graph is empty");
             }
+
+            DrawVertexButton.Enabled = true;
+            DrawEdgeButton.Enabled = true;
+            DeleteElementButton.Enabled = true;
+            ChangeEdgeLengthButton.Enabled = true;
 
             HideAdjacencyMatrix();
         }
@@ -218,25 +226,7 @@ namespace WindowsFormsApp1
         {
             if (!clickContinue)
             {
-                // Если была выбрана вершина для перемещения, то перекрашиваем её.
-                if (indexVertexForMove != -1)
-                {
-                    ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                        Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                    firstPress = true;
-                    field.Image = ToolsForDrawing.GetBitmap();
-                }
-
-                // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-                if (ver1ForConnection != -1)
-                {
-                    ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                        Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                    ver1ForConnection = -1;
-
-                    field.Image = ToolsForDrawing.GetBitmap();
-                }
+                RedrawSelectedVertex();
 
                 // Делаем остальные кнопки активными.
                 DrawVertexButton.Enabled = true;
@@ -246,7 +236,9 @@ namespace WindowsFormsApp1
 
                 // Если нечего проверять, выводим сообщение.
                 if (adjMatrix is null || adjMatrix.Length == 0)
-                    MessageBox.Show("Постройте граф");
+                {
+                    myMessageBox.ShowGraphIsEmpty("Graph is empty");
+                }
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
@@ -260,7 +252,9 @@ namespace WindowsFormsApp1
                     // предлагаем сгенерировать случайный сильносвязный граф,
                     // или продолжить редактирование
                     if (graphForCheck.IsStronglyConnection())
-                        MessageBox.Show("Граф сильносвязный!");
+                    {
+                        myMessageBox.ShowGraphIsStronglyDirection("Graph is strongly direction");
+                    }
                     else
                     {
                         checkGraphForStronglyConnectionForm.Caption.Text =
@@ -287,11 +281,12 @@ namespace WindowsFormsApp1
             {
                 // Если нечего проверять, выводим сообщение.
                 if (adjMatrix is null || adjMatrix.Length == 0)
-                    MessageBox.Show("Постройте граф");
+                    myMessageBox.ShowGraphIsEmpty("Graph is empty");
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
+                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck =
+                        new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
 
                     foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
@@ -476,19 +471,19 @@ namespace WindowsFormsApp1
                         pathForSaveFile = saveGraphDialog.FileName;
 
                         pathForSaveFile = pathForSaveFile.Substring(0,
-                                              pathForSaveFile.LastIndexOf(".") + 1) + "bin";
+                                              pathForSaveFile.LastIndexOf(".") + 1) +
+                                          "bin";
 
                         SaveToolsForGraph();
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("Невозможно сохранить изображение", "Ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        myMessageBox.ShowError("Unable to save image");
                     }
                 }
             }
             else
-                MessageBox.Show("Нарисуйте что-нибудь");
+                myMessageBox.ShowGraphIsEmpty("Graph is empty");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertex.Count != 0)
@@ -564,8 +559,8 @@ namespace WindowsFormsApp1
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Невозможно открыть изображение", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    myMessageBox.ShowError("Unable to open image");
+
                 }
             }
 
@@ -587,25 +582,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void ChangeLengthButton_Click(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Если нет рёбер, пишем об этом.
             if (Edges.Count != 0)
@@ -619,17 +596,9 @@ namespace WindowsFormsApp1
                 DeleteElementButton.Enabled = true;
             }
             else
-                MessageBox.Show("Рёбер нет");
+                myMessageBox.ShowHasNoEdges("No edges");
 
-            // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
-                ShowOrHideAdjMatrix.Enabled = true;
-            else
-            {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-                showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Enabled = false;
-            }
+            HideAdjacencyMatrix();
         }
 
         /// <summary>
@@ -745,18 +714,13 @@ namespace WindowsFormsApp1
                             firstPress = true;
 
                             // Проверяем, чтобы вершина при переносе не перекрывала другую.
-                            for (int i = 0; i < Vertex.Count; i++)
+                            if (Vertex.Where((v, i) => i != indexVertexForMove)
+                                      .Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
+                                                Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                             {
-                                if (i != indexVertexForMove)
-                                    if (Math.Abs(e.X - Vertex[i].X) < 2 * Consts.VertexRadius
-                                        && Math.Abs(e.Y - Vertex[i].Y) < 2 * Consts.VertexRadius)
-                                    {
-                                        MessageBox.Show("Вершины не должны пересекаться", "Error",
-                                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                                        firstPress = true;
-                                        return;
-                                    }
+                                myMessageBox.ShowVertexNotCross("Vertex must not cross");
+                                firstPress = true;
+                                return;
                             }
 
                             // Тогда двигаем точку и перерисовываем граф.
@@ -1007,15 +971,11 @@ namespace WindowsFormsApp1
                 if (!DrawVertexButton.Enabled)
                 {
                     // Проверяем, не попадаем ли мы на другую вершину.
-                    for (int i = 0; i < Vertex.Count; i++)
+                    if (Vertex.Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
+                                        Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                     {
-                        if (Math.Abs(e.X - Vertex[i].X) < 2 * Consts.VertexRadius
-                            && Math.Abs(e.Y - Vertex[i].Y) < 2 * Consts.VertexRadius)
-                        {
-                            MessageBox.Show("Вершины не должны пересекаться", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            return;
-                        }
+                        myMessageBox.ShowVertexNotCross("Vertex must not cross");
+                        return;
                     }
 
                     Vertex.Add(new Vertex(e.X, e.Y));
@@ -1097,8 +1057,11 @@ namespace WindowsFormsApp1
                                     break;
                                 }
 
-                                MessageBox.Show($"Ребро из вершины {ver1ForConnection + 1} " +
-                                                $"в вершину {ver2ForConnection + 1} уже есть!");
+                                myMessageBox.ShowEdgeExists("Edge from vertex" +
+                                                            $" {ver1ForConnection + 1} to vertex " +
+                                                            $"{ver2ForConnection + 1} \n" +
+                                                            GetSpaces(15) + "already exists",
+                                    ver1ForConnection + 1, ver2ForConnection + 1);
 
                                 // Убираем выделение с вершин.
                                 ToolsForDrawing.DrawVertex(
@@ -1131,15 +1094,11 @@ namespace WindowsFormsApp1
                         if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
                             Math.Pow(Consts.VertexRadius, 2))
                         {
-                            string message = "Это действие является необратимым," +
-                                             " Вы уверены, что хотите продолжить?";
+                            var confirmation = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                                                              GetSpaces(2) +
+                                                                              "Are you sure you want to continue?", "Confirmation");
 
-                            string caption = "Confirm";
-
-                            var confirm = MessageBox.Show(message, caption,
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                            if (confirm == DialogResult.Yes)
+                            if (confirmation == DialogResult.Yes)
                             {
                                 for (int j = 0; j < Edges.Count; j++)
                                 {
@@ -1197,12 +1156,9 @@ namespace WindowsFormsApp1
                                     >=
                                     Math.Pow(Consts.VertexRadius - 4, 2))
                                 {
-                                    var message = "Это действие является необратимым," +
-                                                  " Вы уверены, что хотите продолжить?";
-                                    var caption = "Confirm";
-
-                                    var confirm = MessageBox.Show(message, caption,
-                                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                    var confirm = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                                                   GetSpaces(2) +
+                                                                   "Are you sure you want to continue?", "Confirmation");
 
                                     if (confirm == DialogResult.Yes)
                                     {
@@ -1270,12 +1226,9 @@ namespace WindowsFormsApp1
                                             return;
                                         }
 
-                                        string message = "Это действие является необратимым," +
-                                                         " Вы уверены, что хотите продолжить?";
-                                        string caption = "Confirm";
-
-                                        var confirm = MessageBox.Show(message, caption,
-                                            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                        var confirm = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                                                                     GetSpaces(2) +
+                                                                                     "Are you sure you want to continue?", "Confirmation");
 
                                         if (confirm == DialogResult.Yes)
                                         {
@@ -1339,13 +1292,9 @@ namespace WindowsFormsApp1
                                             return;
                                         }
 
-                                        string message = "Это действие является необратимым," +
-                                                         " Вы уверены, что хотите продолжить?";
-                                        string caption = "Confirm";
-
-                                        var confirm = MessageBox.Show(message, caption,
-                                            MessageBoxButtons.YesNo,
-                                            MessageBoxIcon.Question);
+                                        var confirm = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                                                                     GetSpaces(2) +
+                                                                                     "Are you sure you want to continue?", "Confirmation");
 
                                         if (confirm == DialogResult.Yes)
                                         {
@@ -2185,7 +2134,7 @@ namespace WindowsFormsApp1
             if (field.Image != null && !(adjMatrix is null) && adjMatrix.Length != 0)
             {
                 SaveFileDialog saveGraphDialog = new SaveFileDialog();
-                saveGraphDialog.Title = "Сохранить картинку как...";
+                saveGraphDialog.Title = "Сохранить график как...";
                 saveGraphDialog.OverwritePrompt = true;
                 saveGraphDialog.CheckPathExists = true;
                 saveGraphDialog.Filter = "Files(*.CSV)|*.CSV";
@@ -2204,13 +2153,12 @@ namespace WindowsFormsApp1
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("Невозможно сохранить изображение", "Ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        myMessageBox.ShowError("Unable to save chart");
                     }
                 }
             }
             else
-                MessageBox.Show("Нарисуйте что-нибудь");
+                myMessageBox.ShowGraphIsEmpty("Graph is empty");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertex.Count != 0)
@@ -2298,8 +2246,7 @@ namespace WindowsFormsApp1
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Невозможно открыть изображение", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    myMessageBox.ShowError("Unable to open chart");
                 }
             }
         }
@@ -2316,11 +2263,19 @@ namespace WindowsFormsApp1
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            HideSubMenu();
+            button2.Location = new Point(800, 30);
+
+            //trackBar1.Location = new Point(800, 30);
+
             field.Location = new Point(Consts.FieldInitialPositionX, Consts.FieldInitialPositionY);
 
             drawingPanel.BackColor = Color.FromArgb(11, 17, 20);
             drawingSubPanel.BackColor = Color.FromArgb(35, 32, 39);
             changeParametersSubPanel.BackColor = Color.FromArgb(35, 32, 39);
+
+            panel1.BackColor = Color.FromArgb(11, 17, 20);
+            toolsSubPanel.BackColor = Color.FromArgb(35, 32, 39);
 
             field.Width = Consts.GraphPictureBoxWidth;
             field.Height = Consts.GraphPictureBoxHeight;
@@ -2343,6 +2298,11 @@ namespace WindowsFormsApp1
             {
                 changeParametersSubPanel.Visible = false;
             }
+
+            if (toolsSubPanel.Visible)
+            {
+                toolsSubPanel.Visible = false;
+            }
         }
 
         private static void ShowSubMenu(Panel subMenu)
@@ -2358,6 +2318,11 @@ namespace WindowsFormsApp1
         private void button5_Click(object sender, EventArgs e)
         {
             ShowSubMenu(changeParametersSubPanel);
+        }
+
+        private void toolsButton_Click(object sender, EventArgs e)
+        {
+            ShowSubMenu(toolsSubPanel);
         }
     }
 }

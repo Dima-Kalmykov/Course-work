@@ -30,7 +30,7 @@ namespace WindowsFormsApp1
         internal const int ChartTestingFormWidth = 765;
         internal const int ChartTestingFormHeight = 585;
 
-        internal const int GraphPictureBoxWidth = 765;
+        internal const int GraphPictureBoxWidth = 855;
         internal const int GraphPictureBoxHeight = 585;
 
         internal const int TimeLabelLocationX = 700;

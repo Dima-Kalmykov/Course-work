@@ -25,7 +25,10 @@ namespace WindowsFormsApp1
 
         private void ShowErrorMessage()
         {
-            MessageBox.Show("Number must be in range [0.0001 - 10^4]");
+            var myMessageBox = new MyMessageBox();
+            myMessageBox.ShowNumberInRange("Number must be in range\n" +
+                                           "          [0.0001; 10^4]");
+            //MessageBox.Show("Number must be in range [0.0001 - 10^4]");
             GetNumberTextBox.Text = string.Empty;
             GetNumberTextBox.Focus();
         }

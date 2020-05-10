@@ -66,6 +66,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyMessageBox.Designer.cs">
+      <DependentUpon>MyMessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="SpecialKindOfGraphForCheckStronglyDirection.cs" />
     <Compile Include="ChartDisplayForm.cs">
       <SubType>Form</SubType>
@@ -136,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyMessageBox.resx">
+      <DependentUpon>MyMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShowAdjacencyMatrixForm.resx">
       <DependentUpon>ShowAdjacencyMatrixForm.cs</DependentUpon>

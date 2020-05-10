@@ -16,8 +16,9 @@ namespace WindowsFormsApp1
         internal GetRandomGraphForm()
         {
             InitializeComponent();
-
-            var controls = new Control[]
+            selectedRb = null;
+            DoingRadioButtonsUnchecked();
+            var controls = new RadioButton[]
             {
                 radioButton1, radioButton2, radioButton3,
                 radioButton4, radioButton5, radioButton6, radioButton7, radioButton8,
@@ -70,7 +71,8 @@ namespace WindowsFormsApp1
             // Случай, когда ничего не выбрано.
             if (selectedRb is null)
             {
-                MessageBox.Show("Выберите что-нибудь");
+                var myMessageBox = new MyMessageBox();
+                myMessageBox.ShowNothingChoose("Nothing selected");
                 return;
             }
 
@@ -78,7 +80,7 @@ namespace WindowsFormsApp1
 
             // Преобразуем текст кнопки в количество.
             amount = int.Parse(selectedRb.Text);
-
+            selectedRb = null;
             DoingRadioButtonsUnchecked();
         }
 
