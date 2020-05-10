@@ -27,8 +27,6 @@ namespace WindowsFormsApp1
                 MustBeGenerated = false
             };
 
-
-
             var res = cf.ShowDialog();
 
             return (res, cf.MustBeGenerated);

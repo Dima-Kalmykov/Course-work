@@ -70,8 +70,8 @@ namespace WindowsFormsApp1
             };
 
 
-            ms.buttonYes.Location = new Point(70, 150);
-            ms.buttonNo.Location = new Point(240, 150);
+            ms.buttonYes.Location = new Point(80, 150);
+            ms.buttonNo.Location = new Point(250, 150);
             ms.label1.Text = message;
             ms.Text = caption;
             return ms.ShowDialog();

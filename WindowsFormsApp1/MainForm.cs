@@ -7,11 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MetroFramework;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WindowsFormsApp1
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MetroFramework.Forms.MetroForm
     {
         // Диалоговые формы.
         private readonly ChooseEdgeForm chooseEdgeFormForm = new ChooseEdgeForm();
@@ -25,7 +26,7 @@ namespace WindowsFormsApp1
         private readonly Chart chartForm = new Chart();
         private readonly Form1 chartDisplay = new Form1();
 
-        private MyMessageBox myMessageBox = new MyMessageBox();
+        private readonly MyMessageBox myMessageBox = new MyMessageBox();
 
         // Инструменты для рисования.
         public ToolsForDrawingGraph ToolsForDrawing;
@@ -55,6 +56,8 @@ namespace WindowsFormsApp1
         {
             // Устанавливаем необходимые параметры.
             InitializeComponent();
+            Theme = MetroThemeStyle.Light;
+            Style = MetroColorStyle.Green;
             ToolsForDrawing = new ToolsForDrawingGraph(Consts.GraphPictureBoxWidth, Consts.GraphPictureBoxHeight);
             Vertex = new List<Vertex>();
             Edges = new List<Edge>();
@@ -72,7 +75,6 @@ namespace WindowsFormsApp1
 
         private void HideAdjacencyMatrix()
         {
-
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertex.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
@@ -128,7 +130,6 @@ namespace WindowsFormsApp1
             HideAdjacencyMatrix();
         }
 
-        // Todo сделать текущий режим рисования где-нибудь красным цветом на самой кнопке
 
         public void DeleteGraph()
         {
@@ -698,6 +699,7 @@ namespace WindowsFormsApp1
                                       .Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
                                                 Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                             {
+                                RedrawSelectedVertex();
                                 myMessageBox.ShowVertexNotCross("Vertex must not cross");
                                 firstPress = true;
                                 return;
@@ -2074,7 +2076,6 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            timer3.Stop();
 
             RedrawSelectedVertex();
             HideAdjacencyMatrix();
@@ -2089,6 +2090,22 @@ namespace WindowsFormsApp1
 
             if (responseSC)
             {
+                timer3.Stop();
+                HideAllLabel();
+                panelChart.Visible = true;
+                panel3.Visible = true;
+                drawingPanel.Visible = false;
+                saveChartButton.Visible = true;
+                openChartButton.Visible = true;
+                StopProcessButton.Visible = true;
+                testingProgrammButton.Visible = true;
+                panel1.Visible = false;
+                trackBar1.Visible = true;
+                startReseachButton.Visible = false;
+                Width -= 157;
+                panel3.Location = new Point(Consts.GraphPictureBoxWidth, 5);
+                trackBar1.Location = new Point(150, Consts.GraphPictureBoxHeight + 30);
+
                 Vertex[0].HasPoint = true;
                 var listArr = new List<Edge>[Vertex.Count];
 
@@ -2099,6 +2116,9 @@ namespace WindowsFormsApp1
                     listArr[i].AddRange(curEdges);
                 }
 
+                field.Location = new Point(0, 5);
+                HideButtons();
+
                 mainTimer = new Timer { Interval = 2 };
                 mainTimer.Tick += (x, y) => MainTick(listArr);
                 mainTimer.Start();
@@ -2108,6 +2128,15 @@ namespace WindowsFormsApp1
                 chartForm.Show();
                 Activate();
             }
+            else
+            {
+                clickContinue = false;
+            }
+        }
+
+        private void HideButtons()
+        {
+            
         }
 
         /// <summary>
@@ -2119,14 +2148,14 @@ namespace WindowsFormsApp1
         {
             requireTime = sp.ElapsedMilliseconds;
 
-            if (StopProcessButton.Text == "STOP")
+            if (StopProcessButton.Text == "Stop")
             {
                 mainTimer.Stop();
                 timer1.Stop();
                 timer2.Stop();
                 sp.Stop();
                 timers.ForEach(timer => timer.Stop());
-                StopProcessButton.Text = "CONTINUE";
+                StopProcessButton.Text = "Continue";
             }
             else
             {
@@ -2135,7 +2164,7 @@ namespace WindowsFormsApp1
                 timer1.Start();
                 timer2.Start();
                 timers.ForEach(timer => timer.Start());
-                StopProcessButton.Text = "STOP";
+                StopProcessButton.Text = "Stop";
             }
         }
 
@@ -2167,7 +2196,6 @@ namespace WindowsFormsApp1
                     try
                     {
                         string sv = saveGraphDialog.FileName;
-                        pathToCsvFile = sv;
                         File.WriteAllText(sv, chartData.ToString());
                     }
                     catch (Exception)
@@ -2200,8 +2228,6 @@ namespace WindowsFormsApp1
             var timeStr = time.ToString(@"hh\:mm\:ss");
             chartData.AppendLine($"{timeStr};{totalCount}");
         }
-
-        private static string pathToCsvFile;
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -2280,20 +2306,51 @@ namespace WindowsFormsApp1
 
         public long requireTime;
 
+        private void HideAllLabel()
+        {
+            drawEdgeLabel.Visible = false;
+            drawVertexLabel.Visible = false;
+            deleteElementLabel.Visible = false;
+            changeLengthLabel.Visible = false;
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
-            button2.Visible = false;
-            button3.Visible = false;
-            button4.Visible = false;
+            saveChartButton.Visible = false;
+            openChartButton.Visible = false;
+            testingProgrammButton.Visible = false;
             StopProcessButton.Visible = false;
             trackBar1.Visible = false;
             ShowAllSubMenu();
+            panelChart.Visible = false;
+            panel3.Visible = false;
+            drawingPanel.Visible = true;
+            drawEdgeLabel.BackColor = Color.FromArgb(35, 32, 39);
+            drawVertexLabel.BackColor = Color.FromArgb(35, 32, 39);
+            deleteElementLabel.BackColor = Color.FromArgb(35, 32, 39);
+            changeLengthLabel.BackColor = Color.FromArgb(35, 32, 39);
 
-            startReseachButton.Location = new Point(150, Consts.GraphPictureBoxHeight);
+            HideAllLabel();
 
+            drawEdgeLabel.Location = new Point(19, 96);
+            drawVertexLabel.Location = new Point(19, 198);
+            deleteElementLabel.Location = new Point(19, 307);
+            changeLengthLabel.Location = new Point(19, 389);
+
+            startReseachButton.Location = new Point(150, Consts.GraphPictureBoxHeight + 5);
+            startReseachButton.Height = 75;
+            startReseachButton.BackColor = Color.FromArgb(35, 32, 39);
             timer3.Start();
-            field.Location = new Point(Consts.FieldInitialPositionX, Consts.FieldInitialPositionY);
+            Theme = MetroThemeStyle.Dark;
+            field.Location = new Point(Consts.FieldInitialPositionX, Consts.FieldInitialPositionY + 5);
 
+            panel3.BackColor = Color.FromArgb(11, 17, 20);
+            panelChart.BackColor = Color.FromArgb(35, 32, 39);
+
+            StopProcessButton.BackColor = Color.FromArgb(35, 32, 39);
+            testingProgrammButton.BackColor = Color.FromArgb(35, 32, 39);
+            saveChartButton.BackColor = Color.FromArgb(35, 32, 39);
+            openChartButton.BackColor = Color.FromArgb(35, 32, 39);
             drawingPanel.BackColor = Color.FromArgb(11, 17, 20);
             drawingSubPanel.BackColor = Color.FromArgb(35, 32, 39);
             changeParametersSubPanel.BackColor = Color.FromArgb(35, 32, 39);
@@ -2301,9 +2358,11 @@ namespace WindowsFormsApp1
             panel1.BackColor = Color.FromArgb(11, 17, 20);
             toolsSubPanel.BackColor = Color.FromArgb(35, 32, 39);
             panel2.BackColor = Color.FromArgb(35, 32, 39);
+            drawingPanel.Location = new Point(0, 5);
+            panel1.Location = new Point(Consts.GraphPictureBoxWidth + 150, 5);
 
-            Width = 1185;
-
+            Width = 1170;
+            Height = 665;
             field.Width = Consts.GraphPictureBoxWidth;
             field.Height = Consts.GraphPictureBoxHeight;
         }
@@ -2320,24 +2379,6 @@ namespace WindowsFormsApp1
             toolsSubPanel.Visible = true;
             changeParametersSubPanel.Visible = true;
             drawingSubPanel.Visible = true;
-        }
-
-        private void HideSubMenu()
-        {
-            if (drawingSubPanel.Visible)
-            {
-                drawingSubPanel.Visible = false;
-            }
-
-            if (changeParametersSubPanel.Visible)
-            {
-                changeParametersSubPanel.Visible = false;
-            }
-
-            if (toolsSubPanel.Visible)
-            {
-                toolsSubPanel.Visible = false;
-            }
         }
 
         private static void ShowSubMenu(Panel subMenu)
@@ -2367,6 +2408,11 @@ namespace WindowsFormsApp1
 
         private void timer3_Tick(object sender, EventArgs e)
         {
+            changeLengthLabel.Visible = !ChangeEdgeLengthButton.Enabled;
+            drawEdgeLabel.Visible = !DrawEdgeButton.Enabled;
+            drawVertexLabel.Visible = !DrawVertexButton.Enabled;
+            deleteElementLabel.Visible = !DeleteElementButton.Enabled;
+
             var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
 
             foreach (var edge in Edges)
@@ -2375,6 +2421,21 @@ namespace WindowsFormsApp1
             button8.Text = $@"Cyclomatic number: {Edges.Count - Vertex.Count + graphForCheck.FindComps()}";
             button7.Text = $@"Vertex: {Vertex.Count}";
             button6.Text = $@"Edges: {Edges.Count}";
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            ShowSubMenu(panelChart);
+        }
+
+        private void exitButton2_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

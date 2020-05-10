@@ -41,6 +41,7 @@
             // 
             this.buttonYes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.buttonYes.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            this.buttonYes.FlatAppearance.BorderSize = 0;
             this.buttonYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonYes.ForeColor = System.Drawing.Color.LightGray;
             this.buttonYes.Location = new System.Drawing.Point(87, 185);
@@ -55,6 +56,7 @@
             // 
             this.buttonNo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.buttonNo.DialogResult = System.Windows.Forms.DialogResult.No;
+            this.buttonNo.FlatAppearance.BorderSize = 0;
             this.buttonNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonNo.ForeColor = System.Drawing.Color.LightGray;
             this.buttonNo.Location = new System.Drawing.Point(297, 185);
@@ -85,6 +87,7 @@
             // 
             this.buttonOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.buttonOk.FlatAppearance.BorderSize = 0;
             this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOk.ForeColor = System.Drawing.Color.LightGray;
             this.buttonOk.Location = new System.Drawing.Point(69, 286);

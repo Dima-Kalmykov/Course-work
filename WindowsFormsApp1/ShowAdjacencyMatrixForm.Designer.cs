@@ -33,6 +33,7 @@
             // 
             // AdjacencyMatrixListBox
             // 
+            this.AdjacencyMatrixListBox.BackColor = System.Drawing.Color.Black;
             this.AdjacencyMatrixListBox.FormattingEnabled = true;
             this.AdjacencyMatrixListBox.HorizontalScrollbar = true;
             this.AdjacencyMatrixListBox.ImeMode = System.Windows.Forms.ImeMode.On;
@@ -51,6 +52,7 @@
             this.Controls.Add(this.AdjacencyMatrixListBox);
             this.Name = "ShowAdjacencyMatrixForm";
             this.Text = "AdjacencyMatrix";
+            this.Load += new System.EventHandler(this.ShowAdjacencyMatrixForm_Load);
             this.ResumeLayout(false);
 
         }

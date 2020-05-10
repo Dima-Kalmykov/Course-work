@@ -17,7 +17,6 @@ namespace WindowsFormsApp1
             AdjacencyMatrixListBox.Location = new Point(0, 0);
 
             // Убираем верхнюю панель.
-            AdjacencyMatrixListBox.BackColor = Color.FromArgb(31, 30, 68);
             AdjacencyMatrixListBox.ForeColor = Color.LightGray;
             ControlBox = false;
         }
@@ -29,5 +28,10 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void AdjacencyMatrixListBox_Click(object sender, EventArgs e) =>
             AdjacencyMatrixListBox.ClearSelected();
+
+        private void ShowAdjacencyMatrixForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -72,7 +72,7 @@ namespace WindowsFormsApp1
         }
 
         private static bool[] used;
-        private List<int> comp = new List<int>();
+        private readonly List<int> comp = new List<int>();
 
         private void Dfs(int v)
         {

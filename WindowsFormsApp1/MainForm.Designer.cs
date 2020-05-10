@@ -44,25 +44,34 @@
             this.StopProcessButton = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.button2 = new System.Windows.Forms.Button();
+            this.saveChartButton = new System.Windows.Forms.Button();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.openChartButton = new System.Windows.Forms.Button();
+            this.testingProgrammButton = new System.Windows.Forms.Button();
             this.drawingPanel = new System.Windows.Forms.Panel();
             this.changeParametersSubPanel = new System.Windows.Forms.Panel();
             this.button5 = new System.Windows.Forms.Button();
             this.drawingSubPanel = new System.Windows.Forms.Panel();
+            this.drawEdgeLabel = new System.Windows.Forms.Label();
             this.drawingButton = new System.Windows.Forms.Button();
             this.field = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.graphInfoButton = new System.Windows.Forms.Button();
             this.toolsSubPanel = new System.Windows.Forms.Panel();
+            this.exitButton = new System.Windows.Forms.Button();
             this.toolsButton = new System.Windows.Forms.Button();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.drawVertexLabel = new System.Windows.Forms.Label();
+            this.deleteElementLabel = new System.Windows.Forms.Label();
+            this.changeLengthLabel = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelChart = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.exitButton2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.drawingPanel.SuspendLayout();
             this.changeParametersSubPanel.SuspendLayout();
@@ -71,6 +80,8 @@
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.toolsSubPanel.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panelChart.SuspendLayout();
             this.SuspendLayout();
             // 
             // DrawVertexButton
@@ -78,7 +89,7 @@
             this.DrawVertexButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DrawVertexButton.FlatAppearance.BorderSize = 0;
             this.DrawVertexButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DrawVertexButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DrawVertexButton.ForeColor = System.Drawing.Color.Cyan;
             this.DrawVertexButton.Location = new System.Drawing.Point(0, 150);
             this.DrawVertexButton.Name = "DrawVertexButton";
             this.DrawVertexButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -94,7 +105,7 @@
             this.DeleteAllGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DeleteAllGraphButton.FlatAppearance.BorderSize = 0;
             this.DeleteAllGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DeleteAllGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DeleteAllGraphButton.ForeColor = System.Drawing.Color.Magenta;
             this.DeleteAllGraphButton.Location = new System.Drawing.Point(0, 50);
             this.DeleteAllGraphButton.Name = "DeleteAllGraphButton";
             this.DeleteAllGraphButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -110,7 +121,7 @@
             this.DrawEdgeButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DrawEdgeButton.FlatAppearance.BorderSize = 0;
             this.DrawEdgeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DrawEdgeButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DrawEdgeButton.ForeColor = System.Drawing.Color.Cyan;
             this.DrawEdgeButton.Location = new System.Drawing.Point(0, 100);
             this.DrawEdgeButton.Name = "DrawEdgeButton";
             this.DrawEdgeButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -126,7 +137,7 @@
             this.CheckGraphForStrongConnectionButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.CheckGraphForStrongConnectionButton.FlatAppearance.BorderSize = 0;
             this.CheckGraphForStrongConnectionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CheckGraphForStrongConnectionButton.ForeColor = System.Drawing.Color.LightGray;
+            this.CheckGraphForStrongConnectionButton.ForeColor = System.Drawing.Color.Chartreuse;
             this.CheckGraphForStrongConnectionButton.Location = new System.Drawing.Point(0, 0);
             this.CheckGraphForStrongConnectionButton.Name = "CheckGraphForStrongConnectionButton";
             this.CheckGraphForStrongConnectionButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
@@ -142,7 +153,7 @@
             this.GetRandomGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.GetRandomGraphButton.FlatAppearance.BorderSize = 0;
             this.GetRandomGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GetRandomGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.GetRandomGraphButton.ForeColor = System.Drawing.Color.Cyan;
             this.GetRandomGraphButton.Location = new System.Drawing.Point(0, 50);
             this.GetRandomGraphButton.Name = "GetRandomGraphButton";
             this.GetRandomGraphButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -158,7 +169,7 @@
             this.DeleteElementButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DeleteElementButton.FlatAppearance.BorderSize = 0;
             this.DeleteElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DeleteElementButton.ForeColor = System.Drawing.Color.LightGray;
+            this.DeleteElementButton.ForeColor = System.Drawing.Color.Magenta;
             this.DeleteElementButton.Location = new System.Drawing.Point(0, 0);
             this.DeleteElementButton.Name = "DeleteElementButton";
             this.DeleteElementButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -174,7 +185,7 @@
             this.SaveGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.SaveGraphButton.FlatAppearance.BorderSize = 0;
             this.SaveGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SaveGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.SaveGraphButton.ForeColor = System.Drawing.Color.Chartreuse;
             this.SaveGraphButton.Location = new System.Drawing.Point(0, 175);
             this.SaveGraphButton.Name = "SaveGraphButton";
             this.SaveGraphButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
@@ -190,7 +201,7 @@
             this.OpenGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.OpenGraphButton.FlatAppearance.BorderSize = 0;
             this.OpenGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.OpenGraphButton.ForeColor = System.Drawing.Color.LightGray;
+            this.OpenGraphButton.ForeColor = System.Drawing.Color.Chartreuse;
             this.OpenGraphButton.Location = new System.Drawing.Point(0, 120);
             this.OpenGraphButton.Name = "OpenGraphButton";
             this.OpenGraphButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
@@ -206,7 +217,7 @@
             this.ChangeEdgeLengthButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.ChangeEdgeLengthButton.FlatAppearance.BorderSize = 0;
             this.ChangeEdgeLengthButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ChangeEdgeLengthButton.ForeColor = System.Drawing.Color.LightGray;
+            this.ChangeEdgeLengthButton.ForeColor = System.Drawing.Color.Magenta;
             this.ChangeEdgeLengthButton.Location = new System.Drawing.Point(0, 100);
             this.ChangeEdgeLengthButton.Name = "ChangeEdgeLengthButton";
             this.ChangeEdgeLengthButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -222,7 +233,7 @@
             this.StopDrawingButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.StopDrawingButton.FlatAppearance.BorderSize = 0;
             this.StopDrawingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.StopDrawingButton.ForeColor = System.Drawing.Color.LightGray;
+            this.StopDrawingButton.ForeColor = System.Drawing.Color.Cyan;
             this.StopDrawingButton.Location = new System.Drawing.Point(0, 0);
             this.StopDrawingButton.Name = "StopDrawingButton";
             this.StopDrawingButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -239,7 +250,7 @@
             this.ShowOrHideAdjMatrix.Enabled = false;
             this.ShowOrHideAdjMatrix.FlatAppearance.BorderSize = 0;
             this.ShowOrHideAdjMatrix.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ShowOrHideAdjMatrix.ForeColor = System.Drawing.Color.LightGray;
+            this.ShowOrHideAdjMatrix.ForeColor = System.Drawing.Color.Chartreuse;
             this.ShowOrHideAdjMatrix.Location = new System.Drawing.Point(0, 60);
             this.ShowOrHideAdjMatrix.Name = "ShowOrHideAdjMatrix";
             this.ShowOrHideAdjMatrix.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
@@ -252,6 +263,10 @@
             // 
             // startReseachButton
             // 
+            this.startReseachButton.FlatAppearance.BorderSize = 0;
+            this.startReseachButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.startReseachButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.startReseachButton.ForeColor = System.Drawing.Color.LimeGreen;
             this.startReseachButton.Location = new System.Drawing.Point(206, 776);
             this.startReseachButton.Name = "startReseachButton";
             this.startReseachButton.Size = new System.Drawing.Size(1144, 92);
@@ -262,12 +277,19 @@
             // 
             // StopProcessButton
             // 
-            this.StopProcessButton.Location = new System.Drawing.Point(1012, 661);
+            this.StopProcessButton.BackColor = System.Drawing.Color.Black;
+            this.StopProcessButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.StopProcessButton.FlatAppearance.BorderSize = 0;
+            this.StopProcessButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StopProcessButton.ForeColor = System.Drawing.Color.LightGray;
+            this.StopProcessButton.Location = new System.Drawing.Point(0, 0);
             this.StopProcessButton.Name = "StopProcessButton";
-            this.StopProcessButton.Size = new System.Drawing.Size(91, 62);
+            this.StopProcessButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.StopProcessButton.Size = new System.Drawing.Size(211, 47);
             this.StopProcessButton.TabIndex = 21;
-            this.StopProcessButton.Text = "STOP";
-            this.StopProcessButton.UseVisualStyleBackColor = true;
+            this.StopProcessButton.Text = "Stop";
+            this.StopProcessButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.StopProcessButton.UseVisualStyleBackColor = false;
             this.StopProcessButton.Click += new System.EventHandler(this.StopProcessButton_Click);
             // 
             // timer1
@@ -277,48 +299,69 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(372, 646);
+            this.trackBar1.Location = new System.Drawing.Point(358, 760);
             this.trackBar1.Maximum = 19;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(330, 56);
+            this.trackBar1.Size = new System.Drawing.Size(722, 56);
             this.trackBar1.TabIndex = 23;
             this.trackBar1.Value = 10;
             // 
-            // button2
+            // saveChartButton
             // 
-            this.button2.Location = new System.Drawing.Point(226, 682);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(117, 48);
-            this.button2.TabIndex = 24;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.saveChartButton.BackColor = System.Drawing.Color.Black;
+            this.saveChartButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.saveChartButton.FlatAppearance.BorderSize = 0;
+            this.saveChartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveChartButton.ForeColor = System.Drawing.Color.LightGray;
+            this.saveChartButton.Location = new System.Drawing.Point(0, 141);
+            this.saveChartButton.Name = "saveChartButton";
+            this.saveChartButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.saveChartButton.Size = new System.Drawing.Size(211, 47);
+            this.saveChartButton.TabIndex = 24;
+            this.saveChartButton.Text = "Save chart";
+            this.saveChartButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.saveChartButton.UseVisualStyleBackColor = false;
+            this.saveChartButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // timer2
             // 
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // button3
+            // openChartButton
             // 
-            this.button3.Location = new System.Drawing.Point(729, 684);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(107, 46);
-            this.button3.TabIndex = 25;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.openChartButton.BackColor = System.Drawing.Color.Black;
+            this.openChartButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.openChartButton.FlatAppearance.BorderSize = 0;
+            this.openChartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.openChartButton.ForeColor = System.Drawing.Color.LightGray;
+            this.openChartButton.Location = new System.Drawing.Point(0, 94);
+            this.openChartButton.Name = "openChartButton";
+            this.openChartButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.openChartButton.Size = new System.Drawing.Size(211, 47);
+            this.openChartButton.TabIndex = 25;
+            this.openChartButton.Text = "Open chart";
+            this.openChartButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.openChartButton.UseVisualStyleBackColor = false;
+            this.openChartButton.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button4
+            // testingProgrammButton
             // 
-            this.button4.Location = new System.Drawing.Point(842, 622);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(104, 80);
-            this.button4.TabIndex = 26;
-            this.button4.Text = "Испытания программы";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.testingProgrammButton.BackColor = System.Drawing.Color.Black;
+            this.testingProgrammButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.testingProgrammButton.FlatAppearance.BorderSize = 0;
+            this.testingProgrammButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.testingProgrammButton.ForeColor = System.Drawing.Color.LightGray;
+            this.testingProgrammButton.Location = new System.Drawing.Point(0, 47);
+            this.testingProgrammButton.Name = "testingProgrammButton";
+            this.testingProgrammButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.testingProgrammButton.Size = new System.Drawing.Size(211, 47);
+            this.testingProgrammButton.TabIndex = 26;
+            this.testingProgrammButton.Text = "Испытания программы";
+            this.testingProgrammButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.testingProgrammButton.UseVisualStyleBackColor = false;
+            this.testingProgrammButton.Click += new System.EventHandler(this.button4_Click);
             // 
             // drawingPanel
             // 
@@ -327,7 +370,6 @@
             this.drawingPanel.Controls.Add(this.button5);
             this.drawingPanel.Controls.Add(this.drawingSubPanel);
             this.drawingPanel.Controls.Add(this.drawingButton);
-            this.drawingPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.drawingPanel.Location = new System.Drawing.Point(0, 0);
             this.drawingPanel.Name = "drawingPanel";
             this.drawingPanel.Size = new System.Drawing.Size(200, 880);
@@ -341,7 +383,7 @@
             this.changeParametersSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.changeParametersSubPanel.Location = new System.Drawing.Point(0, 354);
             this.changeParametersSubPanel.Name = "changeParametersSubPanel";
-            this.changeParametersSubPanel.Size = new System.Drawing.Size(200, 154);
+            this.changeParametersSubPanel.Size = new System.Drawing.Size(200, 171);
             this.changeParametersSubPanel.TabIndex = 3;
             // 
             // button5
@@ -363,6 +405,7 @@
             // 
             // drawingSubPanel
             // 
+            this.drawingSubPanel.Controls.Add(this.drawEdgeLabel);
             this.drawingSubPanel.Controls.Add(this.DrawVertexButton);
             this.drawingSubPanel.Controls.Add(this.DrawEdgeButton);
             this.drawingSubPanel.Controls.Add(this.GetRandomGraphButton);
@@ -372,6 +415,17 @@
             this.drawingSubPanel.Name = "drawingSubPanel";
             this.drawingSubPanel.Size = new System.Drawing.Size(200, 214);
             this.drawingSubPanel.TabIndex = 2;
+            // 
+            // drawEdgeLabel
+            // 
+            this.drawEdgeLabel.AutoSize = true;
+            this.drawEdgeLabel.BackColor = System.Drawing.Color.SaddleBrown;
+            this.drawEdgeLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.drawEdgeLabel.Location = new System.Drawing.Point(23, 117);
+            this.drawEdgeLabel.Name = "drawEdgeLabel";
+            this.drawEdgeLabel.Size = new System.Drawing.Size(130, 17);
+            this.drawEdgeLabel.TabIndex = 29;
+            this.drawEdgeLabel.Text = "Нарисовать ребро";
             // 
             // drawingButton
             // 
@@ -401,15 +455,26 @@
             // 
             // panel1
             // 
+            this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.graphInfoButton);
             this.panel1.Controls.Add(this.toolsSubPanel);
             this.panel1.Controls.Add(this.toolsButton);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(1430, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(220, 880);
             this.panel1.TabIndex = 28;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.button8);
+            this.panel2.Controls.Add(this.button6);
+            this.panel2.Controls.Add(this.button7);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 445);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(220, 196);
+            this.panel2.TabIndex = 3;
             // 
             // button8
             // 
@@ -427,22 +492,6 @@
             this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button8.UseVisualStyleBackColor = true;
             // 
-            // button7
-            // 
-            this.button7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button7.ForeColor = System.Drawing.Color.Red;
-            this.button7.Location = new System.Drawing.Point(0, 0);
-            this.button7.Name = "button7";
-            this.button7.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.button7.Size = new System.Drawing.Size(220, 60);
-            this.button7.TabIndex = 5;
-            this.button7.Text = "button7";
-            this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button7.UseVisualStyleBackColor = true;
-            // 
             // button6
             // 
             this.button6.Dock = System.Windows.Forms.DockStyle.Top;
@@ -459,16 +508,21 @@
             this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button6.UseVisualStyleBackColor = true;
             // 
-            // panel2
+            // button7
             // 
-            this.panel2.Controls.Add(this.button8);
-            this.panel2.Controls.Add(this.button6);
-            this.panel2.Controls.Add(this.button7);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 404);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(220, 196);
-            this.panel2.TabIndex = 3;
+            this.button7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button7.FlatAppearance.BorderSize = 0;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button7.ForeColor = System.Drawing.Color.Red;
+            this.button7.Location = new System.Drawing.Point(0, 0);
+            this.button7.Name = "button7";
+            this.button7.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.button7.Size = new System.Drawing.Size(220, 60);
+            this.button7.TabIndex = 5;
+            this.button7.Text = "button7";
+            this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button7.UseVisualStyleBackColor = true;
             // 
             // graphInfoButton
             // 
@@ -477,7 +531,7 @@
             this.graphInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.graphInfoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphInfoButton.ForeColor = System.Drawing.Color.Gainsboro;
-            this.graphInfoButton.Location = new System.Drawing.Point(0, 332);
+            this.graphInfoButton.Location = new System.Drawing.Point(0, 373);
             this.graphInfoButton.Name = "graphInfoButton";
             this.graphInfoButton.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.graphInfoButton.Size = new System.Drawing.Size(220, 72);
@@ -489,6 +543,7 @@
             // 
             // toolsSubPanel
             // 
+            this.toolsSubPanel.Controls.Add(this.exitButton);
             this.toolsSubPanel.Controls.Add(this.SaveGraphButton);
             this.toolsSubPanel.Controls.Add(this.OpenGraphButton);
             this.toolsSubPanel.Controls.Add(this.ShowOrHideAdjMatrix);
@@ -496,8 +551,24 @@
             this.toolsSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolsSubPanel.Location = new System.Drawing.Point(0, 58);
             this.toolsSubPanel.Name = "toolsSubPanel";
-            this.toolsSubPanel.Size = new System.Drawing.Size(220, 274);
+            this.toolsSubPanel.Size = new System.Drawing.Size(220, 315);
             this.toolsSubPanel.TabIndex = 1;
+            // 
+            // exitButton
+            // 
+            this.exitButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.exitButton.FlatAppearance.BorderSize = 0;
+            this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exitButton.ForeColor = System.Drawing.Color.Chartreuse;
+            this.exitButton.Location = new System.Drawing.Point(0, 230);
+            this.exitButton.Name = "exitButton";
+            this.exitButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.exitButton.Size = new System.Drawing.Size(220, 55);
+            this.exitButton.TabIndex = 4;
+            this.exitButton.Text = "Exit";
+            this.exitButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
             // toolsButton
             // 
@@ -521,19 +592,102 @@
             this.timer3.Interval = 1;
             this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
             // 
+            // drawVertexLabel
+            // 
+            this.drawVertexLabel.AutoSize = true;
+            this.drawVertexLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.drawVertexLabel.Location = new System.Drawing.Point(311, 453);
+            this.drawVertexLabel.Name = "drawVertexLabel";
+            this.drawVertexLabel.Size = new System.Drawing.Size(147, 17);
+            this.drawVertexLabel.TabIndex = 29;
+            this.drawVertexLabel.Text = "Нарисовать вершину";
+            // 
+            // deleteElementLabel
+            // 
+            this.deleteElementLabel.AutoSize = true;
+            this.deleteElementLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.deleteElementLabel.Location = new System.Drawing.Point(1009, 266);
+            this.deleteElementLabel.Name = "deleteElementLabel";
+            this.deleteElementLabel.Size = new System.Drawing.Size(122, 17);
+            this.deleteElementLabel.TabIndex = 30;
+            this.deleteElementLabel.Text = "Удалить элемент";
+            // 
+            // changeLengthLabel
+            // 
+            this.changeLengthLabel.AutoSize = true;
+            this.changeLengthLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.changeLengthLabel.Location = new System.Drawing.Point(921, 387);
+            this.changeLengthLabel.Name = "changeLengthLabel";
+            this.changeLengthLabel.Size = new System.Drawing.Size(159, 17);
+            this.changeLengthLabel.TabIndex = 31;
+            this.changeLengthLabel.Text = "Изменить длину ребра";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.panelChart);
+            this.panel3.Controls.Add(this.button1);
+            this.panel3.Location = new System.Drawing.Point(1213, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(211, 865);
+            this.panel3.TabIndex = 33;
+            // 
+            // panelChart
+            // 
+            this.panelChart.Controls.Add(this.exitButton2);
+            this.panelChart.Controls.Add(this.saveChartButton);
+            this.panelChart.Controls.Add(this.openChartButton);
+            this.panelChart.Controls.Add(this.testingProgrammButton);
+            this.panelChart.Controls.Add(this.StopProcessButton);
+            this.panelChart.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelChart.Location = new System.Drawing.Point(0, 66);
+            this.panelChart.Name = "panelChart";
+            this.panelChart.Size = new System.Drawing.Size(211, 247);
+            this.panelChart.TabIndex = 1;
+            // 
+            // button1
+            // 
+            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.button1.Size = new System.Drawing.Size(211, 66);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Tools";
+            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // exitButton2
+            // 
+            this.exitButton2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.exitButton2.FlatAppearance.BorderSize = 0;
+            this.exitButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exitButton2.ForeColor = System.Drawing.Color.LightGray;
+            this.exitButton2.Location = new System.Drawing.Point(0, 188);
+            this.exitButton2.Name = "exitButton2";
+            this.exitButton2.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.exitButton2.Size = new System.Drawing.Size(211, 35);
+            this.exitButton2.TabIndex = 27;
+            this.exitButton2.Text = "Exit";
+            this.exitButton2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.exitButton2.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(1650, 880);
+            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.changeLengthLabel);
+            this.Controls.Add(this.deleteElementLabel);
+            this.Controls.Add(this.drawVertexLabel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.drawingPanel);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.StopProcessButton);
             this.Controls.Add(this.startReseachButton);
             this.Controls.Add(this.field);
             this.KeyPreview = true;
@@ -545,10 +699,13 @@
             this.drawingPanel.ResumeLayout(false);
             this.changeParametersSubPanel.ResumeLayout(false);
             this.drawingSubPanel.ResumeLayout(false);
+            this.drawingSubPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.toolsSubPanel.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panelChart.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -570,10 +727,10 @@
         private System.Windows.Forms.Button StopProcessButton;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button saveChartButton;
         private System.Windows.Forms.Timer timer2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button openChartButton;
+        private System.Windows.Forms.Button testingProgrammButton;
         private System.Windows.Forms.Panel drawingPanel;
         private System.Windows.Forms.Panel drawingSubPanel;
         private System.Windows.Forms.Button drawingButton;
@@ -589,6 +746,15 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.Label drawEdgeLabel;
+        private System.Windows.Forms.Label drawVertexLabel;
+        private System.Windows.Forms.Label deleteElementLabel;
+        private System.Windows.Forms.Label changeLengthLabel;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panelChart;
+        private System.Windows.Forms.Button exitButton2;
     }
 }
 

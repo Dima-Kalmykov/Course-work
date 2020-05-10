@@ -37,6 +37,7 @@
             // FirstOptionButton
             // 
             this.FirstOptionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.FirstOptionButton.FlatAppearance.BorderSize = 0;
             this.FirstOptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FirstOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FirstOptionButton.ForeColor = System.Drawing.Color.LightGray;
@@ -50,6 +51,7 @@
             // SecondOptionButton
             // 
             this.SecondOptionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.SecondOptionButton.FlatAppearance.BorderSize = 0;
             this.SecondOptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SecondOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.SecondOptionButton.ForeColor = System.Drawing.Color.LightGray;
@@ -74,6 +76,7 @@
             // CancelButton
             // 
             this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.CancelButton.FlatAppearance.BorderSize = 0;
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.CancelButton.ForeColor = System.Drawing.Color.LightGray;

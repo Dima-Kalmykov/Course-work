@@ -16,6 +16,8 @@ namespace WindowsFormsApp1
 
         private readonly Pen blackPen;
         private readonly Pen redPen;
+        private readonly Pen orangePen;
+        private readonly Pen yellowPen;
         private readonly Pen bluePen;
         private readonly Pen greenPen;
 
@@ -32,12 +34,11 @@ namespace WindowsFormsApp1
         internal ToolsForDrawingGraph(int width, int height)
         {
             // Установка необходимых параметров
-            // @"C:\Users\Dmitry\Desktop".
             bitmap = new Bitmap(width, height);
-            //bitmap = new Bitmap(@"C:\Users\Dmitry\Desktop\1561182897_3.jpg");
             cover = Graphics.FromImage(bitmap);
             
-
+            yellowPen = new Pen(Color.Yellow, Consts.WidthPen);
+            orangePen = new Pen(Color.Orange, Consts.WidthPen);
             blackPen = new Pen(Color.Black, Consts.WidthPen);
             redPen = new Pen(Color.Red, Consts.WidthPen);
             bluePen = new Pen(Color.CornflowerBlue, Consts.WidthPen);
@@ -75,7 +76,7 @@ namespace WindowsFormsApp1
         /// <param name="number"> Число в вершине </param>
         internal void DrawVertex(int x, int y, string number)
         {
-            cover.FillEllipse(Brushes.White, x - VertexRadius, y - VertexRadius,
+            cover.FillEllipse(Brushes.LightGray, x - VertexRadius, y - VertexRadius,
                 2 * VertexRadius, 2 * VertexRadius);
 
             cover.DrawEllipse(blackPen, x - VertexRadius, y - VertexRadius,
@@ -113,15 +114,15 @@ namespace WindowsFormsApp1
             // Если петля, то рисуем дугу.
             if (edge.Ver1 == edge.Ver2)
             {
-                cover.DrawArc(greenPen, vertex1.X - 2 * VertexRadius, vertex1.Y - 2 * VertexRadius,
+                cover.DrawArc(orangePen, vertex1.X - 2 * VertexRadius, vertex1.Y - 2 * VertexRadius,
                     2 * VertexRadius, 2 * VertexRadius, 90, 270);
 
                 // Дорисовываем наконечник.
-                cover.DrawLine(greenPen,
+                cover.DrawLine(orangePen,
                     vertex1.X - 7, vertex1.Y - VertexRadius - 7,
                     vertex1.X, vertex1.Y - VertexRadius);
 
-                cover.DrawLine(greenPen,
+                cover.DrawLine(orangePen,
                     vertex1.X + 7, vertex1.Y - VertexRadius - 7,
                     vertex2.X, vertex2.Y - VertexRadius);
 
@@ -363,15 +364,15 @@ namespace WindowsFormsApp1
         private void DrawArrowhead(double xBegin, double yBegin, double xEnd, double yEnd, double firstEndArrowX,
             double firstEndArrowY, double secondEndArrowX, double secondEndArrowY)
         {
-            cover.DrawLine(bluePen,
+            cover.DrawLine(yellowPen,
                 (float)xBegin, (float)yBegin,
                 (float)xEnd, (float)yEnd);
 
-            cover.DrawLine(bluePen,
+            cover.DrawLine(yellowPen,
                 (float)firstEndArrowX, (float)firstEndArrowY,
                 (float)xEnd, (float)yEnd);
 
-            cover.DrawLine(bluePen,
+            cover.DrawLine(yellowPen,
                 (float)secondEndArrowX, (float)secondEndArrowY,
                 (float)xEnd, (float)yEnd);
         }
