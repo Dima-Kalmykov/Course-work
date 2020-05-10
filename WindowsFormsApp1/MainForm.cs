@@ -277,8 +277,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck =
-                        new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
+                    var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
 
                     foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
@@ -418,25 +417,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void SaveGraphButton_Click(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
@@ -1232,8 +1213,8 @@ namespace WindowsFormsApp1
                                         if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                             adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
-                                           var (caption, text1, text2) =  SetTextInButtonFromChooseEdgeForm(
-                                                Edges[i].Ver1, Edges[i].Ver2);
+                                            var (caption, text1, text2) = SetTextInButtonFromChooseEdgeForm(
+                                                 Edges[i].Ver1, Edges[i].Ver2);
 
                                             //chooseEdgeFormForm.ShowDialog();
                                             var res = chooseEdgeFormForm.MyShow(caption, text1, text2);
@@ -2093,6 +2074,8 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            timer3.Stop();
+
             RedrawSelectedVertex();
             HideAdjacencyMatrix();
 
@@ -2299,12 +2282,16 @@ namespace WindowsFormsApp1
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            button2.Visible = false;
+            button3.Visible = false;
+            button4.Visible = false;
+            StopProcessButton.Visible = false;
+            trackBar1.Visible = false;
             ShowAllSubMenu();
-            //chooseEdgeFormForm.ShowDialog();
-            button2.Location = new Point(800, 30);
 
-            //trackBar1.Location = new Point(800, 30);
+            startReseachButton.Location = new Point(150, Consts.GraphPictureBoxHeight);
 
+            timer3.Start();
             field.Location = new Point(Consts.FieldInitialPositionX, Consts.FieldInitialPositionY);
 
             drawingPanel.BackColor = Color.FromArgb(11, 17, 20);
@@ -2315,6 +2302,7 @@ namespace WindowsFormsApp1
             toolsSubPanel.BackColor = Color.FromArgb(35, 32, 39);
             panel2.BackColor = Color.FromArgb(35, 32, 39);
 
+            Width = 1185;
 
             field.Width = Consts.GraphPictureBoxWidth;
             field.Height = Consts.GraphPictureBoxHeight;
@@ -2375,6 +2363,18 @@ namespace WindowsFormsApp1
         private void graphInfoButton_Click(object sender, EventArgs e)
         {
             ShowSubMenu(panel2);
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
+
+            foreach (var edge in Edges)
+                graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
+
+            button8.Text = $@"Cyclomatic number: {Edges.Count - Vertex.Count + graphForCheck.FindComps()}";
+            button7.Text = $@"Vertex: {Vertex.Count}";
+            button6.Text = $@"Edges: {Edges.Count}";
         }
     }
 }

@@ -19,6 +19,8 @@ namespace WindowsFormsApp1
             {
                 AdjacencyList[i] = new List<int>();
             }
+
+            used = new bool[vertexCount];
         }
 
         internal void AddEdge(int firstVertex, int secondVertex) =>
@@ -67,6 +69,42 @@ namespace WindowsFormsApp1
             {
                 DfsUtil(n, visited);
             }
+        }
+
+        private static bool[] used;
+        private List<int> comp = new List<int>();
+
+        private void Dfs(int v)
+        {
+            used[v] = true;
+            comp.Add(v);
+            for (var i = 0; i < AdjacencyList[v].Count; i++)
+            {
+                int to = AdjacencyList[v][i];
+                if (!used[to])
+                {
+                    Dfs(to);
+                }
+            }
+        }
+
+        public int FindComps()
+        {
+            for (var i = 0; i < VertexCount; i++)
+            {
+                used[i] = false;
+            }
+
+            for (var i = 0; i < VertexCount; i++)
+            {
+                if (!used[i])
+                {
+                    Array.Clear(used, 0, used.Length);
+                    Dfs(i);
+                }
+            }
+
+            return comp?.Count ?? 0;
         }
 
         private SpecialKindOfGraphForCheckStronglyDirection GetTranspose()
