@@ -55,8 +55,14 @@
             this.drawingButton = new System.Windows.Forms.Button();
             this.field = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.toolsButton = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.graphInfoButton = new System.Windows.Forms.Button();
             this.toolsSubPanel = new System.Windows.Forms.Panel();
+            this.toolsButton = new System.Windows.Forms.Button();
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.drawingPanel.SuspendLayout();
             this.changeParametersSubPanel.SuspendLayout();
@@ -394,6 +400,11 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button8);
+            this.panel1.Controls.Add(this.button7);
+            this.panel1.Controls.Add(this.button6);
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.graphInfoButton);
             this.panel1.Controls.Add(this.toolsSubPanel);
             this.panel1.Controls.Add(this.toolsButton);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
@@ -401,6 +412,88 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 880);
             this.panel1.TabIndex = 28;
+            // 
+            // button8
+            // 
+            this.button8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button8.FlatAppearance.BorderSize = 0;
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.ForeColor = System.Drawing.Color.LightGray;
+            this.button8.Location = new System.Drawing.Point(0, 624);
+            this.button8.Name = "button8";
+            this.button8.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.button8.Size = new System.Drawing.Size(200, 60);
+            this.button8.TabIndex = 6;
+            this.button8.Text = "button8";
+            this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button8.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button7.FlatAppearance.BorderSize = 0;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.ForeColor = System.Drawing.Color.LightGray;
+            this.button7.Location = new System.Drawing.Point(0, 564);
+            this.button7.Name = "button7";
+            this.button7.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.button7.Size = new System.Drawing.Size(200, 60);
+            this.button7.TabIndex = 5;
+            this.button7.Text = "button7";
+            this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button7.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            this.button6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button6.FlatAppearance.BorderSize = 0;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button6.ForeColor = System.Drawing.Color.LightGray;
+            this.button6.Location = new System.Drawing.Point(0, 504);
+            this.button6.Name = "button6";
+            this.button6.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.button6.Size = new System.Drawing.Size(200, 60);
+            this.button6.TabIndex = 4;
+            this.button6.Text = "button6";
+            this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button6.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 404);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 100);
+            this.panel2.TabIndex = 3;
+            // 
+            // graphInfoButton
+            // 
+            this.graphInfoButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.graphInfoButton.FlatAppearance.BorderSize = 0;
+            this.graphInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.graphInfoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.graphInfoButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.graphInfoButton.Location = new System.Drawing.Point(0, 332);
+            this.graphInfoButton.Name = "graphInfoButton";
+            this.graphInfoButton.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.graphInfoButton.Size = new System.Drawing.Size(200, 72);
+            this.graphInfoButton.TabIndex = 2;
+            this.graphInfoButton.Text = "Graph info";
+            this.graphInfoButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.graphInfoButton.UseVisualStyleBackColor = true;
+            this.graphInfoButton.Click += new System.EventHandler(this.graphInfoButton_Click);
+            // 
+            // toolsSubPanel
+            // 
+            this.toolsSubPanel.Controls.Add(this.SaveGraphButton);
+            this.toolsSubPanel.Controls.Add(this.OpenGraphButton);
+            this.toolsSubPanel.Controls.Add(this.ShowOrHideAdjMatrix);
+            this.toolsSubPanel.Controls.Add(this.CheckGraphForStrongConnectionButton);
+            this.toolsSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.toolsSubPanel.Location = new System.Drawing.Point(0, 58);
+            this.toolsSubPanel.Name = "toolsSubPanel";
+            this.toolsSubPanel.Size = new System.Drawing.Size(200, 274);
+            this.toolsSubPanel.TabIndex = 1;
             // 
             // toolsButton
             // 
@@ -419,17 +512,9 @@
             this.toolsButton.UseVisualStyleBackColor = true;
             this.toolsButton.Click += new System.EventHandler(this.toolsButton_Click);
             // 
-            // toolsSubPanel
+            // timer3
             // 
-            this.toolsSubPanel.Controls.Add(this.SaveGraphButton);
-            this.toolsSubPanel.Controls.Add(this.OpenGraphButton);
-            this.toolsSubPanel.Controls.Add(this.ShowOrHideAdjMatrix);
-            this.toolsSubPanel.Controls.Add(this.CheckGraphForStrongConnectionButton);
-            this.toolsSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.toolsSubPanel.Location = new System.Drawing.Point(0, 58);
-            this.toolsSubPanel.Name = "toolsSubPanel";
-            this.toolsSubPanel.Size = new System.Drawing.Size(200, 274);
-            this.toolsSubPanel.TabIndex = 1;
+            this.timer3.Interval = 1;
             // 
             // MainForm
             // 
@@ -492,6 +577,12 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel toolsSubPanel;
         private System.Windows.Forms.Button toolsButton;
+        private System.Windows.Forms.Button graphInfoButton;
+        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 

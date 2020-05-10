@@ -2313,6 +2313,8 @@ namespace WindowsFormsApp1
 
             panel1.BackColor = Color.FromArgb(11, 17, 20);
             toolsSubPanel.BackColor = Color.FromArgb(35, 32, 39);
+            panel2.BackColor = Color.FromArgb(35, 32, 39);
+
 
             field.Width = Consts.GraphPictureBoxWidth;
             field.Height = Consts.GraphPictureBoxHeight;
@@ -2326,6 +2328,7 @@ namespace WindowsFormsApp1
 
         private void ShowAllSubMenu()
         {
+            panel2.Visible = true;
             toolsSubPanel.Visible = true;
             changeParametersSubPanel.Visible = true;
             drawingSubPanel.Visible = true;
@@ -2367,6 +2370,11 @@ namespace WindowsFormsApp1
         private void toolsButton_Click(object sender, EventArgs e)
         {
             ShowSubMenu(toolsSubPanel);
+        }
+
+        private void graphInfoButton_Click(object sender, EventArgs e)
+        {
+            ShowSubMenu(panel2);
         }
     }
 }
