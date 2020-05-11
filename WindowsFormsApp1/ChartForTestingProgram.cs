@@ -335,7 +335,7 @@ namespace WindowsFormsApp1
 
         private void ChartForTestingProgram_Load(object sender, EventArgs e)
         {
-            ControlBox = true;
+            ControlBox = false;
             chart.Legends[0].BackColor = Color.SlateGray;
             chart.Series["Amount of points"].Color = Color.Yellow;
             chart.ChartAreas["ChartArea1"].BackColor = Color.SlateGray;

@@ -2301,6 +2301,7 @@ namespace WindowsFormsApp1
         {
             Hide();
             chartForm.Hide();
+            showAdjacencyMatrixForm.Hide();
             mainTimer.Stop();
             timer1.Stop();
             timer2.Stop();
