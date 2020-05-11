@@ -2117,7 +2117,6 @@ namespace WindowsFormsApp1
                 }
 
                 field.Location = new Point(0, 5);
-                HideButtons();
 
                 mainTimer = new Timer { Interval = 2 };
                 mainTimer.Tick += (x, y) => MainTick(listArr);
@@ -2132,11 +2131,6 @@ namespace WindowsFormsApp1
             {
                 clickContinue = false;
             }
-        }
-
-        private void HideButtons()
-        {
-            
         }
 
         /// <summary>
@@ -2301,7 +2295,14 @@ namespace WindowsFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            chartForTestingForm1 = new ChartForTestingProgram(this);
+            mainTimer.Stop();
+            timer1.Stop();
+            timer2.Stop();
+            sp.Stop();
+            timers.ForEach(timer => timer.Stop());
+            requireTime = sp.ElapsedMilliseconds;
+            chartForTestingForm1 = new ChartForTestingProgram(this, 0, 
+                new List<ChartForTestingProgram>());
         }
 
         public long requireTime;

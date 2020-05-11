@@ -52,6 +52,7 @@
             this.GetNumberTextBox.Name = "GetNumberTextBox";
             this.GetNumberTextBox.Size = new System.Drawing.Size(150, 28);
             this.GetNumberTextBox.TabIndex = 1;
+            this.GetNumberTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // ConfirmButton
             // 

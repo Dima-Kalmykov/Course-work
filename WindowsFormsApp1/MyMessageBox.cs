@@ -20,12 +20,12 @@ namespace WindowsFormsApp1
             var ms = new MyMessageBox
             {
                 Style = MetroColorStyle.Orange,
-                buttonOk = {Visible = false},
-                buttonYes = {Visible = true},
-                buttonNo = {Visible = true},
+                buttonOk = { Visible = false },
+                buttonYes = { Visible = true },
+                buttonNo = { Visible = true },
                 Width = 400,
                 Height = 210,
-                label1 = {Location = new Point(17, 70)}
+                label1 = { Location = new Point(17, 70) }
             };
 
 
@@ -42,9 +42,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = {Visible = true},
-                buttonYes = {Visible = false},
-                buttonNo = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonYes = { Visible = false },
+                buttonNo = { Visible = false },
                 Width = 300
             };
 
@@ -61,12 +61,12 @@ namespace WindowsFormsApp1
             var ms = new MyMessageBox
             {
                 Style = MetroColorStyle.Orange,
-                buttonOk = {Visible = false},
-                buttonYes = {Visible = true},
-                buttonNo = {Visible = true},
+                buttonOk = { Visible = false },
+                buttonYes = { Visible = true },
+                buttonNo = { Visible = true },
                 Width = 410,
                 Height = 230,
-                label1 = {Location = new Point(40, 70)}
+                label1 = { Location = new Point(40, 70) }
             };
 
 
@@ -77,15 +77,33 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
+        public DialogResult ShowPlot(int min, int max)
+        {
+            var ms = new MyMessageBox
+            {
+                Width = max > 9 ? 335 : 320,
+                Height = 170,
+                Style = MetroColorStyle.Orange,
+                buttonOk = { Visible = true, Location = new Point(115, 120) },
+                buttonNo = { Visible = false },
+                buttonYes = { Visible = false },
+                Text = "Warning",
+                label1 = {Text = $"Number must be in range [{min}; {max}]",
+                    Location = new Point(20, 70) }
+            };
+
+            return ms.ShowDialog();
+        }
+
         public DialogResult ShowError(string message)
         {
             var ms = new MyMessageBox
             {
                 Style = MetroColorStyle.Red,
                 Text = "Error",
-                buttonOk = {Visible = true},
-                buttonYes = {Visible = false},
-                buttonNo = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonYes = { Visible = false },
+                buttonNo = { Visible = false },
                 Width = 250
             };
 
@@ -103,9 +121,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = {Visible = true},
-                buttonYes = {Visible = false},
-                buttonNo = {Visible = false}
+                buttonOk = { Visible = true },
+                buttonYes = { Visible = false },
+                buttonNo = { Visible = false }
             };
 
             if (num1 < 10 && num2 < 10)
@@ -135,9 +153,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = {Visible = true},
-                buttonYes = {Visible = false},
-                buttonNo = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonYes = { Visible = false },
+                buttonNo = { Visible = false },
                 Width = 250
             };
 
@@ -156,9 +174,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = {Visible = true},
-                buttonYes = {Visible = false},
-                buttonNo = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonYes = { Visible = false },
+                buttonNo = { Visible = false },
                 Width = 200
             };
 
@@ -184,9 +202,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = {Visible = true},
-                buttonNo = {Visible = false},
-                buttonYes = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonNo = { Visible = false },
+                buttonYes = { Visible = false },
                 Width = 210
             };
 
@@ -204,9 +222,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = {Visible = true},
-                buttonNo = {Visible = false},
-                buttonYes = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonNo = { Visible = false },
+                buttonYes = { Visible = false },
                 Width = 200
             };
 
@@ -223,9 +241,9 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Green,
                 Text = "Information",
-                buttonOk = {Visible = true},
-                buttonNo = {Visible = false},
-                buttonYes = {Visible = false},
+                buttonOk = { Visible = true },
+                buttonNo = { Visible = false },
+                buttonYes = { Visible = false },
                 Width = 290
             };
 

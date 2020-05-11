@@ -4,17 +4,38 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class ChartForTestingProgram : Form
+    public partial class ChartForTestingProgram : MetroFramework.Forms.MetroForm
     {
-        public ChartForTestingProgram(MainForm mf)
+        public ChartForTestingProgram(MainForm mf, int formNumber, List<ChartForTestingProgram> forms)
         {
             InitializeComponent();
+            textBox1.Text = string.Empty;
+            FormCounter = formNumber;
+            textBox1.KeyPress += textBox1_KeyPress;
+            this.forms = forms;
+            this.forms.Add(this);
+            ListOfFormClass.SetSwitcherTools(this.forms, formNumber);
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.label3.Text = ListOfFormClass.Pointer.ToString();
+            }
+
+            label4.Text = $"Number form: {formNumber}";
+            var res = $"Array: ";
+            res = ListOfFormClass.chartForTestingProgramList
+                .Aggregate(res, (current, form) => current + form.label4 + "    ");
+
+            label5.Text = res;
+
             SetAllTools(mf);
         }
 
+        public int FormCounter;
+        private List<ChartForTestingProgram> forms;
         private ToolsForDrawingGraph toolsForDrawing;
         private readonly List<Stopwatch> timers = new List<Stopwatch>();
         private readonly List<Edge> points = new List<Edge>();
@@ -66,7 +87,6 @@ namespace WindowsFormsApp1
             SetUpTimers();
         }
 
-
         private void SetUpTimers()
         {
             var listArr = new List<Edge>[vertex.Count];
@@ -86,6 +106,9 @@ namespace WindowsFormsApp1
             mainTimer = new Timer { Interval = 2 };
             mainTimer.Tick += (x, y) => MainTick(listArr);
             mainTimer.Start();
+
+
+
             timerForPlotting.Start();
             pastTimeTimer.Start();
             Show();
@@ -288,7 +311,8 @@ namespace WindowsFormsApp1
             {
                 timerForPlotting.Stop();
                 mainTimer.Stop();
-                var newForm = new ChartForTestingProgram(mainForm);
+                Hide();
+                var _ = new ChartForTestingProgram(mainForm, ++FormCounter, forms);
                 return;
             }
 
@@ -299,22 +323,36 @@ namespace WindowsFormsApp1
 
         private void StopTestingButton_Click(object sender, EventArgs e)
         {
+            foreach (var form in forms)
+            {
+                form.timerForPlotting.Stop();
+                form.mainTimer.Stop();
+            }
             timerForPlotting.Stop();
             mainTimer.Stop();
         }
 
         private void ChartForTestingProgram_Load(object sender, EventArgs e)
         {
+            ControlBox = true;
+            chart.Legends[0].BackColor = Color.SlateGray;
+            chart.Series["Amount of points"].Color = Color.Yellow;
+            chart.ChartAreas["ChartArea1"].BackColor = Color.SlateGray;
+
+            chart.BackColor = Color.SlateGray;
+            Theme = MetroThemeStyle.Dark;
+            Style = MetroColorStyle.Yellow;
             TopMost = true;
-            WindowState = FormWindowState.Maximized;
-            chart.Width = Consts.ChartTestingFormWidth;
+            Width = 1500;
+            Height = 800;
+            chart.Width = Consts.ChartTestingFormWidth - 220;
             chart.Height = Consts.ChartTestingFormHeight;
 
-            field.Location = new Point(0, 0);
+            field.Location = new Point(0, 5);
             field.Width = Consts.GraphPictureBoxWidth;
             field.Height = Consts.GraphPictureBoxHeight;
 
-            chart.Location = new Point(field.Width, 0);
+            chart.Location = new Point(field.Width, 5);
 
             timeLabel.Location = new Point(Consts.TimeLabelLocationX, Consts.TimeLabelLocationY);
 
@@ -325,6 +363,178 @@ namespace WindowsFormsApp1
                                                      Consts.CoefficientTrackBarLocationY);
             stopTestingButton.Location = new Point(Consts.StopTestingProgramButtonLocationX,
                                                    Consts.StopTestingProgramButtonLocationY);
+        }
+
+        // ToDo когда останавливают испытание можно делать листать.
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (ListOfFormClass.Pointer > 0)
+            {
+                ListOfFormClass.Pointer--;
+            }
+            else
+            {
+                return;
+            }
+
+            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            {
+                chartForTestingProgram.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+            }
+
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.label3.Text = ListOfFormClass.Pointer.ToString();
+            }
+
+            HideAllForms();
+            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Show();
+            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Activate();
+        }
+
+
+        private void HideAllForms()
+        {
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.Hide();
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (ListOfFormClass.Pointer < ListOfFormClass.chartForTestingProgramList.Count - 1)
+            {
+                ListOfFormClass.Pointer++;
+            }
+            else
+            {
+                return;
+            }
+
+            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            {
+                chartForTestingProgram.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+            }
+
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.label3.Text = ListOfFormClass.Pointer.ToString();
+            }
+
+            HideAllForms();
+
+            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Show();
+            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Activate();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void leftButton_Click(object sender, EventArgs e)
+        {
+            ListOfFormClass.Pointer = 0;
+
+            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            {
+                chartForTestingProgram.textBox1.Text = "1";
+            }
+
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.label3.Text = ListOfFormClass.Pointer.ToString();
+            }
+
+            ListOfFormClass.chartForTestingProgramList[0].Show();
+            ListOfFormClass.chartForTestingProgramList[0].Activate();
+        }
+
+        private void rightButton_Click(object sender, EventArgs e)
+        {
+            var lastForm = ListOfFormClass.chartForTestingProgramList.LastOrDefault();
+
+            if (lastForm is null)
+            {
+                return;
+            }
+
+
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.label3.Text = ListOfFormClass.Pointer.ToString();
+            }
+
+
+            
+
+            ListOfFormClass.Pointer = ListOfFormClass.chartForTestingProgramList.Count - 1;
+            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            {
+                chartForTestingProgram.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+            }
+
+            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            {
+                form.label3.Text = ListOfFormClass.Pointer.ToString();
+            }
+
+            HideAllForms();
+
+            lastForm.Show();
+            lastForm.Activate();
+        }
+
+        private void ChartForTestingProgram_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var curForm = ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer];
+
+            if (curForm.textBox1.Focused && e.KeyChar == (char)Keys.Enter)
+            {
+                try
+                {
+                    var point = int.Parse(textBox1.Text);
+                    point--;
+
+                    if (point > ListOfFormClass.chartForTestingProgramList.Count ||
+                        point < 0)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+
+                    ListOfFormClass.Pointer = point;
+                    foreach (var form in ListOfFormClass.chartForTestingProgramList)
+                    {
+                        form.textBox1.Text = (point + 1).ToString();
+                    }
+                    HideAllForms();
+                    ListOfFormClass.chartForTestingProgramList[point].Show();
+                    ListOfFormClass.chartForTestingProgramList[point].Activate();
+                }
+                catch (Exception)
+                {
+                    label5.Focus();
+                    HideAllForms();
+                    var ms = new MyMessageBox();
+                    var res = ms.ShowPlot(1, ListOfFormClass.chartForTestingProgramList.Count);
+
+                    if (res == DialogResult.OK)
+                    {
+                        curForm.Show();
+
+                        foreach (var form in ListOfFormClass.chartForTestingProgramList)
+                        {
+                            form.textBox1.Text = string.Empty;
+                        }
+                    }
+                }
+            }
         }
     }
 }
