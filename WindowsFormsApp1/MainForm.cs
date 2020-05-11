@@ -80,7 +80,7 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Close matrix";
                 showAdjacencyMatrixForm.Hide();
                 ShowOrHideAdjMatrix.Enabled = false;
             }
@@ -405,7 +405,7 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Close matrix";
                 showAdjacencyMatrixForm.Hide();
                 ShowOrHideAdjMatrix.Enabled = false;
             }
@@ -467,7 +467,7 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Close matrix";
                 showAdjacencyMatrixForm.Hide();
                 ShowOrHideAdjMatrix.Enabled = false;
             }
@@ -546,7 +546,7 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Close matrix";
                 showAdjacencyMatrixForm.Hide();
                 ShowOrHideAdjMatrix.Enabled = false;
             }
@@ -630,15 +630,15 @@ namespace WindowsFormsApp1
             ChangeEdgeLengthButton.Enabled = true;
 
             // В зависимости от текста открываем/закрываем матрицу смежности.
-            if (ShowOrHideAdjMatrix.Text == "Закрыть матрицу")
+            if (ShowOrHideAdjMatrix.Text == "Close matrix")
             {
                 showAdjacencyMatrixForm.Hide();
-                ShowOrHideAdjMatrix.Text = "Открыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Open matrix";
             }
             else
             {
                 showAdjacencyMatrixForm.Show();
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Close matrix";
             }
         }
 
@@ -799,9 +799,9 @@ namespace WindowsFormsApp1
                                         //chooseEdgeFormForm.ShowDialog();
 
                                         var res = chooseEdgeFormForm.MyShowChangeLength(
-                                            "Choose the edge whose length\n          you want to change",
-                                            $"Change edge length from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
-                                            $"Change edge length from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
+                                            "Choose the edge whose weight\n          you want to change",
+                                            $"Change edge weight from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
+                                            $"Change edge weight from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
                                             );
 
                                         chooseEdgeFormForm.WasCancel = res.Item2;
@@ -907,9 +907,9 @@ namespace WindowsFormsApp1
                                         //    $"{Edges[i].Ver1 + 1}";
 
                                         var res = chooseEdgeFormForm.MyShowChangeLength(
-                                            "Choose the edge whose length\n          you want to change",
-                                            $"Change edge length from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
-                                            $"Change edge length from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
+                                            "Choose the edge whose weight\n          you want to change",
+                                            $"Change edge weight from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
+                                            $"Change edge weight from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
                                         );
 
                                         chooseEdgeFormForm.WasCancel = res.Item2;
@@ -995,6 +995,17 @@ namespace WindowsFormsApp1
                                         Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                     {
                         myMessageBox.ShowVertexNotCross("Vertex must not cross");
+                        return;
+                    }
+
+                    var newVertex = new Vertex(e.X, e.Y);
+
+                    if (newVertex.X >= field.Size.Width - 2 * Consts.VertexRadius ||
+                        newVertex.X <= 2 * Consts.VertexRadius ||
+                        newVertex.Y <= 2 * Consts.VertexRadius ||
+                        newVertex.Y >= field.Size.Height - 2 * Consts.VertexRadius)
+                    {
+                        myMessageBox.ShowInvalidPlace();
                         return;
                     }
 
@@ -1796,7 +1807,7 @@ namespace WindowsFormsApp1
                 showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
                 showAdjacencyMatrixForm.Hide();
             }
-            else if (ShowOrHideAdjMatrix.Text == "Закрыть матрицу")
+            else if (ShowOrHideAdjMatrix.Text == "Close matrix")
             {
                 showAdjacencyMatrixForm.Show();
                 Activate();
@@ -2166,6 +2177,12 @@ namespace WindowsFormsApp1
         {
             RedrawSelectedVertex();
 
+            mainTimer.Stop();
+            timer1.Stop();
+            timer2.Stop();
+            sp.Stop();
+            timers.ForEach(timer => timer.Stop());
+
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
             DrawEdgeButton.Enabled = true;
@@ -2206,7 +2223,7 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
-                ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
+                ShowOrHideAdjMatrix.Text = "Close matrix";
                 showAdjacencyMatrixForm.Hide();
                 ShowOrHideAdjMatrix.Enabled = false;
             }
@@ -2229,25 +2246,13 @@ namespace WindowsFormsApp1
             chartDisplay.chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
             chartDisplay.chart1.ChartAreas[0].AxisX.Minimum = 0;
 
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            mainTimer.Stop();
+            timer1.Stop();
+            timer2.Stop();
+            sp.Stop();
+            timers.ForEach(timer => timer.Stop());
 
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
@@ -2277,7 +2282,7 @@ namespace WindowsFormsApp1
                         var time = TimeSpan.Parse(line[0]).TotalSeconds;
                         var amount = int.Parse(line[1]);
 
-                        chartDisplay.chart1.Series["Series1"]
+                        chartDisplay.chart1.Series["Amount of points"]
                             .Points.AddXY(time, amount);
                     }
 
@@ -2301,7 +2306,7 @@ namespace WindowsFormsApp1
             sp.Stop();
             timers.ForEach(timer => timer.Stop());
             requireTime = sp.ElapsedMilliseconds;
-            chartForTestingForm1 = new ChartForTestingProgram(this, 0, 
+            chartForTestingForm1 = new ChartForTestingProgram(this, 0,
                 new List<ChartForTestingProgram>());
         }
 
@@ -2313,6 +2318,7 @@ namespace WindowsFormsApp1
             drawVertexLabel.Visible = false;
             deleteElementLabel.Visible = false;
             changeLengthLabel.Visible = false;
+            label1.Visible = false;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -2330,13 +2336,15 @@ namespace WindowsFormsApp1
             drawVertexLabel.BackColor = Color.FromArgb(35, 32, 39);
             deleteElementLabel.BackColor = Color.FromArgb(35, 32, 39);
             changeLengthLabel.BackColor = Color.FromArgb(35, 32, 39);
+            label1.BackColor = Color.FromArgb(35, 32, 39);
 
             HideAllLabel();
-
-            drawEdgeLabel.Location = new Point(19, 96);
-            drawVertexLabel.Location = new Point(19, 198);
-            deleteElementLabel.Location = new Point(19, 307);
-            changeLengthLabel.Location = new Point(19, 389);
+            changeLengthLabel.Text = "Change edge";
+            label1.Location = new Point(55, 451);
+            drawEdgeLabel.Location = new Point(39, 112);
+            drawVertexLabel.Location = new Point(36, 222);
+            deleteElementLabel.Location = new Point(24, 343);
+            changeLengthLabel.Location = new Point(30, 431);
 
             startReseachButton.Location = new Point(150, Consts.GraphPictureBoxHeight + 5);
             startReseachButton.Height = 75;
@@ -2413,6 +2421,7 @@ namespace WindowsFormsApp1
             drawEdgeLabel.Visible = !DrawEdgeButton.Enabled;
             drawVertexLabel.Visible = !DrawVertexButton.Enabled;
             deleteElementLabel.Visible = !DeleteElementButton.Enabled;
+            label1.Visible = !ChangeEdgeLengthButton.Enabled;
 
             var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
 
@@ -2426,7 +2435,7 @@ namespace WindowsFormsApp1
 
         private void exitButton_Click(object sender, EventArgs e)
         {
-            Close();
+            Environment.Exit(0);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -2437,6 +2446,11 @@ namespace WindowsFormsApp1
         private void exitButton2_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void exitButton2_Click_1(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

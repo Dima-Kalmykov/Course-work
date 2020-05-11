@@ -49,7 +49,7 @@
             this.ContinueButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ContinueButton.FlatAppearance.BorderSize = 0;
             this.ContinueButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ContinueButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ContinueButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ContinueButton.ForeColor = System.Drawing.Color.LightGray;
             this.ContinueButton.Location = new System.Drawing.Point(31, 142);
             this.ContinueButton.Name = "ContinueButton";
@@ -64,7 +64,7 @@
             this.GenerateGraphButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.GenerateGraphButton.FlatAppearance.BorderSize = 0;
             this.GenerateGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GenerateGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.GenerateGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.GenerateGraphButton.ForeColor = System.Drawing.Color.LightGray;
             this.GenerateGraphButton.Location = new System.Drawing.Point(227, 142);
             this.GenerateGraphButton.Name = "GenerateGraphButton";

@@ -43,6 +43,7 @@
             this.buttonYes.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.buttonYes.FlatAppearance.BorderSize = 0;
             this.buttonYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonYes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonYes.ForeColor = System.Drawing.Color.LightGray;
             this.buttonYes.Location = new System.Drawing.Point(87, 185);
             this.buttonYes.Name = "buttonYes";
@@ -58,6 +59,7 @@
             this.buttonNo.DialogResult = System.Windows.Forms.DialogResult.No;
             this.buttonNo.FlatAppearance.BorderSize = 0;
             this.buttonNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonNo.ForeColor = System.Drawing.Color.LightGray;
             this.buttonNo.Location = new System.Drawing.Point(297, 185);
             this.buttonNo.Name = "buttonNo";
@@ -89,6 +91,7 @@
             this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonOk.FlatAppearance.BorderSize = 0;
             this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonOk.ForeColor = System.Drawing.Color.LightGray;
             this.buttonOk.Location = new System.Drawing.Point(69, 286);
             this.buttonOk.Name = "buttonOk";

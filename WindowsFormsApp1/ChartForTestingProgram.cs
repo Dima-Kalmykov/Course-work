@@ -13,6 +13,7 @@ namespace WindowsFormsApp1
         public ChartForTestingProgram(MainForm mf, int formNumber, List<ChartForTestingProgram> forms)
         {
             InitializeComponent();
+            label5.Location = new Point(2000, 2000);
             textBox1.Text = string.Empty;
             FormCounter = formNumber;
             textBox1.KeyPress += textBox1_KeyPress;

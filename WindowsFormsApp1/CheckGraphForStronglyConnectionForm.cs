@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework;
 
@@ -61,6 +62,9 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void CheckGraphForStronglyConnection_Load(object sender, EventArgs e)
         {
+            GenerateGraphButton.ForeColor = Color.Orange;
+            ContinueButton.ForeColor = Color.Orange;
+
             Style = MetroColorStyle.Orange;
             Theme = MetroThemeStyle.Dark;
             ControlBox = false;

@@ -39,11 +39,11 @@
             this.FirstOptionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.FirstOptionButton.FlatAppearance.BorderSize = 0;
             this.FirstOptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.FirstOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.FirstOptionButton.ForeColor = System.Drawing.Color.LightGray;
+            this.FirstOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FirstOptionButton.ForeColor = System.Drawing.Color.Aqua;
             this.FirstOptionButton.Location = new System.Drawing.Point(70, 145);
             this.FirstOptionButton.Name = "FirstOptionButton";
-            this.FirstOptionButton.Size = new System.Drawing.Size(250, 50);
+            this.FirstOptionButton.Size = new System.Drawing.Size(250, 55);
             this.FirstOptionButton.TabIndex = 0;
             this.FirstOptionButton.UseVisualStyleBackColor = false;
             this.FirstOptionButton.Click += new System.EventHandler(this.FirstActionButton_Click);
@@ -53,11 +53,11 @@
             this.SecondOptionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.SecondOptionButton.FlatAppearance.BorderSize = 0;
             this.SecondOptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SecondOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SecondOptionButton.ForeColor = System.Drawing.Color.LightGray;
+            this.SecondOptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SecondOptionButton.ForeColor = System.Drawing.Color.Aqua;
             this.SecondOptionButton.Location = new System.Drawing.Point(70, 215);
             this.SecondOptionButton.Name = "SecondOptionButton";
-            this.SecondOptionButton.Size = new System.Drawing.Size(250, 50);
+            this.SecondOptionButton.Size = new System.Drawing.Size(250, 55);
             this.SecondOptionButton.TabIndex = 1;
             this.SecondOptionButton.UseVisualStyleBackColor = false;
             this.SecondOptionButton.Click += new System.EventHandler(this.SecondActionButton_Click);
@@ -78,11 +78,11 @@
             this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.CancelButton.FlatAppearance.BorderSize = 0;
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CancelButton.ForeColor = System.Drawing.Color.LightGray;
+            this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CancelButton.ForeColor = System.Drawing.Color.Aqua;
             this.CancelButton.Location = new System.Drawing.Point(70, 285);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(250, 50);
+            this.CancelButton.Size = new System.Drawing.Size(250, 55);
             this.CancelButton.TabIndex = 3;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
@@ -92,7 +92,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(405, 375);
+            this.ClientSize = new System.Drawing.Size(405, 379);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.TextForUnderstandingLabel);
             this.Controls.Add(this.SecondOptionButton);

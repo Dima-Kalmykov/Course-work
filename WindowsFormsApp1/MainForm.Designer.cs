@@ -70,8 +70,9 @@
             this.changeLengthLabel = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panelChart = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.exitButton2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.drawingPanel.SuspendLayout();
             this.changeParametersSubPanel.SuspendLayout();
@@ -89,14 +90,14 @@
             this.DrawVertexButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DrawVertexButton.FlatAppearance.BorderSize = 0;
             this.DrawVertexButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DrawVertexButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.DrawVertexButton.ForeColor = System.Drawing.Color.Cyan;
-            this.DrawVertexButton.Location = new System.Drawing.Point(0, 150);
+            this.DrawVertexButton.Location = new System.Drawing.Point(0, 180);
             this.DrawVertexButton.Name = "DrawVertexButton";
             this.DrawVertexButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.DrawVertexButton.Size = new System.Drawing.Size(200, 50);
+            this.DrawVertexButton.Size = new System.Drawing.Size(200, 60);
             this.DrawVertexButton.TabIndex = 2;
-            this.DrawVertexButton.Text = "Нарисовать вершину";
-            this.DrawVertexButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DrawVertexButton.Text = "Draw vertex";
             this.DrawVertexButton.UseVisualStyleBackColor = true;
             this.DrawVertexButton.Click += new System.EventHandler(this.DrawVertexButton_Click);
             // 
@@ -105,14 +106,14 @@
             this.DeleteAllGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DeleteAllGraphButton.FlatAppearance.BorderSize = 0;
             this.DeleteAllGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteAllGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.DeleteAllGraphButton.ForeColor = System.Drawing.Color.Magenta;
-            this.DeleteAllGraphButton.Location = new System.Drawing.Point(0, 50);
+            this.DeleteAllGraphButton.Location = new System.Drawing.Point(0, 60);
             this.DeleteAllGraphButton.Name = "DeleteAllGraphButton";
             this.DeleteAllGraphButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.DeleteAllGraphButton.Size = new System.Drawing.Size(200, 50);
+            this.DeleteAllGraphButton.Size = new System.Drawing.Size(200, 60);
             this.DeleteAllGraphButton.TabIndex = 4;
-            this.DeleteAllGraphButton.Text = "Удалить весь граф";
-            this.DeleteAllGraphButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DeleteAllGraphButton.Text = "Delete full graph";
             this.DeleteAllGraphButton.UseVisualStyleBackColor = true;
             this.DeleteAllGraphButton.Click += new System.EventHandler(this.DeleteAllGraphButton_Click);
             // 
@@ -121,14 +122,14 @@
             this.DrawEdgeButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DrawEdgeButton.FlatAppearance.BorderSize = 0;
             this.DrawEdgeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DrawEdgeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.DrawEdgeButton.ForeColor = System.Drawing.Color.Cyan;
-            this.DrawEdgeButton.Location = new System.Drawing.Point(0, 100);
+            this.DrawEdgeButton.Location = new System.Drawing.Point(0, 120);
             this.DrawEdgeButton.Name = "DrawEdgeButton";
             this.DrawEdgeButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.DrawEdgeButton.Size = new System.Drawing.Size(200, 50);
+            this.DrawEdgeButton.Size = new System.Drawing.Size(200, 60);
             this.DrawEdgeButton.TabIndex = 5;
-            this.DrawEdgeButton.Text = "Нарисовать ребро";
-            this.DrawEdgeButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DrawEdgeButton.Text = "Draw edge";
             this.DrawEdgeButton.UseVisualStyleBackColor = true;
             this.DrawEdgeButton.Click += new System.EventHandler(this.DrawEdgeButton_Click);
             // 
@@ -137,14 +138,14 @@
             this.CheckGraphForStrongConnectionButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.CheckGraphForStrongConnectionButton.FlatAppearance.BorderSize = 0;
             this.CheckGraphForStrongConnectionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CheckGraphForStrongConnectionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.CheckGraphForStrongConnectionButton.ForeColor = System.Drawing.Color.Chartreuse;
             this.CheckGraphForStrongConnectionButton.Location = new System.Drawing.Point(0, 0);
             this.CheckGraphForStrongConnectionButton.Name = "CheckGraphForStrongConnectionButton";
             this.CheckGraphForStrongConnectionButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.CheckGraphForStrongConnectionButton.Size = new System.Drawing.Size(220, 60);
             this.CheckGraphForStrongConnectionButton.TabIndex = 11;
-            this.CheckGraphForStrongConnectionButton.Text = "Проверить граф на сильносвязность";
-            this.CheckGraphForStrongConnectionButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckGraphForStrongConnectionButton.Text = "Check graph for strongly direction";
             this.CheckGraphForStrongConnectionButton.UseVisualStyleBackColor = true;
             this.CheckGraphForStrongConnectionButton.Click += new System.EventHandler(this.CheckGraphForStrongConnectionButton_Click);
             // 
@@ -153,14 +154,14 @@
             this.GetRandomGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.GetRandomGraphButton.FlatAppearance.BorderSize = 0;
             this.GetRandomGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GetRandomGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.GetRandomGraphButton.ForeColor = System.Drawing.Color.Cyan;
-            this.GetRandomGraphButton.Location = new System.Drawing.Point(0, 50);
+            this.GetRandomGraphButton.Location = new System.Drawing.Point(0, 60);
             this.GetRandomGraphButton.Name = "GetRandomGraphButton";
             this.GetRandomGraphButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.GetRandomGraphButton.Size = new System.Drawing.Size(200, 50);
+            this.GetRandomGraphButton.Size = new System.Drawing.Size(200, 60);
             this.GetRandomGraphButton.TabIndex = 13;
-            this.GetRandomGraphButton.Text = "Сгенерировать граф";
-            this.GetRandomGraphButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.GetRandomGraphButton.Text = "Generated graph";
             this.GetRandomGraphButton.UseVisualStyleBackColor = true;
             this.GetRandomGraphButton.Click += new System.EventHandler(this.GetRandomGraphButton_Click);
             // 
@@ -169,14 +170,14 @@
             this.DeleteElementButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.DeleteElementButton.FlatAppearance.BorderSize = 0;
             this.DeleteElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteElementButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.DeleteElementButton.ForeColor = System.Drawing.Color.Magenta;
             this.DeleteElementButton.Location = new System.Drawing.Point(0, 0);
             this.DeleteElementButton.Name = "DeleteElementButton";
             this.DeleteElementButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.DeleteElementButton.Size = new System.Drawing.Size(200, 50);
+            this.DeleteElementButton.Size = new System.Drawing.Size(200, 60);
             this.DeleteElementButton.TabIndex = 14;
-            this.DeleteElementButton.Text = "Удалить элемент";
-            this.DeleteElementButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DeleteElementButton.Text = "Delete element";
             this.DeleteElementButton.UseVisualStyleBackColor = true;
             this.DeleteElementButton.Click += new System.EventHandler(this.DeleteElementButton_Click);
             // 
@@ -185,14 +186,14 @@
             this.SaveGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.SaveGraphButton.FlatAppearance.BorderSize = 0;
             this.SaveGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SaveGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.SaveGraphButton.ForeColor = System.Drawing.Color.Chartreuse;
-            this.SaveGraphButton.Location = new System.Drawing.Point(0, 175);
+            this.SaveGraphButton.Location = new System.Drawing.Point(0, 180);
             this.SaveGraphButton.Name = "SaveGraphButton";
             this.SaveGraphButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.SaveGraphButton.Size = new System.Drawing.Size(220, 55);
+            this.SaveGraphButton.Size = new System.Drawing.Size(220, 60);
             this.SaveGraphButton.TabIndex = 15;
-            this.SaveGraphButton.Text = "Сохранить изображение";
-            this.SaveGraphButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SaveGraphButton.Text = "Save file";
             this.SaveGraphButton.UseVisualStyleBackColor = true;
             this.SaveGraphButton.Click += new System.EventHandler(this.SaveGraphButton_Click);
             // 
@@ -201,14 +202,14 @@
             this.OpenGraphButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.OpenGraphButton.FlatAppearance.BorderSize = 0;
             this.OpenGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OpenGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.OpenGraphButton.ForeColor = System.Drawing.Color.Chartreuse;
             this.OpenGraphButton.Location = new System.Drawing.Point(0, 120);
             this.OpenGraphButton.Name = "OpenGraphButton";
             this.OpenGraphButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.OpenGraphButton.Size = new System.Drawing.Size(220, 55);
+            this.OpenGraphButton.Size = new System.Drawing.Size(220, 60);
             this.OpenGraphButton.TabIndex = 16;
-            this.OpenGraphButton.Text = "Открыть файл";
-            this.OpenGraphButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.OpenGraphButton.Text = "Open file";
             this.OpenGraphButton.UseVisualStyleBackColor = true;
             this.OpenGraphButton.Click += new System.EventHandler(this.OpenGraphButton_Click);
             // 
@@ -217,14 +218,14 @@
             this.ChangeEdgeLengthButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.ChangeEdgeLengthButton.FlatAppearance.BorderSize = 0;
             this.ChangeEdgeLengthButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ChangeEdgeLengthButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ChangeEdgeLengthButton.ForeColor = System.Drawing.Color.Magenta;
-            this.ChangeEdgeLengthButton.Location = new System.Drawing.Point(0, 100);
+            this.ChangeEdgeLengthButton.Location = new System.Drawing.Point(0, 120);
             this.ChangeEdgeLengthButton.Name = "ChangeEdgeLengthButton";
             this.ChangeEdgeLengthButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.ChangeEdgeLengthButton.Size = new System.Drawing.Size(200, 50);
+            this.ChangeEdgeLengthButton.Size = new System.Drawing.Size(200, 60);
             this.ChangeEdgeLengthButton.TabIndex = 17;
-            this.ChangeEdgeLengthButton.Text = "Изменить длину ребра";
-            this.ChangeEdgeLengthButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ChangeEdgeLengthButton.Text = "Change edge weight";
             this.ChangeEdgeLengthButton.UseVisualStyleBackColor = true;
             this.ChangeEdgeLengthButton.Click += new System.EventHandler(this.ChangeLengthButton_Click);
             // 
@@ -233,14 +234,14 @@
             this.StopDrawingButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.StopDrawingButton.FlatAppearance.BorderSize = 0;
             this.StopDrawingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StopDrawingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.StopDrawingButton.ForeColor = System.Drawing.Color.Cyan;
             this.StopDrawingButton.Location = new System.Drawing.Point(0, 0);
             this.StopDrawingButton.Name = "StopDrawingButton";
             this.StopDrawingButton.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.StopDrawingButton.Size = new System.Drawing.Size(200, 50);
+            this.StopDrawingButton.Size = new System.Drawing.Size(200, 60);
             this.StopDrawingButton.TabIndex = 18;
-            this.StopDrawingButton.Text = "Прекратить рисование";
-            this.StopDrawingButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.StopDrawingButton.Text = "Stop drawing";
             this.StopDrawingButton.UseVisualStyleBackColor = true;
             this.StopDrawingButton.Click += new System.EventHandler(this.StopDrawingButton_Click);
             // 
@@ -250,14 +251,14 @@
             this.ShowOrHideAdjMatrix.Enabled = false;
             this.ShowOrHideAdjMatrix.FlatAppearance.BorderSize = 0;
             this.ShowOrHideAdjMatrix.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ShowOrHideAdjMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ShowOrHideAdjMatrix.ForeColor = System.Drawing.Color.Chartreuse;
             this.ShowOrHideAdjMatrix.Location = new System.Drawing.Point(0, 60);
             this.ShowOrHideAdjMatrix.Name = "ShowOrHideAdjMatrix";
             this.ShowOrHideAdjMatrix.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.ShowOrHideAdjMatrix.Size = new System.Drawing.Size(220, 60);
             this.ShowOrHideAdjMatrix.TabIndex = 19;
-            this.ShowOrHideAdjMatrix.Text = "Закрыть матрицу";
-            this.ShowOrHideAdjMatrix.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ShowOrHideAdjMatrix.Text = "Close matrix";
             this.ShowOrHideAdjMatrix.UseVisualStyleBackColor = true;
             this.ShowOrHideAdjMatrix.Click += new System.EventHandler(this.ShowOrHideAdjMatrix_Click);
             // 
@@ -281,11 +282,12 @@
             this.StopProcessButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.StopProcessButton.FlatAppearance.BorderSize = 0;
             this.StopProcessButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StopProcessButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.StopProcessButton.ForeColor = System.Drawing.Color.LightGray;
             this.StopProcessButton.Location = new System.Drawing.Point(0, 0);
             this.StopProcessButton.Name = "StopProcessButton";
             this.StopProcessButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.StopProcessButton.Size = new System.Drawing.Size(211, 47);
+            this.StopProcessButton.Size = new System.Drawing.Size(211, 60);
             this.StopProcessButton.TabIndex = 21;
             this.StopProcessButton.Text = "Stop";
             this.StopProcessButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -313,11 +315,12 @@
             this.saveChartButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.saveChartButton.FlatAppearance.BorderSize = 0;
             this.saveChartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveChartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.saveChartButton.ForeColor = System.Drawing.Color.LightGray;
-            this.saveChartButton.Location = new System.Drawing.Point(0, 141);
+            this.saveChartButton.Location = new System.Drawing.Point(0, 180);
             this.saveChartButton.Name = "saveChartButton";
             this.saveChartButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.saveChartButton.Size = new System.Drawing.Size(211, 47);
+            this.saveChartButton.Size = new System.Drawing.Size(211, 60);
             this.saveChartButton.TabIndex = 24;
             this.saveChartButton.Text = "Save chart";
             this.saveChartButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -335,11 +338,12 @@
             this.openChartButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.openChartButton.FlatAppearance.BorderSize = 0;
             this.openChartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.openChartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.openChartButton.ForeColor = System.Drawing.Color.LightGray;
-            this.openChartButton.Location = new System.Drawing.Point(0, 94);
+            this.openChartButton.Location = new System.Drawing.Point(0, 120);
             this.openChartButton.Name = "openChartButton";
             this.openChartButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.openChartButton.Size = new System.Drawing.Size(211, 47);
+            this.openChartButton.Size = new System.Drawing.Size(211, 60);
             this.openChartButton.TabIndex = 25;
             this.openChartButton.Text = "Open chart";
             this.openChartButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -352,13 +356,14 @@
             this.testingProgrammButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.testingProgrammButton.FlatAppearance.BorderSize = 0;
             this.testingProgrammButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.testingProgrammButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.testingProgrammButton.ForeColor = System.Drawing.Color.LightGray;
-            this.testingProgrammButton.Location = new System.Drawing.Point(0, 47);
+            this.testingProgrammButton.Location = new System.Drawing.Point(0, 60);
             this.testingProgrammButton.Name = "testingProgrammButton";
             this.testingProgrammButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.testingProgrammButton.Size = new System.Drawing.Size(211, 47);
+            this.testingProgrammButton.Size = new System.Drawing.Size(211, 60);
             this.testingProgrammButton.TabIndex = 26;
-            this.testingProgrammButton.Text = "Испытания программы";
+            this.testingProgrammButton.Text = "Test programm";
             this.testingProgrammButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.testingProgrammButton.UseVisualStyleBackColor = false;
             this.testingProgrammButton.Click += new System.EventHandler(this.button4_Click);
@@ -381,9 +386,9 @@
             this.changeParametersSubPanel.Controls.Add(this.DeleteAllGraphButton);
             this.changeParametersSubPanel.Controls.Add(this.DeleteElementButton);
             this.changeParametersSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.changeParametersSubPanel.Location = new System.Drawing.Point(0, 354);
+            this.changeParametersSubPanel.Location = new System.Drawing.Point(0, 399);
             this.changeParametersSubPanel.Name = "changeParametersSubPanel";
-            this.changeParametersSubPanel.Size = new System.Drawing.Size(200, 171);
+            this.changeParametersSubPanel.Size = new System.Drawing.Size(200, 180);
             this.changeParametersSubPanel.TabIndex = 3;
             // 
             // button5
@@ -391,12 +396,12 @@
             this.button5.Dock = System.Windows.Forms.DockStyle.Top;
             this.button5.FlatAppearance.BorderSize = 0;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button5.ForeColor = System.Drawing.Color.Gainsboro;
-            this.button5.Location = new System.Drawing.Point(0, 283);
+            this.button5.Location = new System.Drawing.Point(0, 309);
             this.button5.Name = "button5";
             this.button5.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.button5.Size = new System.Drawing.Size(200, 71);
+            this.button5.Size = new System.Drawing.Size(200, 90);
             this.button5.TabIndex = 0;
             this.button5.Text = "Change parameters";
             this.button5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -413,26 +418,28 @@
             this.drawingSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.drawingSubPanel.Location = new System.Drawing.Point(0, 69);
             this.drawingSubPanel.Name = "drawingSubPanel";
-            this.drawingSubPanel.Size = new System.Drawing.Size(200, 214);
+            this.drawingSubPanel.Size = new System.Drawing.Size(200, 240);
             this.drawingSubPanel.TabIndex = 2;
             // 
             // drawEdgeLabel
             // 
             this.drawEdgeLabel.AutoSize = true;
             this.drawEdgeLabel.BackColor = System.Drawing.Color.SaddleBrown;
+            this.drawEdgeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.drawEdgeLabel.ForeColor = System.Drawing.Color.Yellow;
             this.drawEdgeLabel.Location = new System.Drawing.Point(23, 117);
             this.drawEdgeLabel.Name = "drawEdgeLabel";
-            this.drawEdgeLabel.Size = new System.Drawing.Size(130, 17);
+            this.drawEdgeLabel.Size = new System.Drawing.Size(106, 25);
             this.drawEdgeLabel.TabIndex = 29;
-            this.drawEdgeLabel.Text = "Нарисовать ребро";
+            this.drawEdgeLabel.Text = "Draw edge";
+            this.drawEdgeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // drawingButton
             // 
             this.drawingButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.drawingButton.FlatAppearance.BorderSize = 0;
             this.drawingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drawingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.drawingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.drawingButton.ForeColor = System.Drawing.Color.Gainsboro;
             this.drawingButton.Location = new System.Drawing.Point(0, 0);
             this.drawingButton.Name = "drawingButton";
@@ -471,9 +478,9 @@
             this.panel2.Controls.Add(this.button6);
             this.panel2.Controls.Add(this.button7);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 445);
+            this.panel2.Location = new System.Drawing.Point(0, 430);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(220, 196);
+            this.panel2.Size = new System.Drawing.Size(220, 180);
             this.panel2.TabIndex = 3;
             // 
             // button8
@@ -481,7 +488,7 @@
             this.button8.Dock = System.Windows.Forms.DockStyle.Top;
             this.button8.FlatAppearance.BorderSize = 0;
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button8.ForeColor = System.Drawing.Color.Red;
             this.button8.Location = new System.Drawing.Point(0, 120);
             this.button8.Name = "button8";
@@ -489,7 +496,6 @@
             this.button8.Size = new System.Drawing.Size(220, 60);
             this.button8.TabIndex = 6;
             this.button8.Text = "Cyclomatic number";
-            this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button8.UseVisualStyleBackColor = true;
             // 
             // button6
@@ -497,7 +503,7 @@
             this.button6.Dock = System.Windows.Forms.DockStyle.Top;
             this.button6.FlatAppearance.BorderSize = 0;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button6.ForeColor = System.Drawing.Color.Red;
             this.button6.Location = new System.Drawing.Point(0, 60);
             this.button6.Name = "button6";
@@ -505,7 +511,6 @@
             this.button6.Size = new System.Drawing.Size(220, 60);
             this.button6.TabIndex = 4;
             this.button6.Text = "button6";
-            this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button6.UseVisualStyleBackColor = true;
             // 
             // button7
@@ -513,7 +518,7 @@
             this.button7.Dock = System.Windows.Forms.DockStyle.Top;
             this.button7.FlatAppearance.BorderSize = 0;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button7.ForeColor = System.Drawing.Color.Red;
             this.button7.Location = new System.Drawing.Point(0, 0);
             this.button7.Name = "button7";
@@ -521,7 +526,6 @@
             this.button7.Size = new System.Drawing.Size(220, 60);
             this.button7.TabIndex = 5;
             this.button7.Text = "button7";
-            this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button7.UseVisualStyleBackColor = true;
             // 
             // graphInfoButton
@@ -529,9 +533,9 @@
             this.graphInfoButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.graphInfoButton.FlatAppearance.BorderSize = 0;
             this.graphInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.graphInfoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.graphInfoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.graphInfoButton.ForeColor = System.Drawing.Color.Gainsboro;
-            this.graphInfoButton.Location = new System.Drawing.Point(0, 373);
+            this.graphInfoButton.Location = new System.Drawing.Point(0, 358);
             this.graphInfoButton.Name = "graphInfoButton";
             this.graphInfoButton.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.graphInfoButton.Size = new System.Drawing.Size(220, 72);
@@ -551,7 +555,7 @@
             this.toolsSubPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolsSubPanel.Location = new System.Drawing.Point(0, 58);
             this.toolsSubPanel.Name = "toolsSubPanel";
-            this.toolsSubPanel.Size = new System.Drawing.Size(220, 315);
+            this.toolsSubPanel.Size = new System.Drawing.Size(220, 300);
             this.toolsSubPanel.TabIndex = 1;
             // 
             // exitButton
@@ -559,14 +563,14 @@
             this.exitButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.exitButton.FlatAppearance.BorderSize = 0;
             this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.exitButton.ForeColor = System.Drawing.Color.Chartreuse;
-            this.exitButton.Location = new System.Drawing.Point(0, 230);
+            this.exitButton.Location = new System.Drawing.Point(0, 240);
             this.exitButton.Name = "exitButton";
             this.exitButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.exitButton.Size = new System.Drawing.Size(220, 55);
+            this.exitButton.Size = new System.Drawing.Size(220, 60);
             this.exitButton.TabIndex = 4;
             this.exitButton.Text = "Exit";
-            this.exitButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
@@ -575,7 +579,7 @@
             this.toolsButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolsButton.FlatAppearance.BorderSize = 0;
             this.toolsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.toolsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolsButton.ForeColor = System.Drawing.Color.Gainsboro;
             this.toolsButton.Location = new System.Drawing.Point(0, 0);
             this.toolsButton.Name = "toolsButton";
@@ -595,32 +599,35 @@
             // drawVertexLabel
             // 
             this.drawVertexLabel.AutoSize = true;
+            this.drawVertexLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.drawVertexLabel.ForeColor = System.Drawing.Color.Yellow;
             this.drawVertexLabel.Location = new System.Drawing.Point(311, 453);
             this.drawVertexLabel.Name = "drawVertexLabel";
-            this.drawVertexLabel.Size = new System.Drawing.Size(147, 17);
+            this.drawVertexLabel.Size = new System.Drawing.Size(115, 25);
             this.drawVertexLabel.TabIndex = 29;
-            this.drawVertexLabel.Text = "Нарисовать вершину";
+            this.drawVertexLabel.Text = "Draw vertex";
             // 
             // deleteElementLabel
             // 
             this.deleteElementLabel.AutoSize = true;
+            this.deleteElementLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.deleteElementLabel.ForeColor = System.Drawing.Color.Yellow;
             this.deleteElementLabel.Location = new System.Drawing.Point(1009, 266);
             this.deleteElementLabel.Name = "deleteElementLabel";
-            this.deleteElementLabel.Size = new System.Drawing.Size(122, 17);
+            this.deleteElementLabel.Size = new System.Drawing.Size(142, 25);
             this.deleteElementLabel.TabIndex = 30;
-            this.deleteElementLabel.Text = "Удалить элемент";
+            this.deleteElementLabel.Text = "Delete element";
             // 
             // changeLengthLabel
             // 
             this.changeLengthLabel.AutoSize = true;
+            this.changeLengthLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.changeLengthLabel.ForeColor = System.Drawing.Color.Yellow;
             this.changeLengthLabel.Location = new System.Drawing.Point(921, 387);
             this.changeLengthLabel.Name = "changeLengthLabel";
-            this.changeLengthLabel.Size = new System.Drawing.Size(159, 17);
+            this.changeLengthLabel.Size = new System.Drawing.Size(192, 25);
             this.changeLengthLabel.TabIndex = 31;
-            this.changeLengthLabel.Text = "Изменить длину ребра";
+            this.changeLengthLabel.Text = "Change edge weight";
             // 
             // panel3
             // 
@@ -641,15 +648,32 @@
             this.panelChart.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelChart.Location = new System.Drawing.Point(0, 66);
             this.panelChart.Name = "panelChart";
-            this.panelChart.Size = new System.Drawing.Size(211, 247);
+            this.panelChart.Size = new System.Drawing.Size(211, 300);
             this.panelChart.TabIndex = 1;
+            // 
+            // exitButton2
+            // 
+            this.exitButton2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.exitButton2.FlatAppearance.BorderSize = 0;
+            this.exitButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exitButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.exitButton2.ForeColor = System.Drawing.Color.LightGray;
+            this.exitButton2.Location = new System.Drawing.Point(0, 240);
+            this.exitButton2.Name = "exitButton2";
+            this.exitButton2.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
+            this.exitButton2.Size = new System.Drawing.Size(211, 60);
+            this.exitButton2.TabIndex = 27;
+            this.exitButton2.Text = "Exit";
+            this.exitButton2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.exitButton2.UseVisualStyleBackColor = true;
+            this.exitButton2.Click += new System.EventHandler(this.exitButton2_Click_1);
             // 
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Top;
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ForeColor = System.Drawing.Color.Gainsboro;
             this.button1.Location = new System.Drawing.Point(0, 0);
             this.button1.Name = "button1";
@@ -661,26 +685,23 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // exitButton2
+            // label1
             // 
-            this.exitButton2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.exitButton2.FlatAppearance.BorderSize = 0;
-            this.exitButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.exitButton2.ForeColor = System.Drawing.Color.LightGray;
-            this.exitButton2.Location = new System.Drawing.Point(0, 188);
-            this.exitButton2.Name = "exitButton2";
-            this.exitButton2.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
-            this.exitButton2.Size = new System.Drawing.Size(211, 35);
-            this.exitButton2.TabIndex = 27;
-            this.exitButton2.Text = "Exit";
-            this.exitButton2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.exitButton2.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ForeColor = System.Drawing.Color.Yellow;
+            this.label1.Location = new System.Drawing.Point(239, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 25);
+            this.label1.TabIndex = 34;
+            this.label1.Text = "weight";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1650, 880);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.changeLengthLabel);
             this.Controls.Add(this.deleteElementLabel);
@@ -755,6 +776,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panelChart;
         private System.Windows.Forms.Button exitButton2;
+        private System.Windows.Forms.Label label1;
     }
 }
 
