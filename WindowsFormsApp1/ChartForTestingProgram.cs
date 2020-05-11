@@ -344,9 +344,9 @@ namespace WindowsFormsApp1
             Theme = MetroThemeStyle.Dark;
             Style = MetroColorStyle.Yellow;
             TopMost = true;
-            Width = 1500;
+            Width = 1450;
             Height = 800;
-            chart.Width = Consts.ChartTestingFormWidth - 220;
+            chart.Width = Consts.ChartTestingFormWidth - 170;
             chart.Height = Consts.ChartTestingFormHeight;
 
             field.Location = new Point(0, 5);
@@ -536,6 +536,11 @@ namespace WindowsFormsApp1
                     }
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

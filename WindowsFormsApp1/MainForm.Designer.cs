@@ -363,7 +363,7 @@
             this.testingProgrammButton.Padding = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.testingProgrammButton.Size = new System.Drawing.Size(211, 60);
             this.testingProgrammButton.TabIndex = 26;
-            this.testingProgrammButton.Text = "Test programm";
+            this.testingProgrammButton.Text = "Test program";
             this.testingProgrammButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.testingProgrammButton.UseVisualStyleBackColor = false;
             this.testingProgrammButton.Click += new System.EventHandler(this.button4_Click);

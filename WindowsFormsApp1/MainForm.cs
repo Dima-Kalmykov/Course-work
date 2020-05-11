@@ -2087,7 +2087,6 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             RedrawSelectedVertex();
             HideAdjacencyMatrix();
 
@@ -2300,6 +2299,8 @@ namespace WindowsFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
+            Hide();
+            chartForm.Hide();
             mainTimer.Stop();
             timer1.Stop();
             timer2.Stop();
@@ -2374,6 +2375,8 @@ namespace WindowsFormsApp1
             Height = 665;
             field.Width = Consts.GraphPictureBoxWidth;
             field.Height = Consts.GraphPictureBoxHeight;
+
+            Activate();
         }
 
         private void CustomizeDesign()
