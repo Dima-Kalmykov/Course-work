@@ -388,7 +388,7 @@ namespace WindowsFormsApp1
 
             coefficientTrackBar.Location = new Point(Consts.CoefficientTrackBarLocationX - 30,
                                                      Consts.CoefficientTrackBarLocationY);
-            stopTestingButton.Location = new Point(Consts.StopTestingProgramButtonLocationX - 40,
+            stopTestingButton.Location = new Point(Consts.StopTestingProgramButtonLocationX - 35,
                                                    Consts.StopTestingProgramButtonLocationY);
         }
 
