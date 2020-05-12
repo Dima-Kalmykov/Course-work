@@ -705,6 +705,19 @@ namespace WindowsFormsApp1
                                 return;
                             }
 
+                            var newVertex = new Vertex(e.X, e.Y);
+
+                            if (newVertex.X >= field.Size.Width - 2 * Consts.VertexRadius ||
+                                newVertex.X <= 2 * Consts.VertexRadius ||
+                                newVertex.Y <= 2 * Consts.VertexRadius ||
+                                newVertex.Y >= field.Size.Height - 2 * Consts.VertexRadius)
+                            {
+                                RedrawSelectedVertex();
+                                myMessageBox.ShowInvalidPlace();
+                                firstPress = true;
+                                return;
+                            }
+
                             // Тогда двигаем точку и перерисовываем граф.
                             Vertex[indexVertexForMove].X = e.X;
                             Vertex[indexVertexForMove].Y = e.Y;
