@@ -552,12 +552,16 @@ namespace WindowsFormsApp1
 
                     if (res == DialogResult.OK)
                     {
-                        curForm.Show();
+
+                        label5.Focus();
 
                         foreach (var form in ListOfFormClass.chartForTestingProgramList)
                         {
-                            form.textBox1.Text = string.Empty;
+                            form.textBox1.Text = "1";
                         }
+
+                        curForm.Show();
+                        curForm.Activate();
                     }
                 }
             }

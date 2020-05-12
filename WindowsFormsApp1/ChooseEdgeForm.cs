@@ -43,6 +43,8 @@ namespace WindowsFormsApp1
         {
             IsFirstAction = false;
             WasCancel = false;
+
+            Close();
         }
 
         public (DialogResult, bool, bool) MyShowChangeLength(string caption, string text1, string text2)

@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
     {
         // Инструменты для рисования графа.
         private readonly Bitmap bitmap;
-        private  Graphics cover;
+        private Graphics cover;
         private PointF point;
         private readonly Font font;
         private readonly Brush brush;
@@ -36,7 +36,7 @@ namespace WindowsFormsApp1
             // Установка необходимых параметров
             bitmap = new Bitmap(width, height);
             cover = Graphics.FromImage(bitmap);
-            
+
             yellowPen = new Pen(Color.Yellow, Consts.WidthPen);
             orangePen = new Pen(Color.Orange, Consts.WidthPen);
             blackPen = new Pen(Color.Black, Consts.WidthPen);
@@ -500,10 +500,6 @@ namespace WindowsFormsApp1
         /// <returns> Матрица смежности </returns>
         internal double[,] SetDistanceEdge(double[,] adjMatrix)
         {
-            // Min и Max значения веса рёбер.
-            var min = 1;
-            var max = 999;
-
             // Пробегаемся по всем элементам и заполняем матрицу.
             for (int i = 0; i < adjMatrix.GetLength(0); i++)
             {
@@ -511,8 +507,7 @@ namespace WindowsFormsApp1
                 {
                     if (adjMatrix[i, j] == 1)
                         adjMatrix[i, j] =
-                            Rnd.Next(min, max) + Rnd.NextDouble() +
-                            Rnd.Next(2) * double.Epsilon;
+                            Rnd.Next(0, 10000) + Rnd.NextDouble() + double.Epsilon;
                 }
 
             }
@@ -685,7 +680,7 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Очистка холста.
         /// </summary>
-        internal void ClearField() => 
+        internal void ClearField() =>
         cover.Clear(Color.SlateGray);
 
         /// <summary>
