@@ -326,15 +326,38 @@ namespace WindowsFormsApp1
         {
             foreach (var form in forms)
             {
+                form.Height -= 60;
                 form.timerForPlotting.Stop();
                 form.mainTimer.Stop();
+                form.timerForPlotting.Stop();
+                form.mainTimer.Stop();
+
+                form.label1.Visible = false;
+                form.label2.Visible = false;
+                form.coefficientTrackBar.Visible = false;
+                form.stopTestingButton.Visible = false;
+                form.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+                form.leftButton.Visible = true;
+                form.leftMiniButton.Visible = true;
+                form.rightButton.Visible = true;
+                form.rightMiniButton.Visible = true;
+                form.textBox1.Visible = true;
+                form.exitButton.Visible = true;
             }
-            timerForPlotting.Stop();
-            mainTimer.Stop();
         }
 
         private void ChartForTestingProgram_Load(object sender, EventArgs e)
         {
+            label3.Visible = false;
+            label4.Visible = false;
+            label5.Visible = false;
+            leftButton.Visible = false;
+            leftMiniButton.Visible = false;
+            rightButton.Visible = false;
+            rightMiniButton.Visible = false;
+            textBox1.Visible = false;
+            exitButton.Visible = false;
+
             ControlBox = false;
             chart.Legends[0].BackColor = Color.SlateGray;
             chart.Series["Amount of points"].Color = Color.Yellow;
@@ -343,6 +366,7 @@ namespace WindowsFormsApp1
             chart.BackColor = Color.SlateGray;
             Theme = MetroThemeStyle.Dark;
             Style = MetroColorStyle.Yellow;
+            coefficientTrackBar.BackColor = Color.FromArgb(11, 17, 20);
             TopMost = true;
             Width = 1450;
             Height = 800;
@@ -355,18 +379,19 @@ namespace WindowsFormsApp1
 
             chart.Location = new Point(field.Width, 5);
 
-            timeLabel.Location = new Point(Consts.TimeLabelLocationX, Consts.TimeLabelLocationY);
+            timeLabel.Location = new Point(Consts.TimeLabelLocationX - 30, Consts.TimeLabelLocationY);
 
-            label1.Location = new Point(Consts.LeftValueTrackBarLocationX, Consts.LeftValueTrackBarLocationY);
-            label2.Location = new Point(Consts.RightValueTrackBarLocationX, Consts.RightValueTrackBarLocationY);
+            label1.Location = new Point(Consts.LeftValueTrackBarLocationX - 35,
+                Consts.LeftValueTrackBarLocationY - 4);
+            label2.Location = new Point(Consts.RightValueTrackBarLocationX - 25,
+                Consts.RightValueTrackBarLocationY - 4);
 
-            coefficientTrackBar.Location = new Point(Consts.CoefficientTrackBarLocationX,
+            coefficientTrackBar.Location = new Point(Consts.CoefficientTrackBarLocationX - 30,
                                                      Consts.CoefficientTrackBarLocationY);
-            stopTestingButton.Location = new Point(Consts.StopTestingProgramButtonLocationX,
+            stopTestingButton.Location = new Point(Consts.StopTestingProgramButtonLocationX - 40,
                                                    Consts.StopTestingProgramButtonLocationY);
         }
 
-        // ToDo когда останавливают испытание можно делать листать.
         private void button1_Click_1(object sender, EventArgs e)
         {
             if (ListOfFormClass.Pointer > 0)
@@ -468,7 +493,7 @@ namespace WindowsFormsApp1
             }
 
 
-            
+
 
             ListOfFormClass.Pointer = ListOfFormClass.chartForTestingProgramList.Count - 1;
             foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
@@ -489,7 +514,7 @@ namespace WindowsFormsApp1
 
         private void ChartForTestingProgram_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
+
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)

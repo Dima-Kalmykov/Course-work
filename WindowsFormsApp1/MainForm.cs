@@ -2090,6 +2090,7 @@ namespace WindowsFormsApp1
             RedrawSelectedVertex();
             HideAdjacencyMatrix();
 
+
             chartForm.chartForm.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisX.Minimum = 0;
@@ -2102,6 +2103,8 @@ namespace WindowsFormsApp1
             {
                 timer3.Stop();
                 HideAllLabel();
+                x2.Visible = true;
+                x05.Visible = true;
                 panelChart.Visible = true;
                 panel3.Visible = true;
                 drawingPanel.Visible = false;
@@ -2325,6 +2328,10 @@ namespace WindowsFormsApp1
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            x05.Visible = false;
+            x2.Visible = false;
+            x2.Location = new Point(696, 616);
+            x05.Location = new Point(123, 616);
             saveChartButton.Visible = false;
             openChartButton.Visible = false;
             testingProgrammButton.Visible = false;
@@ -2342,11 +2349,11 @@ namespace WindowsFormsApp1
 
             HideAllLabel();
             changeLengthLabel.Text = "Change edge";
-            label1.Location = new Point(55, 451);
-            drawEdgeLabel.Location = new Point(39, 112);
-            drawVertexLabel.Location = new Point(36, 222);
-            deleteElementLabel.Location = new Point(24, 343);
-            changeLengthLabel.Location = new Point(30, 431);
+            label1.Location = new Point(51, 451);
+            drawEdgeLabel.Location = new Point(36, 112);
+            drawVertexLabel.Location = new Point(33, 222);
+            deleteElementLabel.Location = new Point(20, 343);
+            changeLengthLabel.Location = new Point(26, 431);
 
             startReseachButton.Location = new Point(150, Consts.GraphPictureBoxHeight + 5);
             startReseachButton.Height = 75;
