@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea19 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend19 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series19 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.timeLabel = new System.Windows.Forms.Label();
             this.field = new System.Windows.Forms.PictureBox();
@@ -56,20 +56,20 @@
             // 
             // chart
             // 
-            chartArea19.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea19);
-            legend19.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            legend19.IsTextAutoFit = false;
-            legend19.Name = "Legend1";
-            this.chart.Legends.Add(legend19);
+            chartArea1.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea1);
+            legend1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            legend1.IsTextAutoFit = false;
+            legend1.Name = "Legend1";
+            this.chart.Legends.Add(legend1);
             this.chart.Location = new System.Drawing.Point(613, 255);
             this.chart.Name = "chart";
             this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry;
-            series19.ChartArea = "ChartArea1";
-            series19.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series19.Legend = "Legend1";
-            series19.Name = "Amount of points";
-            this.chart.Series.Add(series19);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Amount of points";
+            this.chart.Series.Add(series1);
             this.chart.Size = new System.Drawing.Size(701, 452);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
@@ -78,7 +78,7 @@
             // 
             this.timeLabel.AutoSize = true;
             this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.timeLabel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.timeLabel.ForeColor = System.Drawing.Color.Yellow;
             this.timeLabel.Location = new System.Drawing.Point(700, 740);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(50, 20);
@@ -133,8 +133,10 @@
             // leftMiniButton
             // 
             this.leftMiniButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.leftMiniButton.FlatAppearance.BorderSize = 0;
             this.leftMiniButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.leftMiniButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.leftMiniButton.ForeColor = System.Drawing.Color.Aqua;
             this.leftMiniButton.Location = new System.Drawing.Point(902, 789);
             this.leftMiniButton.Name = "leftMiniButton";
             this.leftMiniButton.Size = new System.Drawing.Size(65, 45);
@@ -146,8 +148,10 @@
             // rightMiniButton
             // 
             this.rightMiniButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rightMiniButton.FlatAppearance.BorderSize = 0;
             this.rightMiniButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rightMiniButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rightMiniButton.ForeColor = System.Drawing.Color.Aqua;
             this.rightMiniButton.Location = new System.Drawing.Point(1069, 789);
             this.rightMiniButton.Name = "rightMiniButton";
             this.rightMiniButton.Size = new System.Drawing.Size(65, 45);
@@ -159,8 +163,10 @@
             // rightButton
             // 
             this.rightButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rightButton.FlatAppearance.BorderSize = 0;
             this.rightButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rightButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rightButton.ForeColor = System.Drawing.Color.Aqua;
             this.rightButton.Location = new System.Drawing.Point(1140, 789);
             this.rightButton.Name = "rightButton";
             this.rightButton.Size = new System.Drawing.Size(65, 45);
@@ -172,8 +178,10 @@
             // leftButton
             // 
             this.leftButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.leftButton.FlatAppearance.BorderSize = 0;
             this.leftButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.leftButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.leftButton.ForeColor = System.Drawing.Color.Aqua;
             this.leftButton.Location = new System.Drawing.Point(831, 789);
             this.leftButton.Name = "leftButton";
             this.leftButton.Size = new System.Drawing.Size(65, 45);
@@ -227,9 +235,10 @@
             // exitButton
             // 
             this.exitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.exitButton.FlatAppearance.BorderSize = 0;
             this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.exitButton.ForeColor = System.Drawing.Color.White;
+            this.exitButton.ForeColor = System.Drawing.Color.Aqua;
             this.exitButton.Location = new System.Drawing.Point(941, 857);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(147, 52);
@@ -244,7 +253,7 @@
             this.stopTestingButton.FlatAppearance.BorderSize = 0;
             this.stopTestingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.stopTestingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.stopTestingButton.ForeColor = System.Drawing.Color.Gainsboro;
+            this.stopTestingButton.ForeColor = System.Drawing.Color.Aqua;
             this.stopTestingButton.Location = new System.Drawing.Point(593, 823);
             this.stopTestingButton.Name = "stopTestingButton";
             this.stopTestingButton.Size = new System.Drawing.Size(260, 105);
