@@ -66,6 +66,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChartWolfram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChartWolfram.Designer.cs">
+      <DependentUpon>ChartWolfram.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListOfFormClass.cs" />
     <Compile Include="MyMessageBox.cs">
       <SubType>Form</SubType>
@@ -73,6 +79,7 @@
     <Compile Include="MyMessageBox.Designer.cs">
       <DependentUpon>MyMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyPoint.cs" />
     <Compile Include="SpecialKindOfGraphForCheckStronglyDirection.cs" />
     <Compile Include="ChartDisplayForm.cs">
       <SubType>Form</SubType>
@@ -140,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChartForTestingProgram.resx">
       <DependentUpon>ChartForTestingProgram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChartWolfram.resx">
+      <DependentUpon>ChartWolfram.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

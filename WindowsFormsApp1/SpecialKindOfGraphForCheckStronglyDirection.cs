@@ -74,22 +74,25 @@ namespace WindowsFormsApp1
         private static bool[] used;
         private readonly List<int> comp = new List<int>();
 
-        private void Dfs(int v)
+
+
+        private void Dfs(int cur)
         {
-            used[v] = true;
-            comp.Add(v);
-            for (var i = 0; i < AdjacencyList[v].Count; i++)
+            used[cur] = true;
+            for (var i = 0; i < AdjacencyList[cur].Count; i++)
             {
-                int to = AdjacencyList[v][i];
-                if (!used[to])
+                int next = AdjacencyList[cur][i];
+                if (!used[next])
                 {
-                    Dfs(to);
+                    Dfs(next);
                 }
             }
         }
 
-        public int FindComps()
+        public int GetConnectedComponentsAmount()
         {
+            var count = 0;
+
             for (var i = 0; i < VertexCount; i++)
             {
                 used[i] = false;
@@ -99,12 +102,12 @@ namespace WindowsFormsApp1
             {
                 if (!used[i])
                 {
-                    Array.Clear(used, 0, used.Length);
                     Dfs(i);
+                    count++;
                 }
             }
 
-            return comp?.Count ?? 0;
+            return count;
         }
 
         private SpecialKindOfGraphForCheckStronglyDirection GetTranspose()

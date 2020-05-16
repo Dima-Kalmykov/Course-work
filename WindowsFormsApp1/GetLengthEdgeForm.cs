@@ -33,15 +33,31 @@ namespace WindowsFormsApp1
             GetNumberTextBox.Focus();
         }
 
-        public (DialogResult, bool, double) MyShow()
+        public (DialogResult, bool, double) MyShow(bool isAlpha = false)
         {
-            var gl = new GetLengthEdgeForm
+            if (!isAlpha)
             {
-                WasCancel = false,
-                Weight = 0
-            };
+                var gl = new GetLengthEdgeForm
+                {
+                    Text = "Get edge weight",
+                    WasCancel = false,
+                    Weight = 0,
+                    TextForUnderstandingLabel = {Text = "Enter edge weight"}
+                };
+                return (gl.ShowDialog(), gl.WasCancel, gl.Weight);
+            }
+            else
+            {
+                var gl = new GetLengthEdgeForm
+                {
+                    Text = "Get alpha value",
+                    WasCancel = false,
+                    Weight = 0,
+                    TextForUnderstandingLabel = {Text = "Enter alpha value"},
+                };
 
-            return (gl.ShowDialog(), gl.WasCancel, gl.Weight);
+                return (gl.ShowDialog(), gl.WasCancel, gl.Weight);
+            }
         }
 
         /// <summary>

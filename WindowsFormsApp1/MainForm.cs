@@ -64,6 +64,7 @@ namespace WindowsFormsApp1
 
             chooseEdgeFormForm.Owner = this;
             getEdgeLengthForm.Owner = this;
+            getEdgeLengthForm.Text = "Get edge weight";
             getRandomGraphForm.Owner = this;
             checkGraphForStronglyConnectionForm.Owner = this;
 
@@ -1895,11 +1896,18 @@ namespace WindowsFormsApp1
         private bool firstVertex = true;
 
         public float coefficient = 1;
+        List<MyPoint> pointsForComputeFormula = new List<MyPoint>();
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            chartForm.chartForm.Series["Amount of points"]
-                .Points.AddXY((int)(sp.ElapsedMilliseconds) / 1000, totalCount);
+            var xValue = (sp.ElapsedMilliseconds) / 1000;
+            var yValue = totalCount;
+
+            if (pointsForComputeFormula.All(p => p.X != xValue))
+            {
+                pointsForComputeFormula.Add(new MyPoint(xValue, yValue));
+            }
+            chartForm.chartForm.Series["Amount of points"].Points.AddXY(xValue, yValue);
         }
 
 
@@ -2103,7 +2111,6 @@ namespace WindowsFormsApp1
             RedrawSelectedVertex();
             HideAdjacencyMatrix();
 
-
             chartForm.chartForm.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
             chartForm.chartForm.ChartAreas[0].AxisX.Minimum = 0;
@@ -2176,6 +2183,7 @@ namespace WindowsFormsApp1
                 sp.Stop();
                 timers.ForEach(timer => timer.Stop());
                 StopProcessButton.Text = "Continue";
+                ShowFormula();
             }
             else
             {
@@ -2185,6 +2193,68 @@ namespace WindowsFormsApp1
                 timer2.Start();
                 timers.ForEach(timer => timer.Start());
                 StopProcessButton.Text = "Stop";
+            }
+        }
+
+        internal double alpha;
+
+        internal ChartWolfram chartWolfram;
+
+        private void SetAndShowPlotForm()
+        {
+
+            chartWolfram = new ChartWolfram();
+            chartWolfram.pictureBox1.Image = null;
+            mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
+            mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
+            //mathKernel1.Compute("Plot[f[x], {x, 0, 10}/*, PlotRange -> Full*/]");
+            mathKernel1.Compute("Plot[f[x], {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
+                                "AxesStyle -> Directive[Black, FontColor -> White], " +
+                                "Background -> Gray, " +
+                                "PlotStyle -> Orange]");
+            if (mathKernel1.Graphics.Length > 0)
+            {
+                chartWolfram.pictureBox1.Image = mathKernel1.Graphics[0];
+                chartWolfram.Show();
+                chartWolfram.Activate();
+            }
+        }
+
+        private void ShowFormula()
+        {
+            alpha = cyclomaticNumber - 1;
+
+            var (_, item2, item3) = getEdgeLengthForm.MyShow(true);
+
+            getEdgeLengthForm.WasCancel = item2;
+            getEdgeLengthForm.Weight = item3;
+
+            if (!getEdgeLengthForm.WasCancel)
+            {
+                alpha = getEdgeLengthForm.Weight;
+            }
+
+            var data = pointsForComputeFormula
+                .Distinct()
+                .Aggregate("{", (current, next) => current + ", " + next, res => res + "}")
+                .TrimStart('{', ',', ' ');
+
+            data = "data = {{" + data;
+
+            mathKernel1.Compute(data);
+            mathKernel1.Compute("formula = FindFormula[data, x] / (x^" + $"{alpha})");
+            mathKernel1.Compute("f[x_] := formula");
+            SetAndShowPlotForm();
+
+            mathKernel1.Compute("Limit[formula, x -> Infinity]");
+
+            try
+            {
+                double.Parse(mathKernel1.Result.ToString().Replace('.', ','));
+            }
+            catch (Exception e)
+            {
+
             }
         }
 
@@ -2439,6 +2509,8 @@ namespace WindowsFormsApp1
             ShowSubMenu(panel2);
         }
 
+        internal double cyclomaticNumber;
+
         private void timer3_Tick(object sender, EventArgs e)
         {
             changeLengthLabel.Visible = !ChangeEdgeLengthButton.Enabled;
@@ -2452,7 +2524,8 @@ namespace WindowsFormsApp1
             foreach (var edge in Edges)
                 graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
 
-            button8.Text = $@"Cyclomatic number: {Edges.Count - Vertex.Count + graphForCheck.FindComps()}";
+            cyclomaticNumber = Edges.Count - Vertex.Count + graphForCheck.GetConnectedComponentsAmount();
+            button8.Text = $@"Cyclomatic number: {cyclomaticNumber}";
             button7.Text = $@"Vertex: {Vertex.Count}";
             button6.Text = $@"Edges: {Edges.Count}";
         }

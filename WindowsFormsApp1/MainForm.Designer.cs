@@ -75,6 +75,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.x05 = new System.Windows.Forms.Label();
             this.x2 = new System.Windows.Forms.Label();
+            this.mathKernel1 = new Wolfram.NETLink.MathKernel();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.drawingPanel.SuspendLayout();
             this.changeParametersSubPanel.SuspendLayout();
@@ -695,6 +696,24 @@
             this.x2.TabIndex = 36;
             this.x2.Text = "2";
             // 
+            // mathKernel1
+            // 
+            this.mathKernel1.AutoCloseLink = true;
+            this.mathKernel1.CaptureGraphics = true;
+            this.mathKernel1.CaptureMessages = true;
+            this.mathKernel1.CapturePrint = true;
+            this.mathKernel1.GraphicsFormat = "Automatic";
+            this.mathKernel1.GraphicsHeight = 0;
+            this.mathKernel1.GraphicsResolution = 0;
+            this.mathKernel1.GraphicsWidth = 0;
+            this.mathKernel1.HandleEvents = true;
+            this.mathKernel1.Input = null;
+            this.mathKernel1.Link = null;
+            this.mathKernel1.LinkArguments = null;
+            this.mathKernel1.PageWidth = 0;
+            this.mathKernel1.ResultFormat = Wolfram.NETLink.MathKernel.ResultFormatType.OutputForm;
+            this.mathKernel1.UseFrontEnd = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -780,6 +799,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label x05;
         private System.Windows.Forms.Label x2;
+        private Wolfram.NETLink.MathKernel mathKernel1;
     }
 }
 
