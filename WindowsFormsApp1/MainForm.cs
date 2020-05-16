@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using MetroFramework;
 using Timer = System.Windows.Forms.Timer;
@@ -2175,14 +2176,15 @@ namespace WindowsFormsApp1
         {
             requireTime = sp.ElapsedMilliseconds;
 
-            if (StopProcessButton.Text == "Stop")
+            if (StopProcessButton.Text == "Get main part")
             {
                 mainTimer.Stop();
                 timer1.Stop();
                 timer2.Stop();
                 sp.Stop();
                 timers.ForEach(timer => timer.Stop());
-                StopProcessButton.Text = "Continue";
+                StopProcessButton.Text = "Continue testing";
+                StopProcessButton.Enabled = false;
                 ShowFormula();
             }
             else
@@ -2192,7 +2194,7 @@ namespace WindowsFormsApp1
                 timer1.Start();
                 timer2.Start();
                 timers.ForEach(timer => timer.Start());
-                StopProcessButton.Text = "Stop";
+                StopProcessButton.Text = "Get main part";
             }
         }
 
@@ -2203,15 +2205,33 @@ namespace WindowsFormsApp1
         private void SetAndShowPlotForm()
         {
 
-            chartWolfram = new ChartWolfram();
-            chartWolfram.pictureBox1.Image = null;
+            chartWolfram = new ChartWolfram { pictureBox1 = { Image = null } };
             mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
             mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
-            //mathKernel1.Compute("Plot[f[x], {x, 0, 10}/*, PlotRange -> Full*/]");
             mathKernel1.Compute("Plot[f[x], {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
                                 "AxesStyle -> Directive[Black, FontColor -> White], " +
                                 "Background -> Gray, " +
                                 "PlotStyle -> Orange]");
+
+            if (mathKernel1.Graphics.Length > 0)
+            {
+                chartWolfram.pictureBox1.Image = mathKernel1.Graphics[0];
+                chartWolfram.Show();
+                chartWolfram.Activate();
+            }
+        }
+
+        private void SetAndShowPlotForm2(double value)
+        {
+            chartWolfram = new ChartWolfram { pictureBox1 = { Image = null } };
+            mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
+            mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
+            mathKernel1.Compute($"g[x_] := {value}*x^{alpha}");
+            mathKernel1.Compute("Plot[{f[x], g[x]}, {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
+                                "AxesStyle -> Directive[Black, FontColor -> White], " +
+                                "Background -> Gray, " +
+                                "PlotStyle -> {Orange, Yellow}]");
+
             if (mathKernel1.Graphics.Length > 0)
             {
                 chartWolfram.pictureBox1.Image = mathKernel1.Graphics[0];
@@ -2244,18 +2264,24 @@ namespace WindowsFormsApp1
             mathKernel1.Compute(data);
             mathKernel1.Compute("formula = FindFormula[data, x] / (x^" + $"{alpha})");
             mathKernel1.Compute("f[x_] := formula");
-            SetAndShowPlotForm();
-
             mathKernel1.Compute("Limit[formula, x -> Infinity]");
 
             try
             {
-                double.Parse(mathKernel1.Result.ToString().Replace('.', ','));
-            }
-            catch (Exception e)
-            {
+                var value = double.Parse(mathKernel1.Result.ToString().Replace('.', ','));
+                if (Math.Abs(value) < double.Epsilon)
+                {
+                    throw new ArgumentException();
+                }
 
+                SetAndShowPlotForm2(value);
             }
+            catch (Exception)
+            {
+                SetAndShowPlotForm();
+            }
+
+            StopProcessButton.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -2538,11 +2564,6 @@ namespace WindowsFormsApp1
         private void button1_Click_1(object sender, EventArgs e)
         {
             ShowSubMenu(panelChart);
-        }
-
-        private void exitButton2_Click(object sender, EventArgs e)
-        {
-            Close();
         }
 
         private void exitButton2_Click_1(object sender, EventArgs e)

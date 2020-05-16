@@ -280,7 +280,7 @@
             this.StopProcessButton.Name = "StopProcessButton";
             this.StopProcessButton.Size = new System.Drawing.Size(211, 60);
             this.StopProcessButton.TabIndex = 21;
-            this.StopProcessButton.Text = "Stop";
+            this.StopProcessButton.Text = "Get main part";
             this.StopProcessButton.UseVisualStyleBackColor = false;
             this.StopProcessButton.Click += new System.EventHandler(this.StopProcessButton_Click);
             // 
@@ -765,7 +765,7 @@
         private System.Windows.Forms.Button StopDrawingButton;
         private System.Windows.Forms.Button ShowOrHideAdjMatrix;
         private System.Windows.Forms.Button startReseachButton;
-        private System.Windows.Forms.Button StopProcessButton;
+        public System.Windows.Forms.Button StopProcessButton;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Button saveChartButton;
