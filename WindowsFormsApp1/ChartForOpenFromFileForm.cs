@@ -4,14 +4,14 @@ using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class Form1 : MetroFramework.Forms.MetroForm
+    public partial class ChartForOpenFromFileForm : MetroFramework.Forms.MetroForm
     {
-        public Form1()
+        public ChartForOpenFromFileForm()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, System.EventArgs e)
+        private void FormLoad(object sender, System.EventArgs e)
         {
             Style = MetroColorStyle.Magenta;
             chart1.Legends[0].BackColor = Color.SlateGray;

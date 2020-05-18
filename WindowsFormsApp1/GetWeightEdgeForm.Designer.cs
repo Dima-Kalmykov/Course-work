@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class GetLengthEdgeForm
+    partial class GetWeightEdgeForm
     {
         /// <summary>
         /// Required designer variable.
@@ -63,11 +63,11 @@
             this.ConfirmButton.ForeColor = System.Drawing.Color.Aqua;
             this.ConfirmButton.Location = new System.Drawing.Point(31, 191);
             this.ConfirmButton.Name = "ConfirmButton";
-            this.ConfirmButton.Size = new System.Drawing.Size(135, 50);
+            this.ConfirmButton.Size = new System.Drawing.Size(135, 55);
             this.ConfirmButton.TabIndex = 2;
             this.ConfirmButton.Text = "Continue";
             this.ConfirmButton.UseVisualStyleBackColor = false;
-            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButtonClick);
             // 
             // CancelButton
             // 
@@ -78,11 +78,11 @@
             this.CancelButton.ForeColor = System.Drawing.Color.Aqua;
             this.CancelButton.Location = new System.Drawing.Point(183, 191);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(135, 50);
+            this.CancelButton.Size = new System.Drawing.Size(135, 55);
             this.CancelButton.TabIndex = 3;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelButton.Click += new System.EventHandler(this.CancelButtonClick);
             // 
             // GetLengthEdgeForm
             // 
@@ -95,7 +95,7 @@
             this.Controls.Add(this.TextForUnderstandingLabel);
             this.Name = "GetLengthEdgeForm";
             this.Text = "Get edge weight";
-            this.Load += new System.EventHandler(this.GetLengthEdgeForm_Load);
+            this.Load += new System.EventHandler(this.FormLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 

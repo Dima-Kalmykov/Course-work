@@ -319,7 +319,7 @@
             this.ConfirmButton.TabIndex = 1;
             this.ConfirmButton.Text = "Continue";
             this.ConfirmButton.UseVisualStyleBackColor = false;
-            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmationButtonClick);
             // 
             // CancelButton
             // 
@@ -334,7 +334,7 @@
             this.CancelButton.TabIndex = 2;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelButton.Click += new System.EventHandler(this.CancelButtonClick);
             // 
             // GetRandomGraphForm
             // 
@@ -346,7 +346,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "GetRandomGraphForm";
             this.Text = "Random graph";
-            this.Load += new System.EventHandler(this.GetRandomGraphForm_Load);
+            this.Load += new System.EventHandler(this.FormLoad);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

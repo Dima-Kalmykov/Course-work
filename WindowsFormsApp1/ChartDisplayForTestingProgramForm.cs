@@ -8,26 +8,26 @@ using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class ChartForTestingProgram : MetroFramework.Forms.MetroForm
+    public partial class ChartDisplayForTestingProgramForm : MetroFramework.Forms.MetroForm
     {
-        public ChartForTestingProgram(MainForm mf, int formNumber, List<ChartForTestingProgram> forms)
+        public ChartDisplayForTestingProgramForm(MainForm mf, int formNumber, List<ChartDisplayForTestingProgramForm> forms)
         {
             InitializeComponent();
             label5.Location = new Point(2000, 2000);
             textBox1.Text = string.Empty;
             FormCounter = formNumber;
-            textBox1.KeyPress += textBox1_KeyPress;
+            textBox1.KeyPress += FormNumberTextBoxKeyPress;
             this.forms = forms;
             this.forms.Add(this);
-            ListOfFormClass.SetSwitcherTools(this.forms, formNumber);
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            ListOfFormsForTestingProgram.SetSwitcherTools(this.forms, formNumber);
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                form.label3.Text = ListOfFormClass.Pointer.ToString();
+                form.label3.Text = ListOfFormsForTestingProgram.Pointer.ToString();
             }
 
             label4.Text = $"Number form: {formNumber}";
             var res = $"Array: ";
-            res = ListOfFormClass.chartForTestingProgramList
+            res = ListOfFormsForTestingProgram.ChartFormsForTestingProgram
                 .Aggregate(res, (current, form) => current + form.label4 + "    ");
 
             label5.Text = res;
@@ -36,20 +36,97 @@ namespace WindowsFormsApp1
         }
 
         public int FormCounter;
-        private List<ChartForTestingProgram> forms;
-        private ToolsForDrawingGraph toolsForDrawing;
+        private readonly List<ChartDisplayForTestingProgramForm> forms;
+        private ToolsForDrawing toolsForDrawing;
         private readonly List<Stopwatch> timers = new List<Stopwatch>();
         private readonly List<Edge> points = new List<Edge>();
-        private readonly Stopwatch pastTimeTimer = new Stopwatch();
-        private bool firstVertex;
+        private readonly Stopwatch currentTimeOfTestingTimer = new Stopwatch();
+        private bool isFirstVertex;
         private Timer mainTimer = new Timer();
         private MainForm mainForm;
 
-        private List<Vertex> vertex = new List<Vertex>();
+        private long requireTimeForTesting;
+        private List<Vertex> vertices = new List<Vertex>();
         private List<Edge> edges = new List<Edge>();
 
         private float coefficient;
         private int totalCountOfPoints;
+
+        public void SetAllTools(MainForm mf)
+        {
+            SetUpMainTools(mf);
+
+            SetUpChart();
+
+            foreach (var item in vertices)
+            {
+                item.HasPoint = false;
+            }
+
+            vertices[0].HasPoint = true;
+            isFirstVertex = true;
+
+            edges = toolsForDrawing.GetOtherGraphWithGivenAmountOfEdgesAndVertex(vertices, edges);
+
+            SetUpTimers();
+        }
+        public void MainTick(List<Edge>[] adjacencyList)
+        {
+            timeLabel.Text = $@"Time in millisecond: {currentTimeOfTestingTimer.ElapsedMilliseconds}";
+            // Если готова выпустить точку.
+            var count = points.Count;
+            coefficient = (float)(coefficientTrackBar.Value / 10.0);
+
+            for (var i = 0; i < vertices.Count; i++)
+            {
+                if (vertices[i].HasPoint)
+                {
+                    vertices[i].HasPoint = false;
+
+                    if (isFirstVertex)
+                    {
+                        isFirstVertex = false;
+                        totalCountOfPoints += adjacencyList[i].Count;
+                    }
+                    else
+                    {
+                        totalCountOfPoints += adjacencyList[i].Count - 1;
+                    }
+
+                    points.AddRange(adjacencyList[i]);
+
+                    timers.AddRange(adjacencyList[i].ConvertAll(el => new Stopwatch()));
+                }
+            }
+
+            for (var i = count; i < timers.Count; i++)
+            {
+                timers[i].Start();
+            }
+
+            toolsForDrawing.DrawFullGraph(edges, vertices);
+
+            for (var i = 0; i < points.Count; i++)
+            {
+                if (timers[i].ElapsedMilliseconds * coefficient > points[i].Weight * 1000)
+                {
+                    vertices[points[i].Ver2].HasPoint = true;
+                    points.RemoveAt(i);
+                    timers.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
+                PointF point = GetPoint(vertices[points[i].Ver1],
+                    vertices[points[i].Ver2], points[i].Weight, timers[i]);
+
+                toolsForDrawing.DrawPoint(point.X, point.Y);
+
+                field.Image = toolsForDrawing.GetBitmap();
+            }
+
+            field.Image = toolsForDrawing.GetBitmap();
+        }
 
         private void SetUpChart()
         {
@@ -62,37 +139,18 @@ namespace WindowsFormsApp1
         private void SetUpMainTools(MainForm mf)
         {
             mainForm = mf;
-            vertex = mf.Vertex.GetRange(0, mf.Vertex.Count);
+            vertices = mf.Vertex.GetRange(0, mf.Vertex.Count);
             edges = mf.Edges.GetRange(0, mf.Edges.Count);
             coefficient = mf.coefficient;
             toolsForDrawing = mf.ToolsForDrawing;
-            requireTime = mf.requireTime;
-        }
-
-        public void SetAllTools(MainForm mf)
-        {
-            SetUpMainTools(mf);
-
-            SetUpChart();
-
-            foreach (var item in vertex)
-            {
-                item.HasPoint = false;
-            }
-
-            vertex[0].HasPoint = true;
-            firstVertex = true;
-
-            edges = toolsForDrawing.GetOtherGraphWithGivenAmountOfEdgesAndVertex(vertex, edges);
-
-            SetUpTimers();
+            requireTimeForTesting = mf.requireTimeForTesting;
         }
 
         private void SetUpTimers()
         {
-            var listArr = new List<Edge>[vertex.Count];
+            var listArr = new List<Edge>[vertices.Count];
 
-            for (var i = 0; i < vertex.Count; i++)
+            for (var i = 0; i < vertices.Count; i++)
             {
                 List<Edge> curEdges = edges.Where(el => el.Ver1 == i).ToList();
                 listArr[i] = new List<Edge>();
@@ -102,75 +160,17 @@ namespace WindowsFormsApp1
             RunTimers(listArr);
         }
 
-        private void RunTimers(List<Edge>[] listArr)
+        private void RunTimers(List<Edge>[] adjacencyList)
         {
             mainTimer = new Timer { Interval = 2 };
-            mainTimer.Tick += (x, y) => MainTick(listArr);
+            mainTimer.Tick += (x, y) => MainTick(adjacencyList);
             mainTimer.Start();
 
 
 
             timerForPlotting.Start();
-            pastTimeTimer.Start();
+            currentTimeOfTestingTimer.Start();
             Show();
-        }
-
-        public void MainTick(List<Edge>[] listArr)
-        {
-            timeLabel.Text = $@"Time in millisecond: {pastTimeTimer.ElapsedMilliseconds}";
-            // Если готова выпустить точку.
-            var count = points.Count;
-            coefficient = (float)(coefficientTrackBar.Value / 10.0);
-
-            for (var i = 0; i < vertex.Count; i++)
-            {
-                if (vertex[i].HasPoint)
-                {
-                    vertex[i].HasPoint = false;
-
-                    if (firstVertex)
-                    {
-                        firstVertex = false;
-                        totalCountOfPoints += listArr[i].Count;
-                    }
-                    else
-                    {
-                        totalCountOfPoints += listArr[i].Count - 1;
-                    }
-
-                    points.AddRange(listArr[i]);
-
-                    timers.AddRange(listArr[i].ConvertAll(el => new Stopwatch()));
-                }
-            }
-
-            for (var i = count; i < timers.Count; i++)
-            {
-                timers[i].Start();
-            }
-
-            toolsForDrawing.DrawFullGraph(edges, vertex);
-
-            for (var i = 0; i < points.Count; i++)
-            {
-                if (timers[i].ElapsedMilliseconds * coefficient > points[i].Weight * 1000)
-                {
-                    vertex[points[i].Ver2].HasPoint = true;
-                    points.RemoveAt(i);
-                    timers.RemoveAt(i);
-                    i--;
-                    continue;
-                }
-
-                PointF point = GetPoint(vertex[points[i].Ver1],
-                    vertex[points[i].Ver2], points[i].Weight, timers[i]);
-
-                toolsForDrawing.DrawPoint(point.X, point.Y);
-
-                field.Image = toolsForDrawing.GetBitmap();
-            }
-
-            field.Image = toolsForDrawing.GetBitmap();
         }
 
         private PointF GetPoint(Vertex ver1, Vertex ver2, double allTime, Stopwatch timer)
@@ -304,25 +304,23 @@ namespace WindowsFormsApp1
             return new PointF(x, y);
         }
 
-        private long requireTime;
-
-        private void TimerForPlotting_Tick(object sender, EventArgs e)
+        private void TimerForPlottingTick(object sender, EventArgs e)
         {
-            if (pastTimeTimer.ElapsedMilliseconds > requireTime)
+            if (currentTimeOfTestingTimer.ElapsedMilliseconds > requireTimeForTesting)
             {
                 timerForPlotting.Stop();
                 mainTimer.Stop();
                 Hide();
-                var _ = new ChartForTestingProgram(mainForm, ++FormCounter, forms);
+                var _ = new ChartDisplayForTestingProgramForm(mainForm, ++FormCounter, forms);
                 return;
             }
 
-            var xValue = (int)pastTimeTimer.ElapsedMilliseconds / 1000;
+            var xValue = (int)currentTimeOfTestingTimer.ElapsedMilliseconds / 1000;
 
             chart.Series["Amount of points"].Points.AddXY(xValue, totalCountOfPoints);
         }
 
-        private void StopTestingButton_Click(object sender, EventArgs e)
+        private void StopTestingButtonClick(object sender, EventArgs e)
         {
             foreach (var form in forms)
             {
@@ -336,7 +334,7 @@ namespace WindowsFormsApp1
                 form.label2.Visible = false;
                 form.coefficientTrackBar.Visible = false;
                 form.stopTestingButton.Visible = false;
-                form.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+                form.textBox1.Text = (ListOfFormsForTestingProgram.Pointer + 1).ToString();
                 form.leftButton.Visible = true;
                 form.leftMiniButton.Visible = true;
                 form.rightButton.Visible = true;
@@ -346,7 +344,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void ChartForTestingProgram_Load(object sender, EventArgs e)
+        private void ChartForTestingProgramLoad(object sender, EventArgs e)
         {
             label3.Visible = false;
             label4.Visible = false;
@@ -392,94 +390,88 @@ namespace WindowsFormsApp1
                                                    Consts.StopTestingProgramButtonLocationY);
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void LeftMiniButtonClick(object sender, EventArgs e)
         {
-            if (ListOfFormClass.Pointer > 0)
+            if (ListOfFormsForTestingProgram.Pointer > 0)
             {
-                ListOfFormClass.Pointer--;
+                ListOfFormsForTestingProgram.Pointer--;
             }
             else
             {
                 return;
             }
 
-            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            foreach (var chartForTestingProgram in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                chartForTestingProgram.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+                chartForTestingProgram.textBox1.Text = (ListOfFormsForTestingProgram.Pointer + 1).ToString();
             }
 
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                form.label3.Text = ListOfFormClass.Pointer.ToString();
+                form.label3.Text = ListOfFormsForTestingProgram.Pointer.ToString();
             }
 
             HideAllForms();
-            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Show();
-            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Activate();
+            ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer].Show();
+            ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer].Activate();
         }
-
 
         private void HideAllForms()
         {
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
                 form.Hide();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void RightMiniButtonClick(object sender, EventArgs e)
         {
-            if (ListOfFormClass.Pointer < ListOfFormClass.chartForTestingProgramList.Count - 1)
+            if (ListOfFormsForTestingProgram.Pointer < ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count - 1)
             {
-                ListOfFormClass.Pointer++;
+                ListOfFormsForTestingProgram.Pointer++;
             }
             else
             {
                 return;
             }
 
-            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            foreach (var chartForTestingProgram in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                chartForTestingProgram.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+                chartForTestingProgram.textBox1.Text = (ListOfFormsForTestingProgram.Pointer + 1).ToString();
             }
 
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                form.label3.Text = ListOfFormClass.Pointer.ToString();
+                form.label3.Text = ListOfFormsForTestingProgram.Pointer.ToString();
             }
 
             HideAllForms();
 
-            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Show();
-            ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer].Activate();
+            ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer].Show();
+            ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer].Activate();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void LeftButtonClick(object sender, EventArgs e)
         {
-            Environment.Exit(0);
-        }
+            ListOfFormsForTestingProgram.Pointer = 0;
 
-        private void leftButton_Click(object sender, EventArgs e)
-        {
-            ListOfFormClass.Pointer = 0;
-
-            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            foreach (var chartForTestingProgram in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
                 chartForTestingProgram.textBox1.Text = "1";
             }
 
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                form.label3.Text = ListOfFormClass.Pointer.ToString();
+                form.label3.Text = ListOfFormsForTestingProgram.Pointer.ToString();
             }
 
-            ListOfFormClass.chartForTestingProgramList[0].Show();
-            ListOfFormClass.chartForTestingProgramList[0].Activate();
+            ListOfFormsForTestingProgram.ChartFormsForTestingProgram[0].Show();
+            ListOfFormsForTestingProgram.ChartFormsForTestingProgram[0].Activate();
         }
 
-        private void rightButton_Click(object sender, EventArgs e)
+        private void RightButtonClick(object sender, EventArgs e)
         {
-            var lastForm = ListOfFormClass.chartForTestingProgramList.LastOrDefault();
+            var lastForm = ListOfFormsForTestingProgram.ChartFormsForTestingProgram.LastOrDefault();
 
             if (lastForm is null)
             {
@@ -487,23 +479,23 @@ namespace WindowsFormsApp1
             }
 
 
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                form.label3.Text = ListOfFormClass.Pointer.ToString();
+                form.label3.Text = ListOfFormsForTestingProgram.Pointer.ToString();
             }
 
 
 
 
-            ListOfFormClass.Pointer = ListOfFormClass.chartForTestingProgramList.Count - 1;
-            foreach (var chartForTestingProgram in ListOfFormClass.chartForTestingProgramList)
+            ListOfFormsForTestingProgram.Pointer = ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count - 1;
+            foreach (var chartForTestingProgram in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                chartForTestingProgram.textBox1.Text = (ListOfFormClass.Pointer + 1).ToString();
+                chartForTestingProgram.textBox1.Text = (ListOfFormsForTestingProgram.Pointer + 1).ToString();
             }
 
-            foreach (var form in ListOfFormClass.chartForTestingProgramList)
+            foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
             {
-                form.label3.Text = ListOfFormClass.Pointer.ToString();
+                form.label3.Text = ListOfFormsForTestingProgram.Pointer.ToString();
             }
 
             HideAllForms();
@@ -512,14 +504,9 @@ namespace WindowsFormsApp1
             lastForm.Activate();
         }
 
-        private void ChartForTestingProgram_KeyPress(object sender, KeyPressEventArgs e)
+        private void FormNumberTextBoxKeyPress(object sender, KeyPressEventArgs e)
         {
-
-        }
-
-        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            var curForm = ListOfFormClass.chartForTestingProgramList[ListOfFormClass.Pointer];
+            var curForm = ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer];
 
             if (curForm.textBox1.Focused && e.KeyChar == (char)Keys.Enter)
             {
@@ -528,34 +515,34 @@ namespace WindowsFormsApp1
                     var point = int.Parse(textBox1.Text);
                     point--;
 
-                    if (point > ListOfFormClass.chartForTestingProgramList.Count ||
+                    if (point > ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count ||
                         point < 0)
                     {
                         throw new ArgumentOutOfRangeException();
                     }
 
-                    ListOfFormClass.Pointer = point;
-                    foreach (var form in ListOfFormClass.chartForTestingProgramList)
+                    ListOfFormsForTestingProgram.Pointer = point;
+                    foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
                     {
                         form.textBox1.Text = (point + 1).ToString();
                     }
                     HideAllForms();
-                    ListOfFormClass.chartForTestingProgramList[point].Show();
-                    ListOfFormClass.chartForTestingProgramList[point].Activate();
+                    ListOfFormsForTestingProgram.ChartFormsForTestingProgram[point].Show();
+                    ListOfFormsForTestingProgram.ChartFormsForTestingProgram[point].Activate();
                 }
                 catch (Exception)
                 {
                     label5.Focus();
                     HideAllForms();
                     var ms = new MyMessageBox();
-                    var res = ms.ShowPlot(1, ListOfFormClass.chartForTestingProgramList.Count);
+                    var res = ms.ShowPlot(1, ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count);
 
                     if (res == DialogResult.OK)
                     {
 
                         label5.Focus();
 
-                        foreach (var form in ListOfFormClass.chartForTestingProgramList)
+                        foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
                         {
                             form.textBox1.Text = "1";
                         }
@@ -567,7 +554,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ExitButtonClick(object sender, EventArgs e)
         {
             Environment.Exit(0);
         }

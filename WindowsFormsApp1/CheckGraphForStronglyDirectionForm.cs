@@ -9,19 +9,19 @@ namespace WindowsFormsApp1
     /// Форма оповещения пользователя о сильносвязности графа,
     /// и предлагающая варианты развития событий.
     /// </summary>
-    public partial class CheckGraphForStronglyConnectionForm : MetroFramework.Forms.MetroForm
+    public partial class CheckGraphForStronglyDirectionForm : MetroFramework.Forms.MetroForm
     {
         // Флаг для определения того, нужно генерировать граф, или нет.
         internal bool MustBeGenerated;
 
-        internal CheckGraphForStronglyConnectionForm()
+        internal CheckGraphForStronglyDirectionForm()
         {
             InitializeComponent();
         }
 
         public (DialogResult, bool) MyShow()
         {
-            var cf = new CheckGraphForStronglyConnectionForm
+            var cf = new CheckGraphForStronglyDirectionForm
             {
                 Text = "Warning", 
                 Caption = {Text = "Graph is not strongly directed"},
@@ -38,7 +38,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GenerateGraphButton_Click(object sender, EventArgs e)
+        private void GenerateGraphButtonClick(object sender, EventArgs e)
         {
             MustBeGenerated = true;
             Close();
@@ -49,7 +49,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ContinueButton_Click(object sender, EventArgs e)
+        private void ContinueButtonClick(object sender, EventArgs e)
         {
             MustBeGenerated = false;
             Close();
@@ -60,7 +60,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckGraphForStronglyConnection_Load(object sender, EventArgs e)
+        private void FormLoad(object sender, EventArgs e)
         {
             GenerateGraphButton.ForeColor = Color.Orange;
             ContinueButton.ForeColor = Color.Orange;

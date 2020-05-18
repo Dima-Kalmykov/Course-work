@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetroFramework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -6,9 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using MetroFramework;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WindowsFormsApp1
@@ -17,20 +16,22 @@ namespace WindowsFormsApp1
     {
         // Диалоговые формы.
         private readonly ChooseEdgeForm chooseEdgeFormForm = new ChooseEdgeForm();
-        private readonly GetLengthEdgeForm getEdgeLengthForm = new GetLengthEdgeForm();
+        private readonly GetWeightEdgeForm getEdgeLengthForm = new GetWeightEdgeForm();
         private readonly GetRandomGraphForm getRandomGraphForm = new GetRandomGraphForm();
 
-        private readonly CheckGraphForStronglyConnectionForm checkGraphForStronglyConnectionForm =
-            new CheckGraphForStronglyConnectionForm();
+        private readonly CheckGraphForStronglyDirectionForm checkGraphForStronglyConnectionForm =
+            new CheckGraphForStronglyDirectionForm();
 
         private readonly ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
         private readonly Chart chartForm = new Chart();
-        private readonly Form1 chartDisplay = new Form1();
+        private readonly ChartForOpenFromFileForm chartDisplay = new ChartForOpenFromFileForm();
 
         private readonly MyMessageBox myMessageBox = new MyMessageBox();
 
+        public long requireTimeForTesting;
+
         // Инструменты для рисования.
-        public ToolsForDrawingGraph ToolsForDrawing;
+        public ToolsForDrawing ToolsForDrawing;
 
         // Списки смежности.
         public List<Vertex> Vertex;
@@ -53,13 +54,35 @@ namespace WindowsFormsApp1
         // Индекс вершины, которая переносится.
         private int indexVertexForMove = -1;
 
+        private bool responseSC;
+
+        private int totalCount;
+        private bool firstVertex = true;
+
+        public float coefficient = 1;
+        List<MyPoint> pointsForComputeFormula = new List<MyPoint>();
+
+        private readonly List<Stopwatch> timers = new List<Stopwatch>();
+        private readonly List<Edge> points = new List<Edge>();
+
+        private bool clickContinue;
+        private Timer mainTimer = new Timer();
+        Stopwatch sp = new Stopwatch();
+
+        private static StringBuilder chartData = new StringBuilder("Time;Amount\n");
+        private int seconds;
+
+        internal double alpha;
+
+        internal DisplayMainPartByTimeForm chartWolfram;
+
         internal MainForm()
         {
             // Устанавливаем необходимые параметры.
             InitializeComponent();
             Theme = MetroThemeStyle.Light;
             Style = MetroColorStyle.Green;
-            ToolsForDrawing = new ToolsForDrawingGraph(Consts.GraphPictureBoxWidth, Consts.GraphPictureBoxHeight);
+            ToolsForDrawing = new ToolsForDrawing(Consts.GraphPictureBoxWidth, Consts.GraphPictureBoxHeight);
             Vertex = new List<Vertex>();
             Edges = new List<Edge>();
 
@@ -309,8 +332,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        private bool responseSC;
-
         /// <summary>
         /// Нажатие на кнопку "Сгенерировать граф".
         /// </summary>
@@ -329,14 +350,14 @@ namespace WindowsFormsApp1
             //getRandomGraphForm.ShowDialog();
 
             var res = getRandomGraphForm.MyShow();
-            getRandomGraphForm.cancelGraph = res.Item2;
-            getRandomGraphForm.amount = res.Item3;
+            getRandomGraphForm.CanceledGeneration = res.Item2;
+            getRandomGraphForm.VertexAmount = res.Item3;
 
             // Если нажали отмену, то ничего не происходит.
-            if (!getRandomGraphForm.cancelGraph)
+            if (!getRandomGraphForm.CanceledGeneration)
             {
                 // Количество вершин.
-                int size = getRandomGraphForm.amount;
+                int size = getRandomGraphForm.VertexAmount;
 
                 ToolsForDrawing.ClearField();
 
@@ -767,11 +788,11 @@ namespace WindowsFormsApp1
                                 //getEdgeLengthForm.ShowDialog();
                                 var result = getEdgeLengthForm.MyShow();
 
-                                getEdgeLengthForm.WasCancel = result.Item2;
+                                getEdgeLengthForm.WasCanceled = result.Item2;
                                 getEdgeLengthForm.Weight = result.Item3;
 
                                 // Если мы не нажади отмену, то меняем вес.
-                                if (!getEdgeLengthForm.WasCancel)
+                                if (!getEdgeLengthForm.WasCanceled)
                                 {
                                     Edges[i].Weight = getEdgeLengthForm.Weight;
                                     PrintAdjMatrix();
@@ -819,10 +840,10 @@ namespace WindowsFormsApp1
                                             $"Change edge weight from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
                                             );
 
-                                        chooseEdgeFormForm.WasCancel = res.Item2;
+                                        chooseEdgeFormForm.WasCanceled = res.Item2;
                                         chooseEdgeFormForm.IsFirstAction = res.Item3;
                                         // Если не отменили изменение длины, то меняем.
-                                        if (!chooseEdgeFormForm.WasCancel)
+                                        if (!chooseEdgeFormForm.WasCanceled)
                                         {
                                             if (chooseEdgeFormForm.IsFirstAction)
                                             {
@@ -830,10 +851,10 @@ namespace WindowsFormsApp1
 
                                                 var result1 = getEdgeLengthForm.MyShow();
 
-                                                getEdgeLengthForm.WasCancel = result1.Item2;
+                                                getEdgeLengthForm.WasCanceled = result1.Item2;
                                                 getEdgeLengthForm.Weight = result1.Item3;
 
-                                                if (!getEdgeLengthForm.WasCancel)
+                                                if (!getEdgeLengthForm.WasCanceled)
                                                 {
                                                     Edges[i].Weight = getEdgeLengthForm.Weight;
 
@@ -848,9 +869,9 @@ namespace WindowsFormsApp1
                                             //getEdgeLengthForm.ShowDialog();
                                             var result = getEdgeLengthForm.MyShow();
 
-                                            getEdgeLengthForm.WasCancel = result.Item2;
+                                            getEdgeLengthForm.WasCanceled = result.Item2;
                                             getEdgeLengthForm.Weight = result.Item3;
-                                            if (!getEdgeLengthForm.WasCancel)
+                                            if (!getEdgeLengthForm.WasCanceled)
                                             {
                                                 for (int j = i; j < Edges.Count; j++)
                                                 {
@@ -876,9 +897,9 @@ namespace WindowsFormsApp1
                                         //getEdgeLengthForm.ShowDialog();
                                         var result = getEdgeLengthForm.MyShow();
 
-                                        getEdgeLengthForm.WasCancel = result.Item2;
+                                        getEdgeLengthForm.WasCanceled = result.Item2;
                                         getEdgeLengthForm.Weight = result.Item3;
-                                        if (!getEdgeLengthForm.WasCancel)
+                                        if (!getEdgeLengthForm.WasCanceled)
                                         {
                                             Edges[i].Weight = getEdgeLengthForm.Weight;
 
@@ -927,20 +948,20 @@ namespace WindowsFormsApp1
                                             $"Change edge weight from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
                                         );
 
-                                        chooseEdgeFormForm.WasCancel = res.Item2;
+                                        chooseEdgeFormForm.WasCanceled = res.Item2;
                                         chooseEdgeFormForm.IsFirstAction = res.Item3;
 
                                         // Если не отменили, то меняем длину. 
-                                        if (!chooseEdgeFormForm.WasCancel)
+                                        if (!chooseEdgeFormForm.WasCanceled)
                                         {
                                             if (chooseEdgeFormForm.IsFirstAction)
                                             {
                                                 var result2 = getEdgeLengthForm.MyShow();
 
-                                                getEdgeLengthForm.WasCancel = result2.Item2;
+                                                getEdgeLengthForm.WasCanceled = result2.Item2;
                                                 getEdgeLengthForm.Weight = result2.Item3;
 
-                                                if (!getEdgeLengthForm.WasCancel)
+                                                if (!getEdgeLengthForm.WasCanceled)
                                                 {
                                                     Edges[i].Weight = getEdgeLengthForm.Weight;
 
@@ -954,10 +975,10 @@ namespace WindowsFormsApp1
 
                                             var result = getEdgeLengthForm.MyShow();
 
-                                            getEdgeLengthForm.WasCancel = result.Item2;
+                                            getEdgeLengthForm.WasCanceled = result.Item2;
                                             getEdgeLengthForm.Weight = result.Item3;
 
-                                            if (!getEdgeLengthForm.WasCancel)
+                                            if (!getEdgeLengthForm.WasCanceled)
                                             {
                                                 for (int j = i; j < Edges.Count; j++)
                                                 {
@@ -982,10 +1003,10 @@ namespace WindowsFormsApp1
                                     {
                                         var result = getEdgeLengthForm.MyShow();
 
-                                        getEdgeLengthForm.WasCancel = result.Item2;
+                                        getEdgeLengthForm.WasCanceled = result.Item2;
                                         getEdgeLengthForm.Weight = result.Item3;
 
-                                        if (!getEdgeLengthForm.WasCancel)
+                                        if (!getEdgeLengthForm.WasCanceled)
                                         {
                                             Edges[i].Weight = getEdgeLengthForm.Weight;
 
@@ -1061,11 +1082,11 @@ namespace WindowsFormsApp1
                                 {
                                     var result = getEdgeLengthForm.MyShow();
 
-                                    getEdgeLengthForm.WasCancel = result.Item2;
+                                    getEdgeLengthForm.WasCanceled = result.Item2;
                                     getEdgeLengthForm.Weight = result.Item3;
 
                                     // Если решили отменить рисование ребра.
-                                    if (getEdgeLengthForm.WasCancel)
+                                    if (getEdgeLengthForm.WasCanceled)
                                     {
                                         ToolsForDrawing.DrawVertex(
                                             Vertex[ver1ForConnection].X,
@@ -1077,7 +1098,7 @@ namespace WindowsFormsApp1
                                             Vertex[ver2ForConnection].Y,
                                             (ver2ForConnection + 1).ToString());
 
-                                        getEdgeLengthForm.WasCancel = false;
+                                        getEdgeLengthForm.WasCanceled = false;
 
                                         ver1ForConnection = ver2ForConnection = -1;
                                     }
@@ -1245,11 +1266,11 @@ namespace WindowsFormsApp1
                                                  Edges[i].Ver1, Edges[i].Ver2);
 
                                             //chooseEdgeFormForm.ShowDialog();
-                                            var res = chooseEdgeFormForm.MyShow(caption, text1, text2);
-                                            chooseEdgeFormForm.WasCancel = res.Item2;
+                                            var res = chooseEdgeFormForm.MyShowDeleteEdge(caption, text1, text2);
+                                            chooseEdgeFormForm.WasCanceled = res.Item2;
                                             chooseEdgeFormForm.IsFirstAction = res.Item3;
                                             // Если не нажали отмену, то удаляем.
-                                            if (!chooseEdgeFormForm.WasCancel)
+                                            if (!chooseEdgeFormForm.WasCanceled)
                                             {
                                                 if (chooseEdgeFormForm.IsFirstAction)
                                                 {
@@ -1314,12 +1335,12 @@ namespace WindowsFormsApp1
                                             var (caption, text1, text2) = SetTextInButtonFromChooseEdgeForm(
                                                 Edges[i].Ver1, Edges[i].Ver2);
 
-                                            var res = chooseEdgeFormForm.MyShow(caption, text1, text2);
-                                            chooseEdgeFormForm.WasCancel = res.Item2;
+                                            var res = chooseEdgeFormForm.MyShowDeleteEdge(caption, text1, text2);
+                                            chooseEdgeFormForm.WasCanceled = res.Item2;
                                             chooseEdgeFormForm.IsFirstAction = res.Item3;
 
                                             // Если не нажали отмену, то удаляем.
-                                            if (!chooseEdgeFormForm.WasCancel)
+                                            if (!chooseEdgeFormForm.WasCanceled)
                                             {
                                                 if (chooseEdgeFormForm.IsFirstAction)
                                                 {
@@ -1887,18 +1908,6 @@ namespace WindowsFormsApp1
         private static bool IsInt(double val) =>
             int.TryParse(val.ToString(), out var temp);
 
-
-        // Обработать случай, когда точки на одной прямой.
-        // Когда возвращается в вершину, vertex выходит из диапазона.
-        private double changeStep;
-        private double step;
-
-        private int totalCount = 0;
-        private bool firstVertex = true;
-
-        public float coefficient = 1;
-        List<MyPoint> pointsForComputeFormula = new List<MyPoint>();
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             var xValue = (sp.ElapsedMilliseconds) / 1000;
@@ -1911,8 +1920,7 @@ namespace WindowsFormsApp1
             chartForm.chartForm.Series["Amount of points"].Points.AddXY(xValue, yValue);
         }
 
-
-        public void MainTick(List<Edge>[] listArr)
+        public void MainTick(List<Edge>[] adjacencyList)
         {
             coefficient = (float)(trackBar1.Value / 10.0);
             // Если готова выпустить точку.
@@ -1927,16 +1935,16 @@ namespace WindowsFormsApp1
                     if (firstVertex)
                     {
                         firstVertex = false;
-                        totalCount += listArr[i].Count;
+                        totalCount += adjacencyList[i].Count;
                     }
                     else
                     {
-                        totalCount += listArr[i].Count - 1;
+                        totalCount += adjacencyList[i].Count - 1;
                     }
 
-                    points.AddRange(listArr[i]);
+                    points.AddRange(adjacencyList[i]);
 
-                    timers.AddRange(listArr[i].ConvertAll(el => new Stopwatch()));
+                    timers.AddRange(adjacencyList[i].ConvertAll(el => new Stopwatch()));
                 }
             }
 
@@ -2046,8 +2054,6 @@ namespace WindowsFormsApp1
                     return new PointF(-x + ver1.X, ver1.Y + y);
                 }
 
-
-
                 if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime)
                 {
                     x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime * 3 / 4));
@@ -2099,13 +2105,6 @@ namespace WindowsFormsApp1
 
             return new PointF(x, y);
         }
-
-        private readonly List<Stopwatch> timers = new List<Stopwatch>();
-        private readonly List<Edge> points = new List<Edge>();
-
-        private bool clickContinue;
-        private Timer mainTimer = new Timer();
-        Stopwatch sp = new Stopwatch();
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -2174,7 +2173,7 @@ namespace WindowsFormsApp1
         /// <param name="e"> E </param>
         private void StopProcessButton_Click(object sender, EventArgs e)
         {
-            requireTime = sp.ElapsedMilliseconds;
+            requireTimeForTesting = sp.ElapsedMilliseconds;
 
             if (StopProcessButton.Text == "Get main part")
             {
@@ -2198,20 +2197,16 @@ namespace WindowsFormsApp1
             }
         }
 
-        internal double alpha;
-
-        internal ChartWolfram chartWolfram;
-
         private void SetAndShowPlotForm()
         {
 
-            chartWolfram = new ChartWolfram { pictureBox1 = { Image = null } };
+            chartWolfram = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
             mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
             mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
             mathKernel1.Compute("Plot[f[x], {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
                                 "AxesStyle -> Directive[Black, FontColor -> White], " +
                                 "Background -> Gray, " +
-                                "PlotStyle -> Orange]");
+                                "PlotStyle -> Red]");
 
             if (mathKernel1.Graphics.Length > 0)
             {
@@ -2221,16 +2216,19 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void SetAndShowPlotForm2(double value)
+        private void SetAndShowPlotForm2(string data, double value)
         {
-            chartWolfram = new ChartWolfram { pictureBox1 = { Image = null } };
+            chartWolfram = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
             mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
             mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
             mathKernel1.Compute($"g[x_] := {value}*x^{alpha}");
-            mathKernel1.Compute("Plot[{f[x], g[x]}, {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
+            mathKernel1.Compute(data);
+            mathKernel1.Compute("k= FindFormula[data, x]");
+            mathKernel1.Compute("kf[x_]:=k");
+            mathKernel1.Compute("Plot[{kf[x], g[x]}, {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
                                 "AxesStyle -> Directive[Black, FontColor -> White], " +
                                 "Background -> Gray, " +
-                                "PlotStyle -> {Orange, Yellow}]");
+                                "PlotStyle -> {Red, Yellow}]");
 
             if (mathKernel1.Graphics.Length > 0)
             {
@@ -2246,10 +2244,10 @@ namespace WindowsFormsApp1
 
             var (_, item2, item3) = getEdgeLengthForm.MyShow(true);
 
-            getEdgeLengthForm.WasCancel = item2;
+            getEdgeLengthForm.WasCanceled = item2;
             getEdgeLengthForm.Weight = item3;
 
-            if (!getEdgeLengthForm.WasCancel)
+            if (!getEdgeLengthForm.WasCanceled)
             {
                 alpha = getEdgeLengthForm.Weight;
             }
@@ -2274,7 +2272,7 @@ namespace WindowsFormsApp1
                     throw new ArgumentException();
                 }
 
-                SetAndShowPlotForm2(value);
+                SetAndShowPlotForm2(data, value);
             }
             catch (Exception)
             {
@@ -2309,7 +2307,7 @@ namespace WindowsFormsApp1
                 saveGraphDialog.CheckPathExists = true;
                 saveGraphDialog.Filter = "Files(*.CSV)|*.CSV";
 
-                requireTime = sp.ElapsedMilliseconds;
+                requireTimeForTesting = sp.ElapsedMilliseconds;
                 saveGraphDialog.ShowHelp = true;
 
                 // Процесс сохранения файла.
@@ -2339,9 +2337,6 @@ namespace WindowsFormsApp1
                 ShowOrHideAdjMatrix.Enabled = false;
             }
         }
-
-        private static StringBuilder chartData = new StringBuilder("Time;Amount\n");
-        private int seconds;
 
         private void timer2_Tick(object sender, EventArgs e)
         {
@@ -2407,8 +2402,6 @@ namespace WindowsFormsApp1
         }
 
 
-        private ChartForTestingProgram chartForTestingForm1;
-
         private void button4_Click(object sender, EventArgs e)
         {
             Hide();
@@ -2419,12 +2412,12 @@ namespace WindowsFormsApp1
             timer2.Stop();
             sp.Stop();
             timers.ForEach(timer => timer.Stop());
-            requireTime = sp.ElapsedMilliseconds;
-            chartForTestingForm1 = new ChartForTestingProgram(this, 0,
-                new List<ChartForTestingProgram>());
+            requireTimeForTesting = sp.ElapsedMilliseconds;
+            new ChartDisplayForTestingProgramForm(this, 0,
+                new List<ChartDisplayForTestingProgramForm>());
         }
 
-        public long requireTime;
+
 
         private void HideAllLabel()
         {

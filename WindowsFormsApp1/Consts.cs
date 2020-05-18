@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms.VisualStyles;
-
-namespace WindowsFormsApp1
+﻿namespace WindowsFormsApp1
 {
     /// <summary>
     /// Константы.
@@ -21,7 +18,7 @@ namespace WindowsFormsApp1
         internal const int HeightArrow = 7;
 
         internal const int Accuracy = 3;
-        internal const int WidthPen = 2;
+        internal const int PenWidth = 2;
         internal const int FontSize = 15;
 
         internal const int ChartFormWidth = 1120;
@@ -47,6 +44,5 @@ namespace WindowsFormsApp1
 
         internal const int StopTestingProgramButtonLocationX = 700;
         internal const int StopTestingProgramButtonLocationY = 695;
-
     }
 }

@@ -46,7 +46,7 @@
             this.FirstOptionButton.Size = new System.Drawing.Size(250, 55);
             this.FirstOptionButton.TabIndex = 0;
             this.FirstOptionButton.UseVisualStyleBackColor = false;
-            this.FirstOptionButton.Click += new System.EventHandler(this.FirstActionButton_Click);
+            this.FirstOptionButton.Click += new System.EventHandler(this.FirstActionButtonClick);
             // 
             // SecondOptionButton
             // 
@@ -86,7 +86,7 @@
             this.CancelButton.TabIndex = 3;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelButton.Click += new System.EventHandler(this.CancelButtonClick);
             // 
             // ChooseEdgeForm
             // 
@@ -99,7 +99,7 @@
             this.Controls.Add(this.FirstOptionButton);
             this.Name = "ChooseEdgeForm";
             this.Text = "Choose edge";
-            this.Load += new System.EventHandler(this.ChooseEdgeForm_Load);
+            this.Load += new System.EventHandler(this.FormLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 

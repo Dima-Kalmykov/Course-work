@@ -66,13 +66,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChartWolfram.cs">
+    <Compile Include="DisplayMainPartByTimeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChartWolfram.Designer.cs">
-      <DependentUpon>ChartWolfram.cs</DependentUpon>
+    <Compile Include="DisplayMainPartByTimeForm.Designer.cs">
+      <DependentUpon>DisplayMainPartByTimeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListOfFormClass.cs" />
+    <Compile Include="ListOfFormsForTestingProgram.cs" />
     <Compile Include="MyMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,18 +87,18 @@
     <Compile Include="ChartDisplayForm.Designer.cs">
       <DependentUpon>ChartDisplayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChartForTestingProgram.cs">
+    <Compile Include="ChartDisplayForTestingProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChartForTestingProgram.Designer.cs">
-      <DependentUpon>ChartForTestingProgram.cs</DependentUpon>
+    <Compile Include="ChartDisplayForTestingProgramForm.Designer.cs">
+      <DependentUpon>ChartDisplayForTestingProgramForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Consts.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="ChartForOpenFromFileForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ChartForOpenFromFileForm.Designer.cs">
+      <DependentUpon>ChartForOpenFromFileForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ShowAdjacencyMatrixForm.cs">
       <SubType>Form</SubType>
@@ -107,11 +107,11 @@
       <DependentUpon>ShowAdjacencyMatrixForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MyMath.cs" />
-    <Compile Include="CheckGraphForStronglyConnectionForm.cs">
+    <Compile Include="CheckGraphForStronglyDirectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CheckGraphForStronglyConnectionForm.Designer.cs">
-      <DependentUpon>CheckGraphForStronglyConnectionForm.cs</DependentUpon>
+    <Compile Include="CheckGraphForStronglyDirectionForm.Designer.cs">
+      <DependentUpon>CheckGraphForStronglyDirectionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ChooseEdgeForm.cs">
       <SubType>Form</SubType>
@@ -119,7 +119,7 @@
     <Compile Include="ChooseEdgeForm.Designer.cs">
       <DependentUpon>ChooseEdgeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolsForDrawingGraph.cs" />
+    <Compile Include="ToolsForDrawing.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -127,11 +127,11 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GetLengthEdgeForm.cs">
+    <Compile Include="GetWeightEdgeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GetLengthEdgeForm.Designer.cs">
-      <DependentUpon>GetLengthEdgeForm.cs</DependentUpon>
+    <Compile Include="GetWeightEdgeForm.Designer.cs">
+      <DependentUpon>GetWeightEdgeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PointOfStartProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,14 +145,14 @@
     <EmbeddedResource Include="ChartDisplayForm.resx">
       <DependentUpon>ChartDisplayForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChartForTestingProgram.resx">
-      <DependentUpon>ChartForTestingProgram.cs</DependentUpon>
+    <EmbeddedResource Include="ChartDisplayForTestingProgramForm.resx">
+      <DependentUpon>ChartDisplayForTestingProgramForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChartWolfram.resx">
-      <DependentUpon>ChartWolfram.cs</DependentUpon>
+    <EmbeddedResource Include="DisplayMainPartByTimeForm.resx">
+      <DependentUpon>DisplayMainPartByTimeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="ChartForOpenFromFileForm.resx">
+      <DependentUpon>ChartForOpenFromFileForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyMessageBox.resx">
       <DependentUpon>MyMessageBox.cs</DependentUpon>
@@ -160,8 +160,8 @@
     <EmbeddedResource Include="ShowAdjacencyMatrixForm.resx">
       <DependentUpon>ShowAdjacencyMatrixForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CheckGraphForStronglyConnectionForm.resx">
-      <DependentUpon>CheckGraphForStronglyConnectionForm.cs</DependentUpon>
+    <EmbeddedResource Include="CheckGraphForStronglyDirectionForm.resx">
+      <DependentUpon>CheckGraphForStronglyDirectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChooseEdgeForm.resx">
       <DependentUpon>ChooseEdgeForm.cs</DependentUpon>
@@ -169,8 +169,8 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GetLengthEdgeForm.resx">
-      <DependentUpon>GetLengthEdgeForm.cs</DependentUpon>
+    <EmbeddedResource Include="GetWeightEdgeForm.resx">
+      <DependentUpon>GetWeightEdgeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

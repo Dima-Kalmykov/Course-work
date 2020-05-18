@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace WindowsFormsApp1
 {
-    public class ToolsForDrawingGraph
+    public class ToolsForDrawing
     {
         // Инструменты для рисования графа.
         private readonly Bitmap bitmap;
-        private Graphics cover;
+        private readonly Graphics cover;
         private PointF point;
         private readonly Font font;
         private readonly Brush brush;
@@ -18,7 +18,6 @@ namespace WindowsFormsApp1
         private readonly Pen redPen;
         private readonly Pen orangePen;
         private readonly Pen yellowPen;
-        private readonly Pen bluePen;
         private readonly Pen greenPen;
 
         // Радиус вершины.
@@ -31,18 +30,17 @@ namespace WindowsFormsApp1
 
         private static readonly Random Rnd = new Random(DateTime.Now.Millisecond);
 
-        internal ToolsForDrawingGraph(int width, int height)
+        internal ToolsForDrawing(int width, int height)
         {
             // Установка необходимых параметров
             bitmap = new Bitmap(width, height);
             cover = Graphics.FromImage(bitmap);
 
-            yellowPen = new Pen(Color.Yellow, Consts.WidthPen);
-            orangePen = new Pen(Color.Orange, Consts.WidthPen);
-            blackPen = new Pen(Color.Black, Consts.WidthPen);
-            redPen = new Pen(Color.Red, Consts.WidthPen);
-            bluePen = new Pen(Color.CornflowerBlue, Consts.WidthPen);
-            greenPen = new Pen(Color.Green, Consts.WidthPen);
+            yellowPen = new Pen(Color.Yellow, Consts.PenWidth);
+            orangePen = new Pen(Color.Orange, Consts.PenWidth);
+            blackPen = new Pen(Color.Black, Consts.PenWidth);
+            redPen = new Pen(Color.Red, Consts.PenWidth);
+            greenPen = new Pen(Color.Green, Consts.PenWidth);
             brush = Brushes.Black;
 
             font = new Font("Arial", Consts.FontSize);

@@ -10,10 +10,11 @@ namespace WindowsFormsApp1
         private RadioButton selectedRb = new RadioButton();
 
         // Количество вершин для графа.
-        internal int amount;
+        internal int VertexAmount;
 
         // Флаг, который показывает, отменить генерацию, или нет.
-        internal bool cancelGraph = true;
+        internal bool CanceledGeneration = true;
+
         internal GetRandomGraphForm()
         {
             InitializeComponent();
@@ -41,7 +42,7 @@ namespace WindowsFormsApp1
 
             foreach (var radioButton in radioButtons)
             {
-                radioButton.CheckedChanged += RadioButton_CheckedChanged;
+                radioButton.CheckedChanged += RadioButtonCheckedChanged;
             }
         }
 
@@ -50,7 +51,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RadioButton_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonCheckedChanged(object sender, EventArgs e)
         {
             // Выбранная кнопка.
             var resultRb = sender as RadioButton;
@@ -63,10 +64,10 @@ namespace WindowsFormsApp1
         {
             var rg = new GetRandomGraphForm
             {
-                cancelGraph = true
+                CanceledGeneration = true
             };
 
-            return (rg.ShowDialog(), rg.cancelGraph, rg.amount);
+            return (rg.ShowDialog(), rg.CanceledGeneration, rg.VertexAmount);
         }
 
         /// <summary>
@@ -74,10 +75,10 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ConfirmButton_Click(object sender, EventArgs e)
+        private void ConfirmationButtonClick(object sender, EventArgs e)
         {
-            amount = 0;
-            cancelGraph = false;
+            VertexAmount = 0;
+            CanceledGeneration = false;
 
             // Случай, когда ничего не выбрано.
             if (selectedRb is null)
@@ -90,7 +91,7 @@ namespace WindowsFormsApp1
             Close();
 
             // Преобразуем текст кнопки в количество.
-            amount = int.Parse(selectedRb.Text);
+            VertexAmount = int.Parse(selectedRb.Text);
             selectedRb = null;
             DoingRadioButtonsUnchecked();
         }
@@ -117,9 +118,9 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CancelButton_Click(object sender, EventArgs e)
+        private void CancelButtonClick(object sender, EventArgs e)
         {
-            cancelGraph = true;
+            CanceledGeneration = true;
 
             DoingRadioButtonsUnchecked();
 
@@ -131,7 +132,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GetRandomGraphForm_Load(object sender, EventArgs e)
+        private void FormLoad(object sender, EventArgs e)
         {
             Theme = MetroThemeStyle.Dark;
             ControlBox = false;

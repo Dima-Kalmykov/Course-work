@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class ChartForTestingProgram
+    partial class ChartDisplayForTestingProgramForm
     {
         /// <summary>
         /// Required designer variable.
@@ -95,7 +95,7 @@
             // 
             // timerForPlotting
             // 
-            this.timerForPlotting.Tick += new System.EventHandler(this.TimerForPlotting_Tick);
+            this.timerForPlotting.Tick += new System.EventHandler(this.TimerForPlottingTick);
             // 
             // coefficientTrackBar
             // 
@@ -143,7 +143,7 @@
             this.leftMiniButton.TabIndex = 8;
             this.leftMiniButton.Text = "<";
             this.leftMiniButton.UseVisualStyleBackColor = false;
-            this.leftMiniButton.Click += new System.EventHandler(this.button1_Click_1);
+            this.leftMiniButton.Click += new System.EventHandler(this.LeftMiniButtonClick);
             // 
             // rightMiniButton
             // 
@@ -158,7 +158,7 @@
             this.rightMiniButton.TabIndex = 9;
             this.rightMiniButton.Text = ">";
             this.rightMiniButton.UseVisualStyleBackColor = false;
-            this.rightMiniButton.Click += new System.EventHandler(this.button2_Click);
+            this.rightMiniButton.Click += new System.EventHandler(this.RightMiniButtonClick);
             // 
             // rightButton
             // 
@@ -173,7 +173,7 @@
             this.rightButton.TabIndex = 10;
             this.rightButton.Text = ">>";
             this.rightButton.UseVisualStyleBackColor = false;
-            this.rightButton.Click += new System.EventHandler(this.rightButton_Click);
+            this.rightButton.Click += new System.EventHandler(this.RightButtonClick);
             // 
             // leftButton
             // 
@@ -188,7 +188,7 @@
             this.leftButton.TabIndex = 11;
             this.leftButton.Text = "<<";
             this.leftButton.UseVisualStyleBackColor = false;
-            this.leftButton.Click += new System.EventHandler(this.leftButton_Click);
+            this.leftButton.Click += new System.EventHandler(this.LeftButtonClick);
             // 
             // textBox1
             // 
@@ -200,7 +200,7 @@
             this.textBox1.Size = new System.Drawing.Size(81, 32);
             this.textBox1.TabIndex = 12;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FormNumberTextBoxKeyPress);
             // 
             // label3
             // 
@@ -245,7 +245,7 @@
             this.exitButton.TabIndex = 16;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = false;
-            this.exitButton.Click += new System.EventHandler(this.button1_Click);
+            this.exitButton.Click += new System.EventHandler(this.ExitButtonClick);
             // 
             // stopTestingButton
             // 
@@ -260,9 +260,9 @@
             this.stopTestingButton.TabIndex = 3;
             this.stopTestingButton.Text = "Stop the test";
             this.stopTestingButton.UseVisualStyleBackColor = false;
-            this.stopTestingButton.Click += new System.EventHandler(this.StopTestingButton_Click);
+            this.stopTestingButton.Click += new System.EventHandler(this.StopTestingButtonClick);
             // 
-            // ChartForTestingProgram
+            // ChartDisplayForTestingProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -284,10 +284,9 @@
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.chart);
             this.ForeColor = System.Drawing.Color.LightGray;
-            this.Name = "ChartForTestingProgram";
+            this.Name = "ChartDisplayForTestingProgramForm";
             this.Text = "Testing Program";
-            this.Load += new System.EventHandler(this.ChartForTestingProgram_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChartForTestingProgram_KeyPress);
+            this.Load += new System.EventHandler(this.ChartForTestingProgramLoad);
             ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.field)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.coefficientTrackBar)).EndInit();

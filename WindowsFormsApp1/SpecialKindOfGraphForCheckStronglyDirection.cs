@@ -8,6 +8,7 @@ namespace WindowsFormsApp1
     {
         internal int VertexCount;
         internal List<int>[] AdjacencyList;
+        private static bool[] used;
 
         internal SpecialKindOfGraphForCheckStronglyDirection(int vertexCount)
         {
@@ -39,13 +40,23 @@ namespace WindowsFormsApp1
                 return false;
             }
 
-            var transposeGraph = GetTranspose();
+            var transposeGraph = TransposeCurrentGraph();
 
             Array.Clear(visited, 0, VertexCount);
 
             transposeGraph.DfsUtil(0, visited);
 
             return HasNotHaveUnvisitedVertex(visited);
+        }
+
+        private void DfsUtil(int vertexNumber, IList<bool> visited)
+        {
+            visited[vertexNumber] = true;
+
+            foreach (var n in AdjacencyList[vertexNumber].Where(n => !visited[n]))
+            {
+                DfsUtil(n, visited);
+            }
         }
 
         private bool HasNotHaveUnvisitedVertex(IReadOnlyList<bool> visited)
@@ -61,27 +72,27 @@ namespace WindowsFormsApp1
             return true;
         }
 
-        private void DfsUtil(int vertexNumber, IList<bool> visited)
+        private SpecialKindOfGraphForCheckStronglyDirection TransposeCurrentGraph()
         {
-            visited[vertexNumber] = true;
+            var graph = new SpecialKindOfGraphForCheckStronglyDirection(VertexCount);
 
-            foreach (var n in AdjacencyList[vertexNumber].Where(n => !visited[n]))
+            for (var i = 0; i < VertexCount; i++)
             {
-                DfsUtil(n, visited);
+                foreach (var vertex in AdjacencyList[i])
+                {
+                    graph.AdjacencyList[vertex].Add(i);
+                }
             }
+
+            return graph;
         }
-
-        private static bool[] used;
-        private readonly List<int> comp = new List<int>();
-
-
 
         private void Dfs(int cur)
         {
             used[cur] = true;
             for (var i = 0; i < AdjacencyList[cur].Count; i++)
             {
-                int next = AdjacencyList[cur][i];
+                var next = AdjacencyList[cur][i];
                 if (!used[next])
                 {
                     Dfs(next);
@@ -100,29 +111,17 @@ namespace WindowsFormsApp1
 
             for (var i = 0; i < VertexCount; i++)
             {
-                if (!used[i])
+                if (used[i])
                 {
-                    Dfs(i);
-                    count++;
+                    continue;
                 }
+                Dfs(i);
+                count++;
             }
 
             return count;
         }
 
-        private SpecialKindOfGraphForCheckStronglyDirection GetTranspose()
-        {
-            var graph = new SpecialKindOfGraphForCheckStronglyDirection(VertexCount);
-
-            for (var i = 0; i < VertexCount; i++)
-            {
-                foreach (var vertex in AdjacencyList[i])
-                {
-                    graph.AdjacencyList[vertex].Add(i);
-                }
-            }
-
-            return graph;
-        }
+        
     }
 }

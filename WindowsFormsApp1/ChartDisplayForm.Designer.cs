@@ -67,7 +67,7 @@
             this.Controls.Add(this.chartForm);
             this.Name = "Chart";
             this.Text = "Chart";
-            this.Load += new System.EventHandler(this.Chart_Load);
+            this.Load += new System.EventHandler(this.ChartLoad);
             ((System.ComponentModel.ISupportInitialize)(this.chartForm)).EndInit();
             this.ResumeLayout(false);
 

@@ -10,7 +10,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-        private void Chart_Load(object sender, EventArgs e)
+        private void ChartLoad(object sender, EventArgs e)
         {
             chartForm.Legends[0].BackColor = Color.SlateGray;
             chartForm.Series["Amount of points"].Color = Color.Yellow;

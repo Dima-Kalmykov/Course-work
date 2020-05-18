@@ -5,15 +5,15 @@ using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class GetLengthEdgeForm : MetroFramework.Forms.MetroForm
+    public partial class GetWeightEdgeForm : MetroFramework.Forms.MetroForm
     {
         // Флаг, который показывает, нажали мы кнопку отмены, или нет.
-        internal bool WasCancel;
+        internal bool WasCanceled;
 
         // Итоговое число.
         internal double Weight;
 
-        internal GetLengthEdgeForm()
+        internal GetWeightEdgeForm()
         {
             InitializeComponent();
         }
@@ -37,26 +37,28 @@ namespace WindowsFormsApp1
         {
             if (!isAlpha)
             {
-                var gl = new GetLengthEdgeForm
+                var gl = new GetWeightEdgeForm
                 {
                     Text = "Get edge weight",
-                    WasCancel = false,
+                    WasCanceled = false,
                     Weight = 0,
-                    TextForUnderstandingLabel = {Text = "Enter edge weight"}
+                    TextForUnderstandingLabel = {Text = "Enter edge weight"},
+                    CancelButton = {Text = "Cancel"}
                 };
-                return (gl.ShowDialog(), gl.WasCancel, gl.Weight);
+                return (gl.ShowDialog(), gl.WasCanceled, gl.Weight);
             }
             else
             {
-                var gl = new GetLengthEdgeForm
+                var gl = new GetWeightEdgeForm
                 {
                     Text = "Get alpha value",
-                    WasCancel = false,
+                    WasCanceled = false,
                     Weight = 0,
                     TextForUnderstandingLabel = {Text = "Enter alpha value"},
+                    CancelButton = {Text = "Default value"}
                 };
 
-                return (gl.ShowDialog(), gl.WasCancel, gl.Weight);
+                return (gl.ShowDialog(), gl.WasCanceled, gl.Weight);
             }
         }
 
@@ -66,7 +68,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ConfirmButton_Click(object sender, EventArgs e)
+        private void ConfirmButtonClick(object sender, EventArgs e)
         {
             try
             {
@@ -83,7 +85,7 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            WasCancel = false;
+            WasCanceled = false;
 
             GetNumberTextBox.Text = string.Empty;
             GetNumberTextBox.Focus();
@@ -97,9 +99,9 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CancelButton_Click(object sender, EventArgs e)
+        private void CancelButtonClick(object sender, EventArgs e)
         {
-            WasCancel = true;
+            WasCanceled = true;
 
             GetNumberTextBox.Text = string.Empty;
             GetNumberTextBox.Focus();
@@ -111,7 +113,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GetLengthEdgeForm_Load(object sender, EventArgs e)
+        private void FormLoad(object sender, EventArgs e)
         {
             Theme = MetroThemeStyle.Dark;
             ControlBox = false;

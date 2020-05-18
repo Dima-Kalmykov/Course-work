@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using MetroFramework;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using MetroFramework;
 
 namespace WindowsFormsApp1
 {
-    public partial class ChartWolfram : MetroFramework.Forms.MetroForm
+    public partial class DisplayMainPartByTimeForm : MetroFramework.Forms.MetroForm
     {
-        public ChartWolfram()
+        public DisplayMainPartByTimeForm()
         {
             InitializeComponent();
             Theme = MetroThemeStyle.Dark;

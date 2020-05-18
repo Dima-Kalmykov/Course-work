@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class CheckGraphForStronglyConnectionForm
+    partial class CheckGraphForStronglyDirectionForm
     {
         /// <summary>
         /// Required designer variable.
@@ -57,7 +57,7 @@
             this.ContinueButton.TabIndex = 1;
             this.ContinueButton.Text = "Continue editing";
             this.ContinueButton.UseVisualStyleBackColor = false;
-            this.ContinueButton.Click += new System.EventHandler(this.ContinueButton_Click);
+            this.ContinueButton.Click += new System.EventHandler(this.ContinueButtonClick);
             // 
             // GenerateGraphButton
             // 
@@ -72,7 +72,7 @@
             this.GenerateGraphButton.TabIndex = 2;
             this.GenerateGraphButton.Text = "Generate strongly directed graph";
             this.GenerateGraphButton.UseVisualStyleBackColor = false;
-            this.GenerateGraphButton.Click += new System.EventHandler(this.GenerateGraphButton_Click);
+            this.GenerateGraphButton.Click += new System.EventHandler(this.GenerateGraphButtonClick);
             // 
             // CheckGraphForStronglyConnectionForm
             // 
@@ -84,7 +84,7 @@
             this.Controls.Add(this.Caption);
             this.Name = "CheckGraphForStronglyConnectionForm";
             this.Text = "Check graph";
-            this.Load += new System.EventHandler(this.CheckGraphForStronglyConnection_Load);
+            this.Load += new System.EventHandler(this.FormLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 
