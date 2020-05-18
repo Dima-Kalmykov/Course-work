@@ -14,28 +14,34 @@ namespace WindowsFormsApp1
 {
     public partial class MainForm : MetroFramework.Forms.MetroForm
     {
-        // Диалоговые формы.
-        private readonly ChooseEdgeForm chooseEdgeFormForm = new ChooseEdgeForm();
-        private readonly GetWeightEdgeForm getEdgeLengthForm = new GetWeightEdgeForm();
-        private readonly GetRandomGraphForm getRandomGraphForm = new GetRandomGraphForm();
+        public double Alpha;
+        public double CyclomaticNumber;
+        public DisplayMainPartByTimeForm DisplayMainPartByTimeForm;
 
-        private readonly CheckGraphForStronglyDirectionForm checkGraphForStronglyConnectionForm =
-            new CheckGraphForStronglyDirectionForm();
-
-        private readonly ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
-        private readonly Chart chartForm = new Chart();
-        private readonly ChartForOpenFromFileForm chartDisplay = new ChartForOpenFromFileForm();
-
-        private readonly MyMessageBox myMessageBox = new MyMessageBox();
-
-        public long requireTimeForTesting;
+        public long RequireTimeForTesting;
 
         // Инструменты для рисования.
         public ToolsForDrawing ToolsForDrawing;
 
         // Списки смежности.
-        public List<Vertex> Vertex;
+        public List<Vertex> Vertices;
         public List<Edge> Edges;
+
+        public float SpeedCoefficient = 1;
+
+        // Диалоговые формы.
+        private readonly ChooseEdgeForm chooseEdgeForm = new ChooseEdgeForm();
+        private readonly GetWeightEdgeForm getEdgeLengthForm = new GetWeightEdgeForm();
+        private readonly GetRandomGraphForm getRandomGraphForm = new GetRandomGraphForm();
+
+        private readonly CheckGraphForStronglyDirectionForm checkGraphForStronglyDirectionForm =
+            new CheckGraphForStronglyDirectionForm();
+
+        private readonly ShowAdjacencyMatrixForm showAdjacencyMatrixForm = new ShowAdjacencyMatrixForm();
+        private readonly Chart chartForm = new Chart();
+        private readonly ChartForOpenFromFileForm chartForOpenFromFileForm = new ChartForOpenFromFileForm();
+
+        private readonly MyMessageBox myMessageBox = new MyMessageBox();
 
         // Номера вершин, между которым проводим ребро.
         private int ver1ForConnection = -1;
@@ -56,52 +62,50 @@ namespace WindowsFormsApp1
 
         private bool responseSC;
 
-        private int totalCount;
-        private bool firstVertex = true;
+        private int totalPointsCount;
+        private bool isFirstVertex = true;
 
-        public float coefficient = 1;
-        List<MyPoint> pointsForComputeFormula = new List<MyPoint>();
+
+        private readonly List<MyPoint> pointsForComputeFormula = new List<MyPoint>();
 
         private readonly List<Stopwatch> timers = new List<Stopwatch>();
         private readonly List<Edge> points = new List<Edge>();
 
-        private bool clickContinue;
+        private bool wasClickedContinue;
         private Timer mainTimer = new Timer();
-        Stopwatch sp = new Stopwatch();
+        private readonly Stopwatch timerForPlotting = new Stopwatch();
 
-        private static StringBuilder chartData = new StringBuilder("Time;Amount\n");
-        private int seconds;
+        private static readonly StringBuilder ChartFormatData = new StringBuilder("Time;Amount\n");
+        private int pastSecondsCount;
 
-        internal double alpha;
+        
 
-        internal DisplayMainPartByTimeForm chartWolfram;
-
-        internal MainForm()
+        public MainForm()
         {
             // Устанавливаем необходимые параметры.
             InitializeComponent();
             Theme = MetroThemeStyle.Light;
             Style = MetroColorStyle.Green;
             ToolsForDrawing = new ToolsForDrawing(Consts.GraphPictureBoxWidth, Consts.GraphPictureBoxHeight);
-            Vertex = new List<Vertex>();
+            Vertices = new List<Vertex>();
             Edges = new List<Edge>();
 
-            chooseEdgeFormForm.Owner = this;
+            chooseEdgeForm.Owner = this;
             getEdgeLengthForm.Owner = this;
             getEdgeLengthForm.Text = "Get edge weight";
             getRandomGraphForm.Owner = this;
-            checkGraphForStronglyConnectionForm.Owner = this;
+            checkGraphForStronglyDirectionForm.Owner = this;
 
             ToolsForDrawing.ClearField();
             field.Image = ToolsForDrawing.GetBitmap();
 
-            CustomizeDesign();
+            HideSubMenu();
         }
 
         private void HideAdjacencyMatrix()
         {
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
+            if (Vertices.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -116,8 +120,8 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertices[indexVertexForMove].X,
+                    Vertices[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
 
                 firstPress = true;
                 field.Image = ToolsForDrawing.GetBitmap();
@@ -126,8 +130,8 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertices[ver1ForConnection].X,
+                    Vertices[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
@@ -140,7 +144,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DrawVertexButton_Click(object sender, EventArgs e)
+        private void DrawVertexButtonClick(object sender, EventArgs e)
         {
             // Делаем эту кнопку неактивной.
             DrawVertexButton.Enabled = false;
@@ -155,10 +159,9 @@ namespace WindowsFormsApp1
             HideAdjacencyMatrix();
         }
 
-
         public void DeleteGraph()
         {
-            Vertex.Clear();
+            Vertices.Clear();
             Edges.Clear();
             showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
             ToolsForDrawing.ClearField();
@@ -187,12 +190,12 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DeleteAllGraphButton_Click(object sender, EventArgs e)
+        private void DeleteFullGraphButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
 
             // Проверяем, есть ли какой-то элемент для удаления.
-            if (Vertex.Count != 0)
+            if (Vertices.Count != 0)
             {
 
                 var confirmCancellation = GetConfirmCancellation();
@@ -221,7 +224,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DrawEdgeButton_Click(object sender, EventArgs e)
+        private void DrawEdgeButtonClick(object sender, EventArgs e)
         {
             // Делаем эту кнопку неактивной.
             DrawEdgeButton.Enabled = false;
@@ -246,9 +249,9 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckGraphForStrongConnectionButton_Click(object sender, EventArgs e)
+        private void CheckGraphForStrongDirectionButtonClick(object sender, EventArgs e)
         {
-            if (!clickContinue)
+            if (!wasClickedContinue)
             {
                 RedrawSelectedVertex();
 
@@ -266,7 +269,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
+                    SpecialKindOfGraphForCheckStronglyDirection graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertices.Count);
 
                     foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
@@ -284,11 +287,11 @@ namespace WindowsFormsApp1
                         //checkGraphForStronglyConnectionForm.Caption.Text =
                         //    "Граф не является сильносвязным";
 
-                        var res = checkGraphForStronglyConnectionForm.MyShow();
+                        var res = checkGraphForStronglyDirectionForm.MyShow();
 
-                        checkGraphForStronglyConnectionForm.MustBeGenerated = res.Item2;
+                        checkGraphForStronglyDirectionForm.MustBeGenerated = res.Item2;
 
-                        if (checkGraphForStronglyConnectionForm.MustBeGenerated)
+                        if (checkGraphForStronglyDirectionForm.MustBeGenerated)
                             GetRandomGraphButton.PerformClick();
                     }
                 }
@@ -303,7 +306,7 @@ namespace WindowsFormsApp1
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
-                    var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
+                    var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertices.Count);
 
                     foreach (var edge in Edges)
                         graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
@@ -321,11 +324,11 @@ namespace WindowsFormsApp1
                         DrawEdgeButton.Enabled = true;
                         ChangeEdgeLengthButton.Enabled = true;
                         responseSC = false;
-                        var res = checkGraphForStronglyConnectionForm.MyShow();
+                        var res = checkGraphForStronglyDirectionForm.MyShow();
 
-                        checkGraphForStronglyConnectionForm.MustBeGenerated = res.Item2;
+                        checkGraphForStronglyDirectionForm.MustBeGenerated = res.Item2;
 
-                        if (checkGraphForStronglyConnectionForm.MustBeGenerated)
+                        if (checkGraphForStronglyDirectionForm.MustBeGenerated)
                             GetRandomGraphButton.PerformClick();
                     }
                 }
@@ -337,7 +340,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GetRandomGraphButton_Click(object sender, EventArgs e)
+        private void GetRandomGraphButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
 
@@ -369,7 +372,7 @@ namespace WindowsFormsApp1
                 adjMatrix = ToolsForDrawing.SetDistanceEdge(adjMatrix);
 
                 // Генерируем координаты вершин.
-                Vertex = ToolsForDrawing.GetRandomVertex(adjMatrix,
+                Vertices = ToolsForDrawing.GetRandomVertex(adjMatrix,
                     field.Size.Width - 2 * Consts.VertexRadius,
                     field.Size.Height - 2 * Consts.VertexRadius);
 
@@ -377,10 +380,10 @@ namespace WindowsFormsApp1
                 Edges = ToolsForDrawing.GetRandomEdges(adjMatrix);
 
                 // Отрисовываем полный граф.
-                ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+                ToolsForDrawing.DrawFullGraph(Edges, Vertices);
 
                 // Выводим матрицу смежности.
-                PrintAdjMatrix();
+                PrintAdjacencyMatrix();
 
                 field.Image = ToolsForDrawing.GetBitmap();
             }
@@ -393,13 +396,13 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DeleteElementButton_Click(object sender, EventArgs e)
+        private void DeleteElementButtonClick(object sender, EventArgs e)
         {
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertices[indexVertexForMove].X,
+                    Vertices[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
                 field.Image = ToolsForDrawing.GetBitmap();
             }
@@ -407,8 +410,8 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertices[ver1ForConnection].X,
+                    Vertices[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
@@ -424,7 +427,7 @@ namespace WindowsFormsApp1
             ChangeEdgeLengthButton.Enabled = true;
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
+            if (Vertices.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -439,7 +442,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SaveGraphButton_Click(object sender, EventArgs e)
+        private void SaveGraphButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
 
@@ -486,7 +489,7 @@ namespace WindowsFormsApp1
                 myMessageBox.ShowGraphIsEmpty("Graph is empty");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
+            if (Vertices.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -501,27 +504,9 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OpenGraphButton_Click(object sender, EventArgs e)
+        private void OpenGraphFromFileButtonClick(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем остальные кнопки активными.
             DrawVertexButton.Enabled = true;
@@ -551,10 +536,10 @@ namespace WindowsFormsApp1
 
                     SetDataFromFile();
 
-                    PrintAdjMatrix();
+                    PrintAdjacencyMatrix();
 
                     ToolsForDrawing.ClearField();
-                    ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+                    ToolsForDrawing.DrawFullGraph(Edges, Vertices);
                     field.Image = ToolsForDrawing.GetBitmap();
                 }
                 catch (Exception)
@@ -565,7 +550,7 @@ namespace WindowsFormsApp1
             }
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
+            if (Vertices.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -580,7 +565,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ChangeLengthButton_Click(object sender, EventArgs e)
+        private void ChangeWeightButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
 
@@ -606,7 +591,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StopDrawingButton_Click(object sender, EventArgs e)
+        private void StopDrawingButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
 
@@ -624,13 +609,13 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ShowOrHideAdjMatrix_Click(object sender, EventArgs e)
+        private void ShowOrHideAdjacencyMatrixButtonClick(object sender, EventArgs e)
         {
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
             if (indexVertexForMove != -1)
             {
-                ToolsForDrawing.DrawVertex(Vertex[indexVertexForMove].X,
-                    Vertex[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
+                ToolsForDrawing.DrawVertex(Vertices[indexVertexForMove].X,
+                    Vertices[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
                 firstPress = true;
                 field.Image = ToolsForDrawing.GetBitmap();
             }
@@ -638,8 +623,8 @@ namespace WindowsFormsApp1
             // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
             if (ver1ForConnection != -1)
             {
-                ToolsForDrawing.DrawVertex(Vertex[ver1ForConnection].X,
-                    Vertex[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
+                ToolsForDrawing.DrawVertex(Vertices[ver1ForConnection].X,
+                    Vertices[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
 
                 ver1ForConnection = -1;
 
@@ -671,7 +656,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="ver1"> Номер первой вершины </param>
         /// <param name="ver2"> Номер второй веришны </param>
-        private (string, string, string) SetTextInButtonFromChooseEdgeForm(int ver1, int ver2)
+        private (string, string, string) GetTextInButtonForChooseEdgeForm(int ver1, int ver2)
         {
             //chooseEdgeFormForm.TextForUnderstandingLabel.Text = @"Select the edge you want to delete";
             //chooseEdgeFormForm.FirstOptionButton.Text = $@"Delete edge from {ver1 + 1} to {ver2 + 1}";
@@ -687,7 +672,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void field_MouseClick(object sender, MouseEventArgs e)
+        private void FieldMouseClick(object sender, MouseEventArgs e)
         {
             // Всё происходит только при нажатии ЛКМ.
             if (e.Button == MouseButtons.Left)
@@ -699,12 +684,12 @@ namespace WindowsFormsApp1
                     if (firstPress)
                     {
                         // Ищем вершину, на которую нажали и выделяем её.
-                        for (int i = 0; i < Vertex.Count; i++)
+                        for (int i = 0; i < Vertices.Count; i++)
                         {
-                            if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                            if (Math.Pow(Vertices[i].X - e.X, 2) + Math.Pow(Vertices[i].Y - e.Y, 2) <=
                                 Math.Pow(Consts.VertexRadius, 2))
                             {
-                                ToolsForDrawing.DrawSelectedVertex(Vertex[i].X, Vertex[i].Y);
+                                ToolsForDrawing.DrawSelectedVertex(Vertices[i].X, Vertices[i].Y);
                                 field.Image = ToolsForDrawing.GetBitmap();
 
                                 indexVertexForMove = i;
@@ -718,7 +703,7 @@ namespace WindowsFormsApp1
                             firstPress = true;
 
                             // Проверяем, чтобы вершина при переносе не перекрывала другую.
-                            if (Vertex.Where((v, i) => i != indexVertexForMove)
+                            if (Vertices.Where((v, i) => i != indexVertexForMove)
                                       .Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
                                                 Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                             {
@@ -742,14 +727,14 @@ namespace WindowsFormsApp1
                             }
 
                             // Тогда двигаем точку и перерисовываем граф.
-                            Vertex[indexVertexForMove].X = e.X;
-                            Vertex[indexVertexForMove].Y = e.Y;
+                            Vertices[indexVertexForMove].X = e.X;
+                            Vertices[indexVertexForMove].Y = e.Y;
 
                             ToolsForDrawing.ClearField();
 
                             indexVertexForMove = -1;
 
-                            ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+                            ToolsForDrawing.DrawFullGraph(Edges, Vertices);
 
                             field.Image = ToolsForDrawing.GetBitmap();
                         }
@@ -760,7 +745,7 @@ namespace WindowsFormsApp1
                 if (!ChangeEdgeLengthButton.Enabled)
                 {
                     // Если мы нажали на вершину, то ничего не происходит.
-                    if (Vertex.Any(t => Math.Pow(t.X - e.X, 2) + Math.Pow(t.Y - e.Y, 2) <=
+                    if (Vertices.Any(t => Math.Pow(t.X - e.X, 2) + Math.Pow(t.Y - e.Y, 2) <=
                                         Math.Pow(Consts.VertexRadius, 2)))
                     {
                         return;
@@ -775,14 +760,14 @@ namespace WindowsFormsApp1
                             // У нас центр окружности петли смещён на -R -R.
                             // Если клик попал в тор, то предлагаем изменить длину.
 
-                            if ((Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2) +
-                                 Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) <=
+                            if ((Math.Pow(Vertices[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2) +
+                                 Math.Pow(Vertices[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) <=
                                 Math.Pow(Consts.VertexRadius + 4, 2)
 
                                 &&
 
-                                (Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2) +
-                                 Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) >=
+                                (Math.Pow(Vertices[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2) +
+                                 Math.Pow(Vertices[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2)) >=
                                 Math.Pow(Consts.VertexRadius - 4, 2))
                             {
                                 //getEdgeLengthForm.ShowDialog();
@@ -795,22 +780,22 @@ namespace WindowsFormsApp1
                                 if (!getEdgeLengthForm.WasCanceled)
                                 {
                                     Edges[i].Weight = getEdgeLengthForm.Weight;
-                                    PrintAdjMatrix();
+                                    PrintAdjacencyMatrix();
                                 }
                             }
                         }
                         else
                         {
                             // Если x координаты двух вершин ребра не совпадают.
-                            if (Vertex[Edges[i].Ver1].X != Vertex[Edges[i].Ver2].X)
+                            if (Vertices[Edges[i].Ver1].X != Vertices[Edges[i].Ver2].X)
                             {
                                 // Вычисляем коэффициенты в уравнении прямой,
                                 // проходящей через две вершины этого ребра, вида y = kx + b.
                                 double k = MyMath.GetK(
-                                    Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
+                                    Vertices[Edges[i].Ver1], Vertices[Edges[i].Ver2]);
 
                                 double b = MyMath.GetB(
-                                    Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
+                                    Vertices[Edges[i].Ver1], Vertices[Edges[i].Ver2]);
 
                                 // Проводим прямую между двумя веришнами ребра,
                                 // и "расширяем" её на ширину кисти/2.
@@ -834,18 +819,18 @@ namespace WindowsFormsApp1
 
                                         //chooseEdgeFormForm.ShowDialog();
 
-                                        var res = chooseEdgeFormForm.MyShowChangeLength(
+                                        var res = chooseEdgeForm.MyShowChangeLength(
                                             "Choose the edge whose weight\n          you want to change",
                                             $"Change edge weight from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
                                             $"Change edge weight from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
                                             );
 
-                                        chooseEdgeFormForm.WasCanceled = res.Item2;
-                                        chooseEdgeFormForm.IsFirstAction = res.Item3;
+                                        chooseEdgeForm.WasCanceled = res.Item2;
+                                        chooseEdgeForm.IsFirstAction = res.Item3;
                                         // Если не отменили изменение длины, то меняем.
-                                        if (!chooseEdgeFormForm.WasCanceled)
+                                        if (!chooseEdgeForm.WasCanceled)
                                         {
-                                            if (chooseEdgeFormForm.IsFirstAction)
+                                            if (chooseEdgeForm.IsFirstAction)
                                             {
                                                 //getEdgeLengthForm.ShowDialog();
 
@@ -858,7 +843,7 @@ namespace WindowsFormsApp1
                                                 {
                                                     Edges[i].Weight = getEdgeLengthForm.Weight;
 
-                                                    PrintAdjMatrix();
+                                                    PrintAdjacencyMatrix();
 
                                                     return;
                                                 }
@@ -880,7 +865,7 @@ namespace WindowsFormsApp1
                                                     {
                                                         Edges[j].Weight = getEdgeLengthForm.Weight;
 
-                                                        PrintAdjMatrix();
+                                                        PrintAdjacencyMatrix();
                                                         return;
                                                     }
 
@@ -903,7 +888,7 @@ namespace WindowsFormsApp1
                                         {
                                             Edges[i].Weight = getEdgeLengthForm.Weight;
 
-                                            PrintAdjMatrix();
+                                            PrintAdjacencyMatrix();
 
                                             return;
                                         }
@@ -917,14 +902,14 @@ namespace WindowsFormsApp1
                                 // Если x координаты вершин ребра совпали, 
                                 // то проводим между ними прямую, и 
                                 // "расширяем" её вверх и вниз на ширину кисти/2.
-                                if (e.X <= Vertex[Edges[i].Ver1].X + 4 &&
-                                    e.X >= Vertex[Edges[i].Ver1].X - 4 &&
+                                if (e.X <= Vertices[Edges[i].Ver1].X + 4 &&
+                                    e.X >= Vertices[Edges[i].Ver1].X - 4 &&
                                     e.Y < Math.Max(
-                                        Vertex[Edges[i].Ver1].Y,
-                                        Vertex[Edges[i].Ver2].Y) - Consts.VertexRadius &&
+                                        Vertices[Edges[i].Ver1].Y,
+                                        Vertices[Edges[i].Ver2].Y) - Consts.VertexRadius &&
                                     e.Y > Math.Min(
-                                        Vertex[Edges[i].Ver1].Y,
-                                        Vertex[Edges[i].Ver2].Y) + Consts.VertexRadius)
+                                        Vertices[Edges[i].Ver1].Y,
+                                        Vertices[Edges[i].Ver2].Y) + Consts.VertexRadius)
                                 {
                                     // Если есть обратное ребро, то даём выбрать, 
                                     // длину какого пути надо изменить.
@@ -942,19 +927,19 @@ namespace WindowsFormsApp1
                                         //    $"Изменить длину пути из {Edges[i].Ver2 + 1} в " +
                                         //    $"{Edges[i].Ver1 + 1}";
 
-                                        var res = chooseEdgeFormForm.MyShowChangeLength(
+                                        var res = chooseEdgeForm.MyShowChangeLength(
                                             "Choose the edge whose weight\n          you want to change",
                                             $"Change edge weight from {Edges[i].Ver1 + 1} to {Edges[i].Ver2 + 1}",
                                             $"Change edge weight from {Edges[i].Ver2 + 1} to {Edges[i].Ver1 + 1}"
                                         );
 
-                                        chooseEdgeFormForm.WasCanceled = res.Item2;
-                                        chooseEdgeFormForm.IsFirstAction = res.Item3;
+                                        chooseEdgeForm.WasCanceled = res.Item2;
+                                        chooseEdgeForm.IsFirstAction = res.Item3;
 
                                         // Если не отменили, то меняем длину. 
-                                        if (!chooseEdgeFormForm.WasCanceled)
+                                        if (!chooseEdgeForm.WasCanceled)
                                         {
-                                            if (chooseEdgeFormForm.IsFirstAction)
+                                            if (chooseEdgeForm.IsFirstAction)
                                             {
                                                 var result2 = getEdgeLengthForm.MyShow();
 
@@ -965,7 +950,7 @@ namespace WindowsFormsApp1
                                                 {
                                                     Edges[i].Weight = getEdgeLengthForm.Weight;
 
-                                                    PrintAdjMatrix();
+                                                    PrintAdjacencyMatrix();
 
                                                     return;
                                                 }
@@ -987,7 +972,7 @@ namespace WindowsFormsApp1
                                                     {
                                                         Edges[j].Weight = getEdgeLengthForm.Weight;
 
-                                                        PrintAdjMatrix();
+                                                        PrintAdjacencyMatrix();
                                                         return;
                                                     }
 
@@ -1010,7 +995,7 @@ namespace WindowsFormsApp1
                                         {
                                             Edges[i].Weight = getEdgeLengthForm.Weight;
 
-                                            PrintAdjMatrix();
+                                            PrintAdjacencyMatrix();
 
                                             return;
                                         }
@@ -1027,7 +1012,7 @@ namespace WindowsFormsApp1
                 if (!DrawVertexButton.Enabled)
                 {
                     // Проверяем, не попадаем ли мы на другую вершину.
-                    if (Vertex.Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
+                    if (Vertices.Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
                                         Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                     {
                         myMessageBox.ShowVertexNotCross("Vertex must not cross");
@@ -1045,26 +1030,26 @@ namespace WindowsFormsApp1
                         return;
                     }
 
-                    Vertex.Add(new Vertex(e.X, e.Y));
-                    ToolsForDrawing.DrawVertex(e.X, e.Y, Vertex.Count.ToString());
+                    Vertices.Add(new Vertex(e.X, e.Y));
+                    ToolsForDrawing.DrawVertex(e.X, e.Y, Vertices.Count.ToString());
                     field.Image = ToolsForDrawing.GetBitmap();
 
-                    PrintAdjMatrix();
+                    PrintAdjacencyMatrix();
                 }
 
                 //Если нажата кнопка "Рисовать ребро".
                 if (!DrawEdgeButton.Enabled)
                 {
                     // Смотрим, на какую вершину нажали, затем выделяем её.
-                    for (int i = 0; i < Vertex.Count; i++)
+                    for (int i = 0; i < Vertices.Count; i++)
                     {
-                        if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                        if (Math.Pow(Vertices[i].X - e.X, 2) + Math.Pow(Vertices[i].Y - e.Y, 2) <=
                             Math.Pow(Consts.VertexRadius, 2))
                         {
                             // Если это первая вершина.
                             if (ver1ForConnection == -1)
                             {
-                                ToolsForDrawing.DrawSelectedVertex(Vertex[i].X, Vertex[i].Y);
+                                ToolsForDrawing.DrawSelectedVertex(Vertices[i].X, Vertices[i].Y);
                                 ver1ForConnection = i;
                                 field.Image = ToolsForDrawing.GetBitmap();
                                 break;
@@ -1073,7 +1058,7 @@ namespace WindowsFormsApp1
                             // Если это вторая веришна.
                             if (ver2ForConnection == -1)
                             {
-                                ToolsForDrawing.DrawSelectedVertex(Vertex[i].X, Vertex[i].Y);
+                                ToolsForDrawing.DrawSelectedVertex(Vertices[i].X, Vertices[i].Y);
                                 ver2ForConnection = i;
                                 field.Image = ToolsForDrawing.GetBitmap();
 
@@ -1089,13 +1074,13 @@ namespace WindowsFormsApp1
                                     if (getEdgeLengthForm.WasCanceled)
                                     {
                                         ToolsForDrawing.DrawVertex(
-                                            Vertex[ver1ForConnection].X,
-                                            Vertex[ver1ForConnection].Y,
+                                            Vertices[ver1ForConnection].X,
+                                            Vertices[ver1ForConnection].Y,
                                             (ver1ForConnection + 1).ToString());
 
                                         ToolsForDrawing.DrawVertex(
-                                            Vertex[ver2ForConnection].X,
-                                            Vertex[ver2ForConnection].Y,
+                                            Vertices[ver2ForConnection].X,
+                                            Vertices[ver2ForConnection].Y,
                                             (ver2ForConnection + 1).ToString());
 
                                         getEdgeLengthForm.WasCanceled = false;
@@ -1110,14 +1095,14 @@ namespace WindowsFormsApp1
                                             getEdgeLengthForm.Weight));
 
                                         ToolsForDrawing.DrawEdge(
-                                            Vertex[ver1ForConnection],
-                                            Vertex[ver2ForConnection],
+                                            Vertices[ver1ForConnection],
+                                            Vertices[ver2ForConnection],
                                             Edges[Edges.Count - 1]);
 
                                         ver1ForConnection = -1;
                                         ver2ForConnection = -1;
 
-                                        PrintAdjMatrix();
+                                        PrintAdjacencyMatrix();
 
                                         DrawVertexButton.Enabled = true;
                                     }
@@ -1135,13 +1120,13 @@ namespace WindowsFormsApp1
 
                                 // Убираем выделение с вершин.
                                 ToolsForDrawing.DrawVertex(
-                                    Vertex[ver1ForConnection].X,
-                                    Vertex[ver1ForConnection].Y,
+                                    Vertices[ver1ForConnection].X,
+                                    Vertices[ver1ForConnection].Y,
                                     (ver1ForConnection + 1).ToString());
 
                                 ToolsForDrawing.DrawVertex(
-                                    Vertex[ver2ForConnection].X,
-                                    Vertex[ver2ForConnection].Y,
+                                    Vertices[ver2ForConnection].X,
+                                    Vertices[ver2ForConnection].Y,
                                     (ver2ForConnection + 1).ToString());
 
                                 ver1ForConnection = ver2ForConnection = -1;
@@ -1159,9 +1144,9 @@ namespace WindowsFormsApp1
 
                     // Если удаляем вершину.
                     // Предлагаем также отказаться от удаления.
-                    for (int i = 0; i < Vertex.Count; i++)
+                    for (int i = 0; i < Vertices.Count; i++)
                     {
-                        if (Math.Pow(Vertex[i].X - e.X, 2) + Math.Pow(Vertex[i].Y - e.Y, 2) <=
+                        if (Math.Pow(Vertices[i].X - e.X, 2) + Math.Pow(Vertices[i].Y - e.Y, 2) <=
                             Math.Pow(Consts.VertexRadius, 2))
                         {
                             var confirmation = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
@@ -1190,7 +1175,7 @@ namespace WindowsFormsApp1
                                     }
                                 }
 
-                                Vertex.RemoveAt(i);
+                                Vertices.RemoveAt(i);
                                 somethingDeleted = true;
                                 break;
                             }
@@ -1212,17 +1197,17 @@ namespace WindowsFormsApp1
                                 // Петля - это круг. и +- ширина кисти/2 к радиусу. 
                                 // У нас центр окружности петли смещён на -R -R.
                                 // Если клик попал в тор, то предлагаем изменить длину.
-                                if ((Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
+                                if ((Math.Pow(Vertices[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
                                      +
-                                     Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2))
+                                     Math.Pow(Vertices[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2))
                                     <=
                                     Math.Pow(Consts.VertexRadius + 4, 2)
 
                                     &&
 
-                                    (Math.Pow(Vertex[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
+                                    (Math.Pow(Vertices[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
                                      +
-                                     Math.Pow(Vertex[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2))
+                                     Math.Pow(Vertices[Edges[i].Ver1].Y - Consts.VertexRadius - e.Y, 2))
                                     >=
                                     Math.Pow(Consts.VertexRadius - 4, 2))
                                 {
@@ -1242,15 +1227,15 @@ namespace WindowsFormsApp1
                             else
                             {
                                 // Если x координаты вершин ребра не совпдадают.
-                                if (Vertex[Edges[i].Ver1].X != Vertex[Edges[i].Ver2].X)
+                                if (Vertices[Edges[i].Ver1].X != Vertices[Edges[i].Ver2].X)
                                 {
                                     // Вычисляем коэффициенты в уравнении прямой,
                                     // проходящей через две вершины этого ребра, вида y = kx + b.
                                     double k = MyMath.GetK(
-                                        Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
+                                        Vertices[Edges[i].Ver1], Vertices[Edges[i].Ver2]);
 
                                     double b = MyMath.GetB(
-                                        Vertex[Edges[i].Ver1], Vertex[Edges[i].Ver2]);
+                                        Vertices[Edges[i].Ver1], Vertices[Edges[i].Ver2]);
 
                                     // Проводим прямую между двумя веришнами ребра,
                                     // и "расширяем" её на ширину кисти/2.
@@ -1262,22 +1247,22 @@ namespace WindowsFormsApp1
                                         if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                             adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
-                                            var (caption, text1, text2) = SetTextInButtonFromChooseEdgeForm(
+                                            var (caption, text1, text2) = GetTextInButtonForChooseEdgeForm(
                                                  Edges[i].Ver1, Edges[i].Ver2);
 
                                             //chooseEdgeFormForm.ShowDialog();
-                                            var res = chooseEdgeFormForm.MyShowDeleteEdge(caption, text1, text2);
-                                            chooseEdgeFormForm.WasCanceled = res.Item2;
-                                            chooseEdgeFormForm.IsFirstAction = res.Item3;
+                                            var res = chooseEdgeForm.MyShowDeleteEdge(caption, text1, text2);
+                                            chooseEdgeForm.WasCanceled = res.Item2;
+                                            chooseEdgeForm.IsFirstAction = res.Item3;
                                             // Если не нажали отмену, то удаляем.
-                                            if (!chooseEdgeFormForm.WasCanceled)
+                                            if (!chooseEdgeForm.WasCanceled)
                                             {
-                                                if (chooseEdgeFormForm.IsFirstAction)
+                                                if (chooseEdgeForm.IsFirstAction)
                                                 {
                                                     Edges.RemoveAt(i);
                                                     somethingDeleted = true;
 
-                                                    chooseEdgeFormForm.IsFirstAction = false;
+                                                    chooseEdgeForm.IsFirstAction = false;
                                                     break;
                                                 }
 
@@ -1313,40 +1298,40 @@ namespace WindowsFormsApp1
                                 }
 
                                 // Если x координаты вершин ребра совпадают.
-                                if (Vertex[Edges[i].Ver1].X == Vertex[Edges[i].Ver2].X)
+                                if (Vertices[Edges[i].Ver1].X == Vertices[Edges[i].Ver2].X)
                                 {
                                     // Если x координаты вершин ребра совпали, 
                                     // то проводим между ними прямую, и 
                                     // "расширяем" её вверх и вниз на ширину кисти/2.
-                                    if (e.X <= Vertex[Edges[i].Ver1].X + 4 &&
-                                        e.X >= Vertex[Edges[i].Ver1].X - 4 &&
+                                    if (e.X <= Vertices[Edges[i].Ver1].X + 4 &&
+                                        e.X >= Vertices[Edges[i].Ver1].X - 4 &&
                                         e.Y < Math.Max(
-                                            Vertex[Edges[i].Ver1].Y,
-                                            Vertex[Edges[i].Ver2].Y) - Consts.VertexRadius &&
+                                            Vertices[Edges[i].Ver1].Y,
+                                            Vertices[Edges[i].Ver2].Y) - Consts.VertexRadius &&
                                         e.Y > Math.Min(
-                                            Vertex[Edges[i].Ver1].Y,
-                                            Vertex[Edges[i].Ver2].Y) + Consts.VertexRadius)
+                                            Vertices[Edges[i].Ver1].Y,
+                                            Vertices[Edges[i].Ver2].Y) + Consts.VertexRadius)
                                     {
                                         // Если есть обратный путь, то предлагаем выбрать путь,
                                         // который надо удалить. 
                                         if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                             adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
-                                            var (caption, text1, text2) = SetTextInButtonFromChooseEdgeForm(
+                                            var (caption, text1, text2) = GetTextInButtonForChooseEdgeForm(
                                                 Edges[i].Ver1, Edges[i].Ver2);
 
-                                            var res = chooseEdgeFormForm.MyShowDeleteEdge(caption, text1, text2);
-                                            chooseEdgeFormForm.WasCanceled = res.Item2;
-                                            chooseEdgeFormForm.IsFirstAction = res.Item3;
+                                            var res = chooseEdgeForm.MyShowDeleteEdge(caption, text1, text2);
+                                            chooseEdgeForm.WasCanceled = res.Item2;
+                                            chooseEdgeForm.IsFirstAction = res.Item3;
 
                                             // Если не нажали отмену, то удаляем.
-                                            if (!chooseEdgeFormForm.WasCanceled)
+                                            if (!chooseEdgeForm.WasCanceled)
                                             {
-                                                if (chooseEdgeFormForm.IsFirstAction)
+                                                if (chooseEdgeForm.IsFirstAction)
                                                 {
                                                     Edges.RemoveAt(i);
                                                     somethingDeleted = true;
-                                                    chooseEdgeFormForm.IsFirstAction = false;
+                                                    chooseEdgeForm.IsFirstAction = false;
                                                     break;
                                                 }
 
@@ -1387,9 +1372,9 @@ namespace WindowsFormsApp1
                     if (somethingDeleted)
                     {
                         ToolsForDrawing.ClearField();
-                        ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+                        ToolsForDrawing.DrawFullGraph(Edges, Vertices);
                         field.Image = ToolsForDrawing.GetBitmap();
-                        PrintAdjMatrix();
+                        PrintAdjacencyMatrix();
                     }
                 }
 
@@ -1405,10 +1390,10 @@ namespace WindowsFormsApp1
             File.WriteAllText(pathForSaveFile, default);
 
             // Сначала число вершин, затем сами вершины.
-            File.AppendAllText(pathForSaveFile, Vertex.Count + Environment.NewLine);
+            File.AppendAllText(pathForSaveFile, Vertices.Count + Environment.NewLine);
 
-            for (int i = 0; i < Vertex.Count; i++)
-                File.AppendAllText(pathForSaveFile, Vertex[i] + Environment.NewLine);
+            foreach (var vertex in Vertices)
+                File.AppendAllText(pathForSaveFile, vertex + Environment.NewLine);
 
             // Сначала число рёбер, потом сами рёбра.
             File.AppendAllText(pathForSaveFile, Edges.Count + Environment.NewLine);
@@ -1426,15 +1411,15 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"> Ссылка на объект, вызвавший событие </param>
         /// <param name="e"> Нажатая кнопка </param>
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        private void MainFormKeyPress(object sender, KeyPressEventArgs e)
         {
             // Отмена рисования ребра (нажатие ESC).
             if (ver1ForConnection != -1 && ver2ForConnection == -1)
                 if (e.KeyChar == (char)Keys.Escape)
                 {
                     ToolsForDrawing.DrawVertex(
-                        Vertex[ver1ForConnection].X,
-                        Vertex[ver1ForConnection].Y,
+                        Vertices[ver1ForConnection].X,
+                        Vertices[ver1ForConnection].Y,
                         (ver1ForConnection + 1).ToString());
                     ver1ForConnection = -1;
                 }
@@ -1445,8 +1430,8 @@ namespace WindowsFormsApp1
                 if (e.KeyChar == (char)Keys.Escape)
                 {
                     ToolsForDrawing.DrawVertex(
-                        Vertex[indexVertexForMove].X,
-                        Vertex[indexVertexForMove].Y,
+                        Vertices[indexVertexForMove].X,
+                        Vertices[indexVertexForMove].Y,
                         (indexVertexForMove + 1).ToString());
                     indexVertexForMove = -1;
 
@@ -1467,7 +1452,7 @@ namespace WindowsFormsApp1
             int vertexCount;
             int edgesCount;
 
-            Vertex.Clear();
+            Vertices.Clear();
             Edges.Clear();
 
             string[] lines = File.ReadAllLines(pathForOpenFile);
@@ -1481,7 +1466,7 @@ namespace WindowsFormsApp1
                 int xCoord = int.Parse(lines[i].Split(' ')[0]);
                 int yCoord = int.Parse(lines[i].Split(' ')[1]);
 
-                Vertex.Add(new Vertex(xCoord, yCoord));
+                Vertices.Add(new Vertex(xCoord, yCoord));
             }
 
             // Количество рёбер.
@@ -1503,25 +1488,25 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainForm_Click(object sender, EventArgs e) =>
+        private void MainFormClick(object sender, EventArgs e) =>
             Activate();
 
         /// <summary>
         /// Вывод матрицы смежности в ListBox.
         /// </summary>
-        public void PrintAdjMatrix()
+        public void PrintAdjacencyMatrix()
         {
             // Создаём и заполняем матрицу по листам смежности.
-            adjMatrix = new double[Vertex.Count, Vertex.Count];
+            adjMatrix = new double[Vertices.Count, Vertices.Count];
 
-            ToolsForDrawing.FillAdjMatrix(Vertex.Count, Edges, adjMatrix);
+            ToolsForDrawing.FillAdjMatrix(Vertices.Count, Edges, adjMatrix);
 
             showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
 
             string curStrForPrint;
             string caption;
 
-            string strFromHyphen = GetHyphen(5) + "|";
+            string strFromHyphen = GetHyphens(5) + "|";
 
             caption = GetSpaces(5) + "|" + GetSpaces(3);
 
@@ -1538,7 +1523,7 @@ namespace WindowsFormsApp1
 
             // В зависимости от maxDigitsInMatrix и от длины
             // текущего числа формируем матрицу смежности.
-            for (int i = 0; i < Vertex.Count; i++)
+            for (int i = 0; i < Vertices.Count; i++)
             {
                 // Отдельно высчитываем расстояние между столбцами для двузначных чисел.
                 if (i < 9)
@@ -1546,7 +1531,7 @@ namespace WindowsFormsApp1
                 else
                     curStrForPrint = (i + 1) + GetSpaces(1) + "|" + GetSpaces(3);
 
-                for (int j = 0; j < Vertex.Count; j++)
+                for (int j = 0; j < Vertices.Count; j++)
                 {
                     switch (maxDigitsInMatrix)
                     {
@@ -1561,13 +1546,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(5);
 
-                                    strFromHyphen += GetHyphen(7);
+                                    strFromHyphen += GetHyphens(7);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(3);
 
-                                    strFromHyphen += GetHyphen(10);
+                                    strFromHyphen += GetHyphens(10);
                                 }
                             }
 
@@ -1592,13 +1577,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(7);
 
-                                    strFromHyphen += GetHyphen(9);
+                                    strFromHyphen += GetHyphens(9);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(5);
 
-                                    strFromHyphen += GetHyphen(12);
+                                    strFromHyphen += GetHyphens(12);
                                 }
                             }
 
@@ -1629,13 +1614,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(9);
 
-                                    strFromHyphen += GetHyphen(11);
+                                    strFromHyphen += GetHyphens(11);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(7);
 
-                                    strFromHyphen += GetHyphen(13);
+                                    strFromHyphen += GetHyphens(13);
                                 }
                             }
 
@@ -1669,13 +1654,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(10);
 
-                                    strFromHyphen += GetHyphen(13);
+                                    strFromHyphen += GetHyphens(13);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(8);
 
-                                    strFromHyphen += GetHyphen(15);
+                                    strFromHyphen += GetHyphens(15);
                                 }
                             }
 
@@ -1712,13 +1697,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(11);
 
-                                    strFromHyphen += GetHyphen(14);
+                                    strFromHyphen += GetHyphens(14);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(9);
 
-                                    strFromHyphen += GetHyphen(16);
+                                    strFromHyphen += GetHyphens(16);
                                 }
                             }
 
@@ -1758,13 +1743,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(12);
 
-                                    strFromHyphen += GetHyphen(15);
+                                    strFromHyphen += GetHyphens(15);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(10);
 
-                                    strFromHyphen += GetHyphen(18);
+                                    strFromHyphen += GetHyphens(18);
                                 }
                             }
 
@@ -1807,13 +1792,13 @@ namespace WindowsFormsApp1
                                 {
                                     caption += (j + 1) + GetSpaces(14);
 
-                                    strFromHyphen += GetHyphen(17);
+                                    strFromHyphen += GetHyphens(17);
                                 }
                                 else
                                 {
                                     caption += (j + 1) + GetSpaces(12);
 
-                                    strFromHyphen += GetHyphen(19);
+                                    strFromHyphen += GetHyphens(19);
                                 }
                             }
 
@@ -1827,7 +1812,7 @@ namespace WindowsFormsApp1
                 showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Add(curStrForPrint);
 
                 // Делаем пропуск строки, если это не последняя строка.
-                if (i != Vertex.Count - 1)
+                if (i != Vertices.Count - 1)
                     showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Add(GetSpaces(5) + "|");
 
             }
@@ -1838,7 +1823,7 @@ namespace WindowsFormsApp1
 
             // Если вершин нет, закрываем матрицу.
             // Если есть, то выводим матрицу, при этом оставляем фокус на этом окне.
-            if (Vertex.Count == 0)
+            if (Vertices.Count == 0)
             {
                 showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
                 showAdjacencyMatrixForm.Hide();
@@ -1872,7 +1857,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="amount"> Количество дефисов </param>
         /// <returns> Строка из дефисов </returns>
-        private static string GetHyphen(int amount)
+        private static string GetHyphens(int amount)
         {
             string result = default;
 
@@ -1908,10 +1893,10 @@ namespace WindowsFormsApp1
         private static bool IsInt(double val) =>
             int.TryParse(val.ToString(), out var temp);
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void TimerForPlottingTick(object sender, EventArgs e)
         {
-            var xValue = (sp.ElapsedMilliseconds) / 1000;
-            var yValue = totalCount;
+            var xValue = (timerForPlotting.ElapsedMilliseconds) / 1000;
+            var yValue = totalPointsCount;
 
             if (pointsForComputeFormula.All(p => p.X != xValue))
             {
@@ -1922,24 +1907,24 @@ namespace WindowsFormsApp1
 
         public void MainTick(List<Edge>[] adjacencyList)
         {
-            coefficient = (float)(trackBar1.Value / 10.0);
+            SpeedCoefficient = (float)(trackBar1.Value / 10.0);
             // Если готова выпустить точку.
             var count = points.Count;
 
-            for (var i = 0; i < Vertex.Count; i++)
+            for (var i = 0; i < Vertices.Count; i++)
             {
-                if (Vertex[i].HasPoint)
+                if (Vertices[i].HasPoint)
                 {
-                    Vertex[i].HasPoint = false;
+                    Vertices[i].HasPoint = false;
 
-                    if (firstVertex)
+                    if (isFirstVertex)
                     {
-                        firstVertex = false;
-                        totalCount += adjacencyList[i].Count;
+                        isFirstVertex = false;
+                        totalPointsCount += adjacencyList[i].Count;
                     }
                     else
                     {
-                        totalCount += adjacencyList[i].Count - 1;
+                        totalPointsCount += adjacencyList[i].Count - 1;
                     }
 
                     points.AddRange(adjacencyList[i]);
@@ -1953,21 +1938,21 @@ namespace WindowsFormsApp1
                 timers[i].Start();
             }
 
-            ToolsForDrawing.DrawFullGraph(Edges, Vertex);
+            ToolsForDrawing.DrawFullGraph(Edges, Vertices);
 
             for (var i = 0; i < points.Count; i++)
             {
-                if (timers[i].ElapsedMilliseconds * coefficient > points[i].Weight * 1000)
+                if (timers[i].ElapsedMilliseconds * SpeedCoefficient > points[i].Weight * 1000)
                 {
-                    Vertex[points[i].Ver2].HasPoint = true;
+                    Vertices[points[i].Ver2].HasPoint = true;
                     points.RemoveAt(i);
                     timers.RemoveAt(i);
                     i--;
                     continue;
                 }
 
-                PointF point = GetPoint(Vertex[points[i].Ver1],
-                    Vertex[points[i].Ver2], points[i].Weight, timers[i]);
+                PointF point = GetCurPointPosition(Vertices[points[i].Ver1],
+                    Vertices[points[i].Ver2], points[i].Weight, timers[i]);
 
                 ToolsForDrawing.DrawPoint(point.X, point.Y);
 
@@ -1977,7 +1962,7 @@ namespace WindowsFormsApp1
             field.Image = ToolsForDrawing.GetBitmap();
         }
 
-        private PointF GetPoint(Vertex ver1, Vertex ver2, double allTime, Stopwatch timer)
+        private PointF GetCurPointPosition(Vertex ver1, Vertex ver2, double fullTime, Stopwatch timer)
         {
             var distanceX = Math.Abs(ver2.X - ver1.X);
             var distanceY = Math.Abs(ver2.Y - ver1.Y);
@@ -1989,15 +1974,15 @@ namespace WindowsFormsApp1
             if (ver1 == ver2)
             {
                 // Левая нижняя дуга.
-                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime / 4)
+                if (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 <= fullTime / 4)
                 {
-                    x = (float)(100 / allTime * timer.ElapsedMilliseconds * coefficient / 1000.0);
+                    x = (float)(100 / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0);
                     y = (float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     //return new PointF(ver1.X - 20, ver1.Y);
                     {
-                        x = (float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 4));
+                        x = (float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime / 4));
                         y = -(float)Math.Sqrt(400 - x * x);
 
                         x += 20;
@@ -2010,15 +1995,15 @@ namespace WindowsFormsApp1
                     return new PointF(-x + ver1.X, ver1.Y + y);
                 }
 
-                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime / 2)
+                if (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 <= fullTime / 2)
                 {
                     //Верхняя правая дуга.
-                    x = (float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 4));
+                    x = (float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime / 4));
                     y = -(float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     {
-                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 2));
+                        x = -(float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime / 2));
                         y = -(float)Math.Sqrt(400 - x * x);
 
 
@@ -2033,15 +2018,15 @@ namespace WindowsFormsApp1
                 }
 
 
-                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime * 3 / 4)
+                if (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 <= fullTime * 3 / 4)
                 {
                     // Правая верхняя дуга
-                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime / 2));
+                    x = -(float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime / 2));
                     y = -(float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     {
-                        x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime * 3 / 4));
+                        x = -(float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime * 3 / 4));
                         y = -(float)Math.Sqrt(400 - x * x);
 
                         x += 20;
@@ -2054,14 +2039,14 @@ namespace WindowsFormsApp1
                     return new PointF(-x + ver1.X, ver1.Y + y);
                 }
 
-                if (timer.ElapsedMilliseconds * coefficient / 1000.0 <= allTime)
+                if (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 <= fullTime)
                 {
-                    x = -(float)(100 / allTime * (timer.ElapsedMilliseconds * coefficient / 1000.0 - allTime * 3 / 4));
+                    x = -(float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime * 3 / 4));
                     y = -(float)Math.Sqrt(400 - x * x);
 
                     if (x * x >= 400)
                     {
-                        x = (float)(100 / allTime * timer.ElapsedMilliseconds * coefficient / 1000.0);
+                        x = (float)(100 / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0);
                         y = (float)Math.Sqrt(400 - x * x);
 
                         return new PointF(ver1.X - 20, ver1.Y);
@@ -2079,26 +2064,26 @@ namespace WindowsFormsApp1
                 {
                     if (ver1.Y > ver2.Y)
                     {
-                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
-                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
+                        x = (float)(distanceX / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.X;
+                        y = -(float)(distanceY / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.Y;
                     }
                     else
                     {
-                        x = (float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
-                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
+                        x = (float)(distanceX / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.X;
+                        y = (float)(distanceY / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.Y;
                     }
                 }
                 else
                 {
                     if (ver1.Y > ver2.Y)
                     {
-                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
-                        y = -(float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
+                        x = -(float)(distanceX / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.X;
+                        y = -(float)(distanceY / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.Y;
                     }
                     else
                     {
-                        x = -(float)(distanceX / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.X;
-                        y = (float)(distanceY / allTime * timer.ElapsedMilliseconds * coefficient / 1000) + ver1.Y;
+                        x = -(float)(distanceX / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.X;
+                        y = (float)(distanceY / fullTime * timer.ElapsedMilliseconds * SpeedCoefficient / 1000) + ver1.Y;
                     }
                 }
             }
@@ -2106,7 +2091,7 @@ namespace WindowsFormsApp1
             return new PointF(x, y);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void StartReseachButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
             HideAdjacencyMatrix();
@@ -2116,7 +2101,7 @@ namespace WindowsFormsApp1
             chartForm.chartForm.ChartAreas[0].AxisX.Minimum = 0;
             chartForm.chartForm.ChartAreas[0].AxisX.Title = "Time";
 
-            clickContinue = true;
+            wasClickedContinue = true;
             CheckGraphForStrongConnectionButton.PerformClick();
 
             if (responseSC)
@@ -2139,10 +2124,10 @@ namespace WindowsFormsApp1
                 panel3.Location = new Point(Consts.GraphPictureBoxWidth, 5);
                 trackBar1.Location = new Point(150, Consts.GraphPictureBoxHeight + 30);
 
-                Vertex[0].HasPoint = true;
-                var listArr = new List<Edge>[Vertex.Count];
+                Vertices[0].HasPoint = true;
+                var listArr = new List<Edge>[Vertices.Count];
 
-                for (var i = 0; i < Vertex.Count; i++)
+                for (var i = 0; i < Vertices.Count; i++)
                 {
                     List<Edge> curEdges = Edges.Where(el => el.Ver1 == i).ToList();
                     listArr[i] = new List<Edge>();
@@ -2156,13 +2141,13 @@ namespace WindowsFormsApp1
                 mainTimer.Start();
                 timer1.Start();
                 timer2.Start();
-                sp.Start();
+                timerForPlotting.Start();
                 chartForm.Show();
                 Activate();
             }
             else
             {
-                clickContinue = false;
+                wasClickedContinue = false;
             }
         }
 
@@ -2173,22 +2158,22 @@ namespace WindowsFormsApp1
         /// <param name="e"> E </param>
         private void StopProcessButton_Click(object sender, EventArgs e)
         {
-            requireTimeForTesting = sp.ElapsedMilliseconds;
+            RequireTimeForTesting = timerForPlotting.ElapsedMilliseconds;
 
             if (StopProcessButton.Text == "Get main part")
             {
                 mainTimer.Stop();
                 timer1.Stop();
                 timer2.Stop();
-                sp.Stop();
+                timerForPlotting.Stop();
                 timers.ForEach(timer => timer.Stop());
                 StopProcessButton.Text = "Continue testing";
                 StopProcessButton.Enabled = false;
-                ShowFormula();
+                ShowResultOfMainPartByTime();
             }
             else
             {
-                sp.Start();
+                timerForPlotting.Start();
                 mainTimer.Start();
                 timer1.Start();
                 timer2.Start();
@@ -2197,12 +2182,12 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void SetAndShowPlotForm()
+        private void SetAndShowPlotWithMainPartForm()
         {
 
-            chartWolfram = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
-            mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
-            mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
+            DisplayMainPartByTimeForm = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
+            mathKernel1.GraphicsHeight = DisplayMainPartByTimeForm.pictureBox1.Height;
+            mathKernel1.GraphicsWidth = DisplayMainPartByTimeForm.pictureBox1.Width;
             mathKernel1.Compute("Plot[f[x], {x, 0, " + $"{pointsForComputeFormula.Last().X}" + "}, " +
                                 "AxesStyle -> Directive[Black, FontColor -> White], " +
                                 "Background -> Gray, " +
@@ -2210,18 +2195,18 @@ namespace WindowsFormsApp1
 
             if (mathKernel1.Graphics.Length > 0)
             {
-                chartWolfram.pictureBox1.Image = mathKernel1.Graphics[0];
-                chartWolfram.Show();
-                chartWolfram.Activate();
+                DisplayMainPartByTimeForm.pictureBox1.Image = mathKernel1.Graphics[0];
+                DisplayMainPartByTimeForm.Show();
+                DisplayMainPartByTimeForm.Activate();
             }
         }
 
-        private void SetAndShowPlotForm2(string data, double value)
+        private void SetAndShowPlotWithoutMainPartForm(string data, double value)
         {
-            chartWolfram = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
-            mathKernel1.GraphicsHeight = chartWolfram.pictureBox1.Height;
-            mathKernel1.GraphicsWidth = chartWolfram.pictureBox1.Width;
-            mathKernel1.Compute($"g[x_] := {value}*x^{alpha}");
+            DisplayMainPartByTimeForm = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
+            mathKernel1.GraphicsHeight = DisplayMainPartByTimeForm.pictureBox1.Height;
+            mathKernel1.GraphicsWidth = DisplayMainPartByTimeForm.pictureBox1.Width;
+            mathKernel1.Compute($"g[x_] := {value}*x^{Alpha}");
             mathKernel1.Compute(data);
             mathKernel1.Compute("k= FindFormula[data, x]");
             mathKernel1.Compute("kf[x_]:=k");
@@ -2232,15 +2217,15 @@ namespace WindowsFormsApp1
 
             if (mathKernel1.Graphics.Length > 0)
             {
-                chartWolfram.pictureBox1.Image = mathKernel1.Graphics[0];
-                chartWolfram.Show();
-                chartWolfram.Activate();
+                DisplayMainPartByTimeForm.pictureBox1.Image = mathKernel1.Graphics[0];
+                DisplayMainPartByTimeForm.Show();
+                DisplayMainPartByTimeForm.Activate();
             }
         }
 
-        private void ShowFormula()
+        private void ShowResultOfMainPartByTime()
         {
-            alpha = cyclomaticNumber - 1;
+            Alpha = CyclomaticNumber - 1;
 
             var (_, item2, item3) = getEdgeLengthForm.MyShow(true);
 
@@ -2249,7 +2234,7 @@ namespace WindowsFormsApp1
 
             if (!getEdgeLengthForm.WasCanceled)
             {
-                alpha = getEdgeLengthForm.Weight;
+                Alpha = getEdgeLengthForm.Weight;
             }
 
             var data = pointsForComputeFormula
@@ -2260,7 +2245,7 @@ namespace WindowsFormsApp1
             data = "data = {{" + data;
 
             mathKernel1.Compute(data);
-            mathKernel1.Compute("formula = FindFormula[data, x] / (x^" + $"{alpha})");
+            mathKernel1.Compute("formula = FindFormula[data, x] / (x^" + $"{Alpha})");
             mathKernel1.Compute("f[x_] := formula");
             mathKernel1.Compute("Limit[formula, x -> Infinity]");
 
@@ -2272,24 +2257,24 @@ namespace WindowsFormsApp1
                     throw new ArgumentException();
                 }
 
-                SetAndShowPlotForm2(data, value);
+                SetAndShowPlotWithoutMainPartForm(data, value);
             }
             catch (Exception)
             {
-                SetAndShowPlotForm();
+                SetAndShowPlotWithMainPartForm();
             }
 
             StopProcessButton.Enabled = true;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void SaveChartToCsvFileButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
 
             mainTimer.Stop();
             timer1.Stop();
             timer2.Stop();
-            sp.Stop();
+            timerForPlotting.Stop();
             timers.ForEach(timer => timer.Stop());
 
             // Делаем остальные кнопки активными.
@@ -2307,7 +2292,7 @@ namespace WindowsFormsApp1
                 saveGraphDialog.CheckPathExists = true;
                 saveGraphDialog.Filter = "Files(*.CSV)|*.CSV";
 
-                requireTimeForTesting = sp.ElapsedMilliseconds;
+                RequireTimeForTesting = timerForPlotting.ElapsedMilliseconds;
                 saveGraphDialog.ShowHelp = true;
 
                 // Процесс сохранения файла.
@@ -2316,7 +2301,7 @@ namespace WindowsFormsApp1
                     try
                     {
                         string sv = saveGraphDialog.FileName;
-                        File.WriteAllText(sv, chartData.ToString());
+                        File.WriteAllText(sv, ChartFormatData.ToString());
                     }
                     catch (Exception)
                     {
@@ -2328,7 +2313,7 @@ namespace WindowsFormsApp1
                 myMessageBox.ShowGraphIsEmpty("Graph is empty");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
-            if (Vertex.Count != 0)
+            if (Vertices.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
             else
             {
@@ -2338,26 +2323,26 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
+        private void ConvertDataToCsvFormatTimerTick(object sender, EventArgs e)
         {
-            var time = TimeSpan.FromSeconds(seconds++);
+            var time = TimeSpan.FromSeconds(pastSecondsCount++);
 
             var timeStr = time.ToString(@"hh\:mm\:ss");
-            chartData.AppendLine($"{timeStr};{totalCount}");
+            ChartFormatData.AppendLine($"{timeStr};{totalPointsCount}");
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void OpenChartFromCsvFileButtonClick(object sender, EventArgs e)
         {
-            chartDisplay.chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
-            chartDisplay.chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
-            chartDisplay.chart1.ChartAreas[0].AxisX.Minimum = 0;
+            chartForOpenFromFileForm.chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
+            chartForOpenFromFileForm.chart1.ChartAreas[0].AxisY.MajorGrid.LineWidth = 0;
+            chartForOpenFromFileForm.chart1.ChartAreas[0].AxisX.Minimum = 0;
 
             RedrawSelectedVertex();
 
             mainTimer.Stop();
             timer1.Stop();
             timer2.Stop();
-            sp.Stop();
+            timerForPlotting.Stop();
             timers.ForEach(timer => timer.Stop());
 
             // Делаем остальные кнопки активными.
@@ -2388,11 +2373,11 @@ namespace WindowsFormsApp1
                         var time = TimeSpan.Parse(line[0]).TotalSeconds;
                         var amount = int.Parse(line[1]);
 
-                        chartDisplay.chart1.Series["Amount of points"]
+                        chartForOpenFromFileForm.chart1.Series["Amount of points"]
                             .Points.AddXY(time, amount);
                     }
 
-                    chartDisplay.Show();
+                    chartForOpenFromFileForm.Show();
                 }
                 catch (Exception)
                 {
@@ -2401,8 +2386,7 @@ namespace WindowsFormsApp1
             }
         }
 
-
-        private void button4_Click(object sender, EventArgs e)
+        private void StartTestingProgramButtonClick(object sender, EventArgs e)
         {
             Hide();
             chartForm.Hide();
@@ -2410,14 +2394,12 @@ namespace WindowsFormsApp1
             mainTimer.Stop();
             timer1.Stop();
             timer2.Stop();
-            sp.Stop();
+            timerForPlotting.Stop();
             timers.ForEach(timer => timer.Stop());
-            requireTimeForTesting = sp.ElapsedMilliseconds;
+            RequireTimeForTesting = timerForPlotting.ElapsedMilliseconds;
             new ChartDisplayForTestingProgramForm(this, 0,
                 new List<ChartDisplayForTestingProgramForm>());
         }
-
-
 
         private void HideAllLabel()
         {
@@ -2428,7 +2410,7 @@ namespace WindowsFormsApp1
             label1.Visible = false;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void MainFormLoad(object sender, EventArgs e)
         {
             x05.Visible = false;
             x2.Visible = false;
@@ -2489,7 +2471,7 @@ namespace WindowsFormsApp1
             Activate();
         }
 
-        private void CustomizeDesign()
+        private void HideSubMenu()
         {
             drawingSubPanel.Visible = false;
             changeParametersSubPanel.Visible = false;
@@ -2508,29 +2490,27 @@ namespace WindowsFormsApp1
             subMenu.Visible = !subMenu.Visible;
         }
 
-        private void drawingButton_Click(object sender, EventArgs e)
+        private void DrawingButtonClick(object sender, EventArgs e)
         {
             ShowSubMenu(drawingSubPanel);
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void ChangeParametersButtonClick(object sender, EventArgs e)
         {
             ShowSubMenu(changeParametersSubPanel);
         }
 
-        private void toolsButton_Click(object sender, EventArgs e)
+        private void ToolsButtonClick(object sender, EventArgs e)
         {
             ShowSubMenu(toolsSubPanel);
         }
 
-        private void graphInfoButton_Click(object sender, EventArgs e)
+        private void GraphInfoButtonClick(object sender, EventArgs e)
         {
             ShowSubMenu(panel2);
         }
 
-        internal double cyclomaticNumber;
-
-        private void timer3_Tick(object sender, EventArgs e)
+        private void GraphInfoTimerTick(object sender, EventArgs e)
         {
             changeLengthLabel.Visible = !ChangeEdgeLengthButton.Enabled;
             drawEdgeLabel.Visible = !DrawEdgeButton.Enabled;
@@ -2538,28 +2518,28 @@ namespace WindowsFormsApp1
             deleteElementLabel.Visible = !DeleteElementButton.Enabled;
             label1.Visible = !ChangeEdgeLengthButton.Enabled;
 
-            var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertex.Count);
+            var graphForCheck = new SpecialKindOfGraphForCheckStronglyDirection(Vertices.Count);
 
             foreach (var edge in Edges)
                 graphForCheck.AddEdge(edge.Ver1, edge.Ver2);
 
-            cyclomaticNumber = Edges.Count - Vertex.Count + graphForCheck.GetConnectedComponentsAmount();
-            button8.Text = $@"Cyclomatic number: {cyclomaticNumber}";
-            button7.Text = $@"Vertex: {Vertex.Count}";
+            CyclomaticNumber = Edges.Count - Vertices.Count + graphForCheck.GetConnectedComponentsAmount();
+            button8.Text = $@"Cyclomatic number: {CyclomaticNumber}";
+            button7.Text = $@"Vertex: {Vertices.Count}";
             button6.Text = $@"Edges: {Edges.Count}";
         }
 
-        private void exitButton_Click(object sender, EventArgs e)
+        private void FirstExitButtonClick(object sender, EventArgs e)
         {
             Environment.Exit(0);
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void ToolsForChartButtonClick(object sender, EventArgs e)
         {
             ShowSubMenu(panelChart);
         }
 
-        private void exitButton2_Click_1(object sender, EventArgs e)
+        private void SecondExitButtonClick(object sender, EventArgs e)
         {
             Environment.Exit(0);
         }

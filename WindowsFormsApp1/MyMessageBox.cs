@@ -209,13 +209,6 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        private void MyMessageBox_Load(object sender, EventArgs e)
-        {
-            metroStyleManager1.Theme = MetroThemeStyle.Dark;
-            StyleManager = metroStyleManager1;
-        }
-
-
         public DialogResult ShowNothingChoose(string message)
         {
             var ms = new MyMessageBox
@@ -234,7 +227,6 @@ namespace WindowsFormsApp1
             ms.label1.Text = message;
             return ms.ShowDialog();
         }
-
 
         public DialogResult ShowGraphIsEmpty(string message)
         {
@@ -277,6 +269,12 @@ namespace WindowsFormsApp1
         private void buttonYes_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void MyMessageBox_Load(object sender, EventArgs e)
+        {
+            metroStyleManager1.Theme = MetroThemeStyle.Dark;
+            StyleManager = metroStyleManager1;
         }
 
         private void buttonNo_Click(object sender, EventArgs e)

@@ -10,7 +10,8 @@ namespace WindowsFormsApp1
 {
     public partial class ChartDisplayForTestingProgramForm : MetroFramework.Forms.MetroForm
     {
-        public ChartDisplayForTestingProgramForm(MainForm mf, int formNumber, List<ChartDisplayForTestingProgramForm> forms)
+        public ChartDisplayForTestingProgramForm(MainForm mf, int formNumber, 
+            List<ChartDisplayForTestingProgramForm> forms)
         {
             InitializeComponent();
             label5.Location = new Point(2000, 2000);
@@ -139,11 +140,11 @@ namespace WindowsFormsApp1
         private void SetUpMainTools(MainForm mf)
         {
             mainForm = mf;
-            vertices = mf.Vertex.GetRange(0, mf.Vertex.Count);
+            vertices = mf.Vertices.GetRange(0, mf.Vertices.Count);
             edges = mf.Edges.GetRange(0, mf.Edges.Count);
-            coefficient = mf.coefficient;
+            coefficient = mf.SpeedCoefficient;
             toolsForDrawing = mf.ToolsForDrawing;
-            requireTimeForTesting = mf.requireTimeForTesting;
+            requireTimeForTesting = mf.RequireTimeForTesting;
         }
 
         private void SetUpTimers()

@@ -101,7 +101,7 @@
             this.DrawVertexButton.TabIndex = 2;
             this.DrawVertexButton.Text = "Draw vertex";
             this.DrawVertexButton.UseVisualStyleBackColor = true;
-            this.DrawVertexButton.Click += new System.EventHandler(this.DrawVertexButton_Click);
+            this.DrawVertexButton.Click += new System.EventHandler(this.DrawVertexButtonClick);
             // 
             // DeleteAllGraphButton
             // 
@@ -116,7 +116,7 @@
             this.DeleteAllGraphButton.TabIndex = 4;
             this.DeleteAllGraphButton.Text = "Delete full graph";
             this.DeleteAllGraphButton.UseVisualStyleBackColor = true;
-            this.DeleteAllGraphButton.Click += new System.EventHandler(this.DeleteAllGraphButton_Click);
+            this.DeleteAllGraphButton.Click += new System.EventHandler(this.DeleteFullGraphButtonClick);
             // 
             // DrawEdgeButton
             // 
@@ -131,7 +131,7 @@
             this.DrawEdgeButton.TabIndex = 5;
             this.DrawEdgeButton.Text = "Draw edge";
             this.DrawEdgeButton.UseVisualStyleBackColor = true;
-            this.DrawEdgeButton.Click += new System.EventHandler(this.DrawEdgeButton_Click);
+            this.DrawEdgeButton.Click += new System.EventHandler(this.DrawEdgeButtonClick);
             // 
             // CheckGraphForStrongConnectionButton
             // 
@@ -146,7 +146,7 @@
             this.CheckGraphForStrongConnectionButton.TabIndex = 11;
             this.CheckGraphForStrongConnectionButton.Text = "Check graph for strongly direction";
             this.CheckGraphForStrongConnectionButton.UseVisualStyleBackColor = true;
-            this.CheckGraphForStrongConnectionButton.Click += new System.EventHandler(this.CheckGraphForStrongConnectionButton_Click);
+            this.CheckGraphForStrongConnectionButton.Click += new System.EventHandler(this.CheckGraphForStrongDirectionButtonClick);
             // 
             // GetRandomGraphButton
             // 
@@ -161,7 +161,7 @@
             this.GetRandomGraphButton.TabIndex = 13;
             this.GetRandomGraphButton.Text = "Generated graph";
             this.GetRandomGraphButton.UseVisualStyleBackColor = true;
-            this.GetRandomGraphButton.Click += new System.EventHandler(this.GetRandomGraphButton_Click);
+            this.GetRandomGraphButton.Click += new System.EventHandler(this.GetRandomGraphButtonClick);
             // 
             // DeleteElementButton
             // 
@@ -176,7 +176,7 @@
             this.DeleteElementButton.TabIndex = 14;
             this.DeleteElementButton.Text = "Delete element";
             this.DeleteElementButton.UseVisualStyleBackColor = true;
-            this.DeleteElementButton.Click += new System.EventHandler(this.DeleteElementButton_Click);
+            this.DeleteElementButton.Click += new System.EventHandler(this.DeleteElementButtonClick);
             // 
             // SaveGraphButton
             // 
@@ -191,7 +191,7 @@
             this.SaveGraphButton.TabIndex = 15;
             this.SaveGraphButton.Text = "Save file";
             this.SaveGraphButton.UseVisualStyleBackColor = true;
-            this.SaveGraphButton.Click += new System.EventHandler(this.SaveGraphButton_Click);
+            this.SaveGraphButton.Click += new System.EventHandler(this.SaveGraphButtonClick);
             // 
             // OpenGraphButton
             // 
@@ -206,7 +206,7 @@
             this.OpenGraphButton.TabIndex = 16;
             this.OpenGraphButton.Text = "Open file";
             this.OpenGraphButton.UseVisualStyleBackColor = true;
-            this.OpenGraphButton.Click += new System.EventHandler(this.OpenGraphButton_Click);
+            this.OpenGraphButton.Click += new System.EventHandler(this.OpenGraphFromFileButtonClick);
             // 
             // ChangeEdgeLengthButton
             // 
@@ -221,7 +221,7 @@
             this.ChangeEdgeLengthButton.TabIndex = 17;
             this.ChangeEdgeLengthButton.Text = "Change edge weight";
             this.ChangeEdgeLengthButton.UseVisualStyleBackColor = true;
-            this.ChangeEdgeLengthButton.Click += new System.EventHandler(this.ChangeLengthButton_Click);
+            this.ChangeEdgeLengthButton.Click += new System.EventHandler(this.ChangeWeightButtonClick);
             // 
             // StopDrawingButton
             // 
@@ -236,7 +236,7 @@
             this.StopDrawingButton.TabIndex = 18;
             this.StopDrawingButton.Text = "Stop drawing";
             this.StopDrawingButton.UseVisualStyleBackColor = true;
-            this.StopDrawingButton.Click += new System.EventHandler(this.StopDrawingButton_Click);
+            this.StopDrawingButton.Click += new System.EventHandler(this.StopDrawingButtonClick);
             // 
             // ShowOrHideAdjMatrix
             // 
@@ -252,7 +252,7 @@
             this.ShowOrHideAdjMatrix.TabIndex = 19;
             this.ShowOrHideAdjMatrix.Text = "Close matrix";
             this.ShowOrHideAdjMatrix.UseVisualStyleBackColor = true;
-            this.ShowOrHideAdjMatrix.Click += new System.EventHandler(this.ShowOrHideAdjMatrix_Click);
+            this.ShowOrHideAdjMatrix.Click += new System.EventHandler(this.ShowOrHideAdjacencyMatrixButtonClick);
             // 
             // startReseachButton
             // 
@@ -266,7 +266,7 @@
             this.startReseachButton.TabIndex = 20;
             this.startReseachButton.Text = "Start reseach";
             this.startReseachButton.UseVisualStyleBackColor = true;
-            this.startReseachButton.Click += new System.EventHandler(this.button1_Click);
+            this.startReseachButton.Click += new System.EventHandler(this.StartReseachButtonClick);
             // 
             // StopProcessButton
             // 
@@ -287,7 +287,7 @@
             // timer1
             // 
             this.timer1.Interval = 1;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.TimerForPlottingTick);
             // 
             // trackBar1
             // 
@@ -313,12 +313,12 @@
             this.saveChartButton.TabIndex = 24;
             this.saveChartButton.Text = "Save chart";
             this.saveChartButton.UseVisualStyleBackColor = false;
-            this.saveChartButton.Click += new System.EventHandler(this.button2_Click);
+            this.saveChartButton.Click += new System.EventHandler(this.SaveChartToCsvFileButtonClick);
             // 
             // timer2
             // 
             this.timer2.Interval = 1000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.timer2.Tick += new System.EventHandler(this.ConvertDataToCsvFormatTimerTick);
             // 
             // openChartButton
             // 
@@ -334,7 +334,7 @@
             this.openChartButton.TabIndex = 25;
             this.openChartButton.Text = "Open chart";
             this.openChartButton.UseVisualStyleBackColor = false;
-            this.openChartButton.Click += new System.EventHandler(this.button3_Click);
+            this.openChartButton.Click += new System.EventHandler(this.OpenChartFromCsvFileButtonClick);
             // 
             // testingProgrammButton
             // 
@@ -350,7 +350,7 @@
             this.testingProgrammButton.TabIndex = 26;
             this.testingProgrammButton.Text = "Test program";
             this.testingProgrammButton.UseVisualStyleBackColor = false;
-            this.testingProgrammButton.Click += new System.EventHandler(this.button4_Click);
+            this.testingProgrammButton.Click += new System.EventHandler(this.StartTestingProgramButtonClick);
             // 
             // drawingPanel
             // 
@@ -390,7 +390,7 @@
             this.button5.Text = "Change parameters";
             this.button5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.ChangeParametersButtonClick);
             // 
             // drawingSubPanel
             // 
@@ -433,7 +433,7 @@
             this.drawingButton.Text = "Drawing";
             this.drawingButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.drawingButton.UseVisualStyleBackColor = true;
-            this.drawingButton.Click += new System.EventHandler(this.drawingButton_Click);
+            this.drawingButton.Click += new System.EventHandler(this.DrawingButtonClick);
             // 
             // field
             // 
@@ -442,7 +442,7 @@
             this.field.Size = new System.Drawing.Size(1020, 720);
             this.field.TabIndex = 1;
             this.field.TabStop = false;
-            this.field.MouseClick += new System.Windows.Forms.MouseEventHandler(this.field_MouseClick);
+            this.field.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FieldMouseClick);
             // 
             // panel1
             // 
@@ -524,7 +524,7 @@
             this.graphInfoButton.Text = "Graph info";
             this.graphInfoButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.graphInfoButton.UseVisualStyleBackColor = true;
-            this.graphInfoButton.Click += new System.EventHandler(this.graphInfoButton_Click);
+            this.graphInfoButton.Click += new System.EventHandler(this.GraphInfoButtonClick);
             // 
             // toolsSubPanel
             // 
@@ -552,7 +552,7 @@
             this.exitButton.TabIndex = 4;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = true;
-            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
+            this.exitButton.Click += new System.EventHandler(this.FirstExitButtonClick);
             // 
             // toolsButton
             // 
@@ -569,12 +569,12 @@
             this.toolsButton.Text = "Tools";
             this.toolsButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolsButton.UseVisualStyleBackColor = true;
-            this.toolsButton.Click += new System.EventHandler(this.toolsButton_Click);
+            this.toolsButton.Click += new System.EventHandler(this.ToolsButtonClick);
             // 
             // timer3
             // 
             this.timer3.Interval = 1;
-            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
+            this.timer3.Tick += new System.EventHandler(this.GraphInfoTimerTick);
             // 
             // drawVertexLabel
             // 
@@ -644,7 +644,7 @@
             this.exitButton2.TabIndex = 27;
             this.exitButton2.Text = "Exit";
             this.exitButton2.UseVisualStyleBackColor = true;
-            this.exitButton2.Click += new System.EventHandler(this.exitButton2_Click_1);
+            this.exitButton2.Click += new System.EventHandler(this.SecondExitButtonClick);
             // 
             // button1
             // 
@@ -661,7 +661,7 @@
             this.button1.Text = "Tools";
             this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.button1.Click += new System.EventHandler(this.ToolsForChartButtonClick);
             // 
             // label1
             // 
@@ -733,9 +733,9 @@
             this.Controls.Add(this.field);
             this.KeyPreview = true;
             this.Name = "MainForm";
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.Click += new System.EventHandler(this.MainForm_Click);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
+            this.Load += new System.EventHandler(this.MainFormLoad);
+            this.Click += new System.EventHandler(this.MainFormClick);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainFormKeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.drawingPanel.ResumeLayout(false);
             this.changeParametersSubPanel.ResumeLayout(false);
