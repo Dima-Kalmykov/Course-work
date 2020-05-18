@@ -42,7 +42,7 @@
             this.AdjacencyMatrixListBox.Name = "AdjacencyMatrixListBox";
             this.AdjacencyMatrixListBox.Size = new System.Drawing.Size(1329, 692);
             this.AdjacencyMatrixListBox.TabIndex = 0;
-            this.AdjacencyMatrixListBox.Click += new System.EventHandler(this.AdjacencyMatrixListBox_Click);
+            this.AdjacencyMatrixListBox.Click += new System.EventHandler(this.AdjacencyMatrixListBoxClick);
             // 
             // ShowAdjacencyMatrixForm
             // 
@@ -52,7 +52,6 @@
             this.Controls.Add(this.AdjacencyMatrixListBox);
             this.Name = "ShowAdjacencyMatrixForm";
             this.Text = "AdjacencyMatrix";
-            this.Load += new System.EventHandler(this.ShowAdjacencyMatrixForm_Load);
             this.ResumeLayout(false);
 
         }

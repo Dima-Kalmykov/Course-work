@@ -51,7 +51,7 @@
             this.buttonYes.TabIndex = 0;
             this.buttonYes.Text = "Yes";
             this.buttonYes.UseVisualStyleBackColor = false;
-            this.buttonYes.Click += new System.EventHandler(this.buttonYes_Click);
+            this.buttonYes.Click += new System.EventHandler(this.ButtonYesClick);
             // 
             // buttonNo
             // 
@@ -67,7 +67,7 @@
             this.buttonNo.TabIndex = 1;
             this.buttonNo.Text = "No";
             this.buttonNo.UseVisualStyleBackColor = false;
-            this.buttonNo.Click += new System.EventHandler(this.buttonNo_Click);
+            this.buttonNo.Click += new System.EventHandler(this.ButtonNoClick);
             // 
             // label1
             // 
@@ -99,7 +99,7 @@
             this.buttonOk.TabIndex = 3;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = false;
-            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOkClick);
             // 
             // MyMessageBox
             // 

@@ -180,7 +180,7 @@ namespace WindowsFormsApp1
 
             // Диалоговое окно для подтверждения удаления.
 
-            var confirmCancellation = myMessageBox.ShowDeleteAllGraph(message, caption);
+            var confirmCancellation = myMessageBox.NotifyDeleteAllGraph(message, caption);
 
             return confirmCancellation;
         }
@@ -208,7 +208,7 @@ namespace WindowsFormsApp1
             }
             else
             {
-                myMessageBox.ShowGraphIsEmpty("Graph is empty");
+                myMessageBox.NotifyGraphIsEmpty("Graph is empty");
             }
 
             DrawVertexButton.Enabled = true;
@@ -264,7 +264,7 @@ namespace WindowsFormsApp1
                 // Если нечего проверять, выводим сообщение.
                 if (adjMatrix is null || adjMatrix.Length == 0)
                 {
-                    myMessageBox.ShowGraphIsEmpty("Graph is empty");
+                    myMessageBox.NotifyGraphIsEmpty("Graph is empty");
                 }
                 else
                 {
@@ -280,7 +280,7 @@ namespace WindowsFormsApp1
                     // или продолжить редактирование
                     if (graphForCheck.IsStronglyConnection())
                     {
-                        myMessageBox.ShowGraphIsStronglyDirection("Graph is strongly directed");
+                        myMessageBox.NotifyGraphIsStronglyDirection("Graph is strongly directed");
                     }
                     else
                     {
@@ -302,7 +302,7 @@ namespace WindowsFormsApp1
             {
                 // Если нечего проверять, выводим сообщение.
                 if (adjMatrix is null || adjMatrix.Length == 0)
-                    myMessageBox.ShowGraphIsEmpty("Graph is empty");
+                    myMessageBox.NotifyGraphIsEmpty("Graph is empty");
                 else
                 {
                     // Представляем граф в удобном для проверки виде.
@@ -372,7 +372,7 @@ namespace WindowsFormsApp1
                 adjMatrix = ToolsForDrawing.SetDistanceEdge(adjMatrix);
 
                 // Генерируем координаты вершин.
-                Vertices = ToolsForDrawing.GetRandomVertex(adjMatrix,
+                Vertices = ToolsForDrawing.GetRandomVertices(adjMatrix,
                     field.Size.Width - 2 * Consts.VertexRadius,
                     field.Size.Height - 2 * Consts.VertexRadius);
 
@@ -486,7 +486,7 @@ namespace WindowsFormsApp1
                 }
             }
             else
-                myMessageBox.ShowGraphIsEmpty("Graph is empty");
+                myMessageBox.NotifyGraphIsEmpty("Graph is empty");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertices.Count != 0)
@@ -708,7 +708,7 @@ namespace WindowsFormsApp1
                                                 Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                             {
                                 RedrawSelectedVertex();
-                                myMessageBox.ShowVertexNotCross("Vertex must not cross");
+                                myMessageBox.NotifyVertexMustNotCross("Vertex must not cross");
                                 firstPress = true;
                                 return;
                             }
@@ -721,7 +721,7 @@ namespace WindowsFormsApp1
                                 newVertex.Y >= field.Size.Height - 2 * Consts.VertexRadius)
                             {
                                 RedrawSelectedVertex();
-                                myMessageBox.ShowInvalidPlace();
+                                myMessageBox.NotifyInvalidPlaceForVertex();
                                 firstPress = true;
                                 return;
                             }
@@ -1015,7 +1015,7 @@ namespace WindowsFormsApp1
                     if (Vertices.Any(t => Math.Abs(e.X - t.X) < 2 * Consts.VertexRadius &&
                                         Math.Abs(e.Y - t.Y) < 2 * Consts.VertexRadius))
                     {
-                        myMessageBox.ShowVertexNotCross("Vertex must not cross");
+                        myMessageBox.NotifyVertexMustNotCross("Vertex must not cross");
                         return;
                     }
 
@@ -1026,7 +1026,7 @@ namespace WindowsFormsApp1
                         newVertex.Y <= 2 * Consts.VertexRadius ||
                         newVertex.Y >= field.Size.Height - 2 * Consts.VertexRadius)
                     {
-                        myMessageBox.ShowInvalidPlace();
+                        myMessageBox.NotifyInvalidPlaceForVertex();
                         return;
                     }
 
@@ -1112,7 +1112,7 @@ namespace WindowsFormsApp1
                                     break;
                                 }
 
-                                myMessageBox.ShowEdgeExists("Edge from vertex" +
+                                myMessageBox.NotifyEdgeExists("Edge from vertex" +
                                                             $" {ver1ForConnection + 1} to vertex " +
                                                             $"{ver2ForConnection + 1} \n" +
                                                             GetSpaces(15) + "already exists",
@@ -1149,7 +1149,7 @@ namespace WindowsFormsApp1
                         if (Math.Pow(Vertices[i].X - e.X, 2) + Math.Pow(Vertices[i].Y - e.Y, 2) <=
                             Math.Pow(Consts.VertexRadius, 2))
                         {
-                            var confirmation = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                            var confirmation = myMessageBox.NotifyDeleteElement("The result of this action is permanent\n" +
                                                                               GetSpaces(2) +
                                                                               "Are you sure you want to continue?", "Confirmation");
 
@@ -1211,7 +1211,7 @@ namespace WindowsFormsApp1
                                     >=
                                     Math.Pow(Consts.VertexRadius - 4, 2))
                                 {
-                                    var confirm = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                    var confirm = myMessageBox.NotifyDeleteElement("The result of this action is permanent\n" +
                                                                    GetSpaces(2) +
                                                                    "Are you sure you want to continue?", "Confirmation");
 
@@ -1283,7 +1283,7 @@ namespace WindowsFormsApp1
                                             return;
                                         }
 
-                                        var confirm = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                        var confirm = myMessageBox.NotifyDeleteElement("The result of this action is permanent\n" +
                                                                                      GetSpaces(2) +
                                                                                      "Are you sure you want to continue?", "Confirmation");
 
@@ -1351,7 +1351,7 @@ namespace WindowsFormsApp1
                                             return;
                                         }
 
-                                        var confirm = myMessageBox.ShowDeleteElement("The result of this action is permanent\n" +
+                                        var confirm = myMessageBox.NotifyDeleteElement("The result of this action is permanent\n" +
                                                                                      GetSpaces(2) +
                                                                                      "Are you sure you want to continue?", "Confirmation");
 
@@ -1499,7 +1499,7 @@ namespace WindowsFormsApp1
             // Создаём и заполняем матрицу по листам смежности.
             adjMatrix = new double[Vertices.Count, Vertices.Count];
 
-            ToolsForDrawing.FillAdjMatrix(Vertices.Count, Edges, adjMatrix);
+            ToolsForDrawing.FillAdjacencyMatrix(Vertices.Count, Edges, adjMatrix);
 
             showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Clear();
 
@@ -2310,7 +2310,7 @@ namespace WindowsFormsApp1
                 }
             }
             else
-                myMessageBox.ShowGraphIsEmpty("Graph is empty");
+                myMessageBox.NotifyGraphIsEmpty("Graph is empty");
 
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertices.Count != 0)

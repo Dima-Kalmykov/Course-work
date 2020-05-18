@@ -46,17 +46,16 @@ namespace WindowsFormsApp1
             font = new Font("Arial", Consts.FontSize);
         }
 
-
         /// <summary>
         /// Заполнение матрицы смежности.
         /// </summary>
-        /// <param name="amountVertex"> Количество вершин </param>
+        /// <param name="amountVertices"> Количество вершин </param>
         /// <param name="edges"> Список рёбер </param>
         /// <param name="adjacencyMatrix"> Матрица смежности </param>
-        internal void FillAdjMatrix(int amountVertex, List<Edge> edges, double[,] adjacencyMatrix)
+        internal void FillAdjacencyMatrix(int amountVertices, List<Edge> edges, double[,] adjacencyMatrix)
         {
             // Очищаем матрицу.
-            Array.Clear(adjacencyMatrix, 0, amountVertex);
+            Array.Clear(adjacencyMatrix, 0, amountVertices);
 
             foreach (var edge in edges)
             {
@@ -145,7 +144,6 @@ namespace WindowsFormsApp1
         {
             // Коэффициенты прямой y = kx + b.
             double k = 0;
-            double b;
 
             // Координаты точки, куда приходит стрелка.
             double xEnd;
@@ -160,7 +158,7 @@ namespace WindowsFormsApp1
             {
                 // Вычисляем коэффициенты прямой y = kx + b.
                 k = MyMath.GetK(ver1, ver2);
-                b = MyMath.GetB(ver1, ver2);
+                var b = MyMath.GetB(ver1, ver2);
 
                 // Вычисляем промежуточную величину.
                 var sqrtDiscriminant2 = MyMath.GetSqrtOfDiscriminant(ver2, k, b);
@@ -222,7 +220,7 @@ namespace WindowsFormsApp1
             }
 
 
-            var (firstPoint, secondPoint) = GetArrowHeadPoints(new PointF((float)xBegin, (float)yBegin),
+            var (firstPoint, secondPoint) = GetArrowheadPoints(new PointF((float)xBegin, (float)yBegin),
                 new PointF((float)xEnd, (float)yEnd), k);
 
             var firstEndArrowX = firstPoint.X;
@@ -238,8 +236,8 @@ namespace WindowsFormsApp1
             double yMaxBegin, double xMinBegin, double yMinBegin)
         {
 
-            double xBegin = 0;
-            double yBegin = 0;
+            double xBegin;
+            double yBegin;
 
             if (ver2.X > ver1.X)
             {
@@ -271,7 +269,7 @@ namespace WindowsFormsApp1
             return new PointF((float)xBegin, (float)yBegin);
         }
 
-        private (PointF, PointF) GetArrowHeadPoints(PointF pointBegin, PointF pointEnd, double k)
+        private (PointF, PointF) GetArrowheadPoints(PointF pointBegin, PointF pointEnd, double k)
         {
             var (xBegin, yBegin) = (pointBegin.X, pointBegin.Y);
             var (xEnd, yEnd) = (pointEnd.X, pointEnd.Y);
@@ -293,17 +291,17 @@ namespace WindowsFormsApp1
             // В зависимости от расположения вершин, ищем эти координаты.
             if (xBegin == xEnd)
             {
-                arrowHeadPoints = GetEndOfArrowHead2(yEnd, yBegin, xEnd);
+                arrowHeadPoints = GetSecondEndOfArrowhead(yEnd, yBegin, xEnd);
             }
             else if (yBegin == yEnd)
             {
-                arrowHeadPoints = GetEndOfArrowHead(xBegin, xEnd, yEnd);
+                arrowHeadPoints = GetFirstEndOfArrowhead(xBegin, xEnd, yEnd);
             }
 
             return arrowHeadPoints;
         }
 
-        private (PointF, PointF) GetEndOfArrowHead(double xBegin, double xEnd, double yEnd)
+        private (PointF, PointF) GetFirstEndOfArrowhead(double xBegin, double xEnd, double yEnd)
         {
             double firstEndArrowX;
             double firstEndArrowY;
@@ -331,7 +329,7 @@ namespace WindowsFormsApp1
                     new PointF((float)secondEndArrowX, (float)secondEndArrowY));
         }
 
-        private (PointF, PointF) GetEndOfArrowHead2(double yEnd, double yBegin, double xEnd)
+        private (PointF, PointF) GetSecondEndOfArrowhead(double yEnd, double yBegin, double xEnd)
         {
             double firstEndArrowX;
             double firstEndArrowY;
@@ -375,19 +373,19 @@ namespace WindowsFormsApp1
                 (float)xEnd, (float)yEnd);
         }
 
-        private static void CheckNearVertex(ref int i, ref List<Vertex> vertex, Point currentPoint)
+        private static void CheckNearVertices(ref int i, ref List<Vertex> vertices, Point currentPoint)
         {
             var hasNearOtherVertex = true;
 
             // Если это первая веришна, то просто добавляем её.
             if (i == 0)
             {
-                vertex.Add(new Vertex(currentPoint.X, currentPoint.Y));
+                vertices.Add(new Vertex(currentPoint.X, currentPoint.Y));
                 return;
             }
             // Если это уже не первая вершина, то проверяем,
             // чтобы рядом не было других
-            if (vertex.Any(ver => Math.Abs(ver.X - currentPoint.X) < 2 * VertexRadius &&
+            if (vertices.Any(ver => Math.Abs(ver.X - currentPoint.X) < 2 * VertexRadius &&
                                   Math.Abs(ver.Y - currentPoint.Y) < 2 * VertexRadius))
             {
                 i--;
@@ -397,27 +395,27 @@ namespace WindowsFormsApp1
             // Если рядом нет других, то добавляем новую вершину.
             if (hasNearOtherVertex)
             {
-                vertex.Add(new Vertex(currentPoint.X, currentPoint.Y));
+                vertices.Add(new Vertex(currentPoint.X, currentPoint.Y));
             }
         }
 
         /// <summary>
         /// Заполняем список вершин случайным образом.
         /// </summary>
-        /// <param name="adjMatrix"> Матрица смежности </param>
+        /// <param name="adjacencyMatrix"> Матрица смежности </param>
         /// <param name="maxX"> Границы холста </param>
         /// <param name="maxY"> Границы холста </param>
         /// <returns> Список вершин </returns>
-        internal List<Vertex> GetRandomVertex(double[,] adjMatrix, int maxX, int maxY)
+        internal List<Vertex> GetRandomVertices(double[,] adjacencyMatrix, int maxX, int maxY)
         {
             var vertex = new List<Vertex>();
 
-            for (var i = 0; i < adjMatrix.GetLength(0); i++)
+            for (var i = 0; i < adjacencyMatrix.GetLength(0); i++)
             {
                 var xCoordinate = Rnd.Next(2 * VertexRadius, maxX + 1);
                 var yCoordinate = Rnd.Next(2 * VertexRadius, maxY + 1);
 
-                CheckNearVertex(ref i, ref vertex, new Point(xCoordinate, yCoordinate));
+                CheckNearVertices(ref i, ref vertex, new Point(xCoordinate, yCoordinate));
             }
 
             return vertex;
@@ -426,20 +424,20 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Заполняем список рёбер при генерации графа.
         /// </summary>
-        /// <param name="adjMatrix"> Матрица смежности</param>
+        /// <param name="adjacencyMatrix"> Матрица смежности</param>
         /// <returns> Список рёбер </returns>
-        internal List<Edge> GetRandomEdges(double[,] adjMatrix)
+        internal List<Edge> GetRandomEdges(double[,] adjacencyMatrix)
         {
             var edges = new List<Edge>();
 
             // Весом каждого ребра служит значение из матрицы смежности.
-            for (var i = 0; i < adjMatrix.GetLength(0); i++)
+            for (var i = 0; i < adjacencyMatrix.GetLength(0); i++)
             {
-                for (var j = 0; j < adjMatrix.GetLength(1); j++)
+                for (var j = 0; j < adjacencyMatrix.GetLength(1); j++)
                 {
-                    if (Math.Abs(adjMatrix[i, j]) > double.Epsilon)
+                    if (Math.Abs(adjacencyMatrix[i, j]) > double.Epsilon)
                     {
-                        edges.Add(new Edge(i, j, adjMatrix[i, j]));
+                        edges.Add(new Edge(i, j, adjacencyMatrix[i, j]));
                     }
                 }
             }
@@ -451,18 +449,18 @@ namespace WindowsFormsApp1
         /// Рисуем полный граф.
         /// </summary>
         /// <param name="edges"> Список рёбер </param>
-        /// <param name="vertex"> Список вершин </param>
-        internal void DrawFullGraph(List<Edge> edges, List<Vertex> vertex)
+        /// <param name="vertices"> Список вершин </param>
+        internal void DrawFullGraph(List<Edge> edges, List<Vertex> vertices)
         {
             ClearField();
             foreach (var edge in edges)
             {
-                DrawEdge(vertex[edge.Ver1], vertex[edge.Ver2], edge);
+                DrawEdge(vertices[edge.Ver1], vertices[edge.Ver2], edge);
             }
 
-            for (var i = 0; i < vertex.Count; i++)
+            for (var i = 0; i < vertices.Count; i++)
             {
-                DrawVertex(vertex[i].X, vertex[i].Y, (i + 1).ToString());
+                DrawVertex(vertices[i].X, vertices[i].Y, (i + 1).ToString());
             }
         }
 
@@ -494,28 +492,28 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Задаём рёбрам случайный вес.
         /// </summary>
-        /// <param name="adjMatrix"> Матрица смежности </param>
+        /// <param name="adjacencyMatrix"> Матрица смежности </param>
         /// <returns> Матрица смежности </returns>
-        internal double[,] SetDistanceEdge(double[,] adjMatrix)
+        internal double[,] SetDistanceEdge(double[,] adjacencyMatrix)
         {
             // Пробегаемся по всем элементам и заполняем матрицу.
-            for (int i = 0; i < adjMatrix.GetLength(0); i++)
+            for (int i = 0; i < adjacencyMatrix.GetLength(0); i++)
             {
-                for (int j = 0; j < adjMatrix.GetLength(1); j++)
+                for (int j = 0; j < adjacencyMatrix.GetLength(1); j++)
                 {
-                    if (adjMatrix[i, j] == 1)
-                        adjMatrix[i, j] =
+                    if (adjacencyMatrix[i, j] == 1)
+                        adjacencyMatrix[i, j] =
                             Rnd.Next(0, 10000) + Rnd.NextDouble() + double.Epsilon;
                 }
 
             }
 
-            return adjMatrix;
+            return adjacencyMatrix;
         }
 
-        internal List<Edge> GetOtherGraphWithGivenAmountOfEdgesAndVertex(List<Vertex> vertex, List<Edge> edges)
+        internal List<Edge> GetOtherGraphWithGivenAmountOfEdgesAndVertices(List<Vertex> vertices, List<Edge> edges)
         {
-            var size = vertex.Count;
+            var size = vertices.Count;
             var matrix = new double[size, size];
             List<Edge> edgesForChoice = edges.GetRange(0, edges.Count);
             var curVertexIndex = 0;
@@ -523,35 +521,33 @@ namespace WindowsFormsApp1
             var newEdges = new List<Edge>(size);
             var counter = 1;
 
-            var randomVertexIndex = Rnd.Next(vertex.Count);
-            if (vertex.Count == 1)
+            var randomVertexIndex = Rnd.Next(vertices.Count);
+            if (vertices.Count == 1)
             {
                 return edgesForChoice;
             }
 
             while (curVertexIndex == randomVertexIndex)
             {
-                randomVertexIndex = Rnd.Next(vertex.Count);
+                randomVertexIndex = Rnd.Next(vertices.Count);
             }
 
             var randomEdge = edgesForChoice[Rnd.Next(edgesForChoice.Count)];
             newEdges.Add(new Edge(curVertexIndex, randomVertexIndex, randomEdge.Weight));
             edgesForChoice.Remove(randomEdge);
 
-
             matrix[curVertexIndex, randomVertexIndex] = 1;
 
             curVertexIndex = randomVertexIndex;
 
-            while (counter < vertex.Count - 1)
+            while (counter < vertices.Count - 1)
             {
-                randomVertexIndex = Rnd.Next(vertex.Count);
+                randomVertexIndex = Rnd.Next(vertices.Count);
 
                 while (curVertexIndex == randomVertexIndex || newEdges.Any(e => e.Ver1 == randomVertexIndex))
                 {
-                    randomVertexIndex = Rnd.Next(vertex.Count);
+                    randomVertexIndex = Rnd.Next(vertices.Count);
                 }
-
 
                 randomEdge = edgesForChoice[Rnd.Next(edgesForChoice.Count)];
                 newEdges.Add(new Edge(curVertexIndex, randomVertexIndex, randomEdge.Weight));
@@ -590,7 +586,7 @@ namespace WindowsFormsApp1
             return newEdges;
         }
 
-        private static double[,] SpecialCaseAdjacencyMatrix(int size)
+        private static double[,] CheckSpecialCaseAdjacencyMatrix(int size)
         {
             var adjacencyMatrix = new double[size, size];
 
@@ -661,7 +657,7 @@ namespace WindowsFormsApp1
         {
             if (size == 1 || size == 2)
             {
-                return SpecialCaseAdjacencyMatrix(size);
+                return CheckSpecialCaseAdjacencyMatrix(size);
             }
 
             double[,] adjacencyMatrix = GetAdjacencyMatrix(size);

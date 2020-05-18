@@ -15,7 +15,7 @@ namespace WindowsFormsApp1
             ControlBox = false;
         }
 
-        public DialogResult ShowDeleteAllGraph(string text, string caption)
+        public DialogResult NotifyDeleteAllGraph(string text, string caption)
         {
             var ms = new MyMessageBox
             {
@@ -36,7 +36,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowNumberInRange(string text)
+        public DialogResult NotifyNumberMustBeInRange(string text)
         {
             var ms = new MyMessageBox
             {
@@ -56,7 +56,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowDeleteElement(string message, string caption)
+        public DialogResult NotifyDeleteElement(string message, string caption)
         {
             var ms = new MyMessageBox
             {
@@ -77,7 +77,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowPlot(int min, int max)
+        public DialogResult NotifyWrongNumberOfForm(int min, int max)
         {
             var ms = new MyMessageBox
             {
@@ -95,7 +95,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowInvalidPlace()
+        public DialogResult NotifyInvalidPlaceForVertex()
         {
             var ms = new MyMessageBox
             {
@@ -135,7 +135,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowEdgeExists(string message, int num1, int num2)
+        public DialogResult NotifyEdgeExists(string message, int ver1, int ver2)
         {
             var ms = new MyMessageBox
             {
@@ -146,11 +146,11 @@ namespace WindowsFormsApp1
                 buttonNo = { Visible = false }
             };
 
-            if (num1 < 10 && num2 < 10)
+            if (ver1 < 10 && ver2 < 10)
             {
                 ms.Width = 320;
             }
-            else if (num1 >= 10 && num2 >= 10)
+            else if (ver1 >= 10 && ver2 >= 10)
             {
                 ms.Width = 345;
             }
@@ -167,7 +167,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowVertexNotCross(string text)
+        public DialogResult NotifyVertexMustNotCross(string text)
         {
             var ms = new MyMessageBox
             {
@@ -209,7 +209,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowNothingChoose(string message)
+        public DialogResult NotifyNothingSelected(string message)
         {
             var ms = new MyMessageBox
             {
@@ -228,7 +228,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowGraphIsEmpty(string message)
+        public DialogResult NotifyGraphIsEmpty(string message)
         {
             var ms = new MyMessageBox
             {
@@ -247,7 +247,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        public DialogResult ShowGraphIsStronglyDirection(string message)
+        public DialogResult NotifyGraphIsStronglyDirection(string message)
         {
             var ms = new MyMessageBox
             {
@@ -266,7 +266,7 @@ namespace WindowsFormsApp1
             return ms.ShowDialog();
         }
 
-        private void buttonYes_Click(object sender, EventArgs e)
+        private void ButtonYesClick(object sender, EventArgs e)
         {
             Close();
         }
@@ -277,12 +277,12 @@ namespace WindowsFormsApp1
             StyleManager = metroStyleManager1;
         }
 
-        private void buttonNo_Click(object sender, EventArgs e)
+        private void ButtonNoClick(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void ButtonOkClick(object sender, EventArgs e)
         {
             Close();
         }

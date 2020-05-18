@@ -67,7 +67,7 @@ namespace WindowsFormsApp1
             vertices[0].HasPoint = true;
             isFirstVertex = true;
 
-            edges = toolsForDrawing.GetOtherGraphWithGivenAmountOfEdgesAndVertex(vertices, edges);
+            edges = toolsForDrawing.GetOtherGraphWithGivenAmountOfEdgesAndVertices(vertices, edges);
 
             SetUpTimers();
         }
@@ -536,7 +536,7 @@ namespace WindowsFormsApp1
                     label5.Focus();
                     HideAllForms();
                     var ms = new MyMessageBox();
-                    var res = ms.ShowPlot(1, ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count);
+                    var res = ms.NotifyWrongNumberOfForm(1, ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count);
 
                     if (res == DialogResult.OK)
                     {

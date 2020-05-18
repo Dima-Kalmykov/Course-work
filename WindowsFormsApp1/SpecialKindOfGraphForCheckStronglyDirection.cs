@@ -6,8 +6,9 @@ namespace WindowsFormsApp1
 {
     public class SpecialKindOfGraphForCheckStronglyDirection
     {
-        internal int VertexCount;
-        internal List<int>[] AdjacencyList;
+        public int VertexCount;
+        public List<int>[] AdjacencyList;
+
         private static bool[] used;
 
         internal SpecialKindOfGraphForCheckStronglyDirection(int vertexCount)
@@ -24,6 +25,28 @@ namespace WindowsFormsApp1
             used = new bool[vertexCount];
         }
 
+        internal int GetConnectedComponentsAmount()
+        {
+            var count = 0;
+
+            for (var i = 0; i < VertexCount; i++)
+            {
+                used[i] = false;
+            }
+
+            for (var i = 0; i < VertexCount; i++)
+            {
+                if (used[i])
+                {
+                    continue;
+                }
+                Dfs(i);
+                count++;
+            }
+
+            return count;
+        }
+
         internal void AddEdge(int firstVertex, int secondVertex) =>
             AdjacencyList[firstVertex].Add(secondVertex);
 
@@ -33,7 +56,7 @@ namespace WindowsFormsApp1
 
             Array.Clear(visited, 0, VertexCount);
 
-            DfsUtil(0, visited);
+            SimpleDfs(0, visited);
 
             if (!HasNotHaveUnvisitedVertex(visited))
             {
@@ -44,18 +67,18 @@ namespace WindowsFormsApp1
 
             Array.Clear(visited, 0, VertexCount);
 
-            transposeGraph.DfsUtil(0, visited);
+            transposeGraph.SimpleDfs(0, visited);
 
             return HasNotHaveUnvisitedVertex(visited);
         }
 
-        private void DfsUtil(int vertexNumber, IList<bool> visited)
+        private void SimpleDfs(int vertexNumber, IList<bool> visited)
         {
             visited[vertexNumber] = true;
 
             foreach (var n in AdjacencyList[vertexNumber].Where(n => !visited[n]))
             {
-                DfsUtil(n, visited);
+                SimpleDfs(n, visited);
             }
         }
 
@@ -99,29 +122,5 @@ namespace WindowsFormsApp1
                 }
             }
         }
-
-        public int GetConnectedComponentsAmount()
-        {
-            var count = 0;
-
-            for (var i = 0; i < VertexCount; i++)
-            {
-                used[i] = false;
-            }
-
-            for (var i = 0; i < VertexCount; i++)
-            {
-                if (used[i])
-                {
-                    continue;
-                }
-                Dfs(i);
-                count++;
-            }
-
-            return count;
-        }
-
-        
     }
 }

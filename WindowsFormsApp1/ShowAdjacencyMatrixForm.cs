@@ -26,12 +26,8 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AdjacencyMatrixListBox_Click(object sender, EventArgs e) =>
+        private void AdjacencyMatrixListBoxClick(object sender, EventArgs e) =>
             AdjacencyMatrixListBox.ClearSelected();
 
-        private void ShowAdjacencyMatrixForm_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

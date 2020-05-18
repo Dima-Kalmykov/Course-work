@@ -84,7 +84,7 @@ namespace WindowsFormsApp1
             if (selectedRb is null)
             {
                 var myMessageBox = new MyMessageBox();
-                myMessageBox.ShowNothingChoose("Nothing selected");
+                myMessageBox.NotifyNothingSelected("Nothing selected");
                 return;
             }
 

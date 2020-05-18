@@ -2,8 +2,8 @@
 {
     internal class MyPoint
     {
-        internal long X;
-        internal long Y;
+        public long X;
+        public long Y;
 
         public MyPoint(long x, long y)
         {
