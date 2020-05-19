@@ -99,6 +99,11 @@ namespace WindowsFormsApp1
 
             digitsFraction = GetDigitsFraction(digitsFraction, fraction);
 
+            if (number < 1)
+            {
+                result = 1;
+            }
+            else
             // Считаем число знаков целой части числа.
             if (Math.Abs(number) > double.Epsilon)
             {

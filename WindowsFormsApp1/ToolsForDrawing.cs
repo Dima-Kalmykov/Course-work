@@ -503,7 +503,7 @@ namespace WindowsFormsApp1
                 {
                     if (adjacencyMatrix[i, j] == 1)
                         adjacencyMatrix[i, j] =
-                            Rnd.Next(0, 10000) + Rnd.NextDouble() + double.Epsilon;
+                            Rnd.Next(0, 1000) + Rnd.NextDouble() + double.Epsilon;
                 }
 
             }

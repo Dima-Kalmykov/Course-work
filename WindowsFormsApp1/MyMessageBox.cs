@@ -101,13 +101,13 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Orange,
                 Text = "Warning",
-                buttonOk = { Visible = true, ForeColor = Color.Orange},
+                buttonOk = { Visible = true, ForeColor = Color.Orange },
                 buttonYes = { Visible = false },
                 buttonNo = { Visible = false },
                 Width = 260
             };
 
-            ms.buttonOk.Location = new Point(80, 120);
+            ms.buttonOk.Location = new Point(90, 120);
             ms.Height = 170;
             ms.label1.Location = new Point(30, 70);
             ms.label1.Text = "Invalid place for vertex";
@@ -253,7 +253,7 @@ namespace WindowsFormsApp1
             {
                 Style = MetroColorStyle.Green,
                 Text = "Information",
-                buttonOk = { Visible = true, ForeColor = Color.LimeGreen},
+                buttonOk = { Visible = true, ForeColor = Color.LimeGreen },
                 buttonNo = { Visible = false },
                 buttonYes = { Visible = false },
                 Width = 290

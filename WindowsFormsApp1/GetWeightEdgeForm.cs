@@ -28,7 +28,7 @@ namespace WindowsFormsApp1
         {
             var myMessageBox = new MyMessageBox();
             myMessageBox.NotifyNumberMustBeInRange("Number must be in range\n" +
-                                           "          [0.0001; 10^4]");
+                                           "          [0.0001; 10000]");
             GetNumberTextBox.Text = string.Empty;
             GetNumberTextBox.Focus();
         }

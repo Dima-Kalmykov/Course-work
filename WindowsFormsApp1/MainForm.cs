@@ -456,7 +456,7 @@ namespace WindowsFormsApp1
             if (field.Image != null && !(adjMatrix is null) && adjMatrix.Length != 0)
             {
                 SaveFileDialog saveGraphDialog = new SaveFileDialog();
-                saveGraphDialog.Title = "Сохранить картинку как...";
+                saveGraphDialog.Title = "Save graph as...";
                 saveGraphDialog.OverwritePrompt = true;
                 saveGraphDialog.CheckPathExists = true;
                 saveGraphDialog.Filter = "Imagine Files(*.BMP)|*.BMP|" +
@@ -515,7 +515,7 @@ namespace WindowsFormsApp1
             DeleteElementButton.Enabled = true;
 
             OpenFileDialog openGraphDialog = new OpenFileDialog();
-
+            openGraphDialog.Title = "Open graph...";
             openGraphDialog.Filter = "Imagine Files(*.BMP)|*.BMP|" +
                                      "Imagine Files(*.JPG)|*.JPG|" +
                                      "Imagine Files(*.PNG)|*.PNG";
@@ -2287,7 +2287,7 @@ namespace WindowsFormsApp1
             if (field.Image != null && !(adjMatrix is null) && adjMatrix.Length != 0)
             {
                 SaveFileDialog saveGraphDialog = new SaveFileDialog();
-                saveGraphDialog.Title = "Сохранить график как...";
+                saveGraphDialog.Title = "Save chart as...";
                 saveGraphDialog.OverwritePrompt = true;
                 saveGraphDialog.CheckPathExists = true;
                 saveGraphDialog.Filter = "Files(*.CSV)|*.CSV";
@@ -2353,6 +2353,7 @@ namespace WindowsFormsApp1
 
             var openGraphDialog = new OpenFileDialog
             {
+                Title = "Open chart...",
                 Filter = "Imagine Files(*.CSV)|*.CSV",
                 ShowHelp = true
             };

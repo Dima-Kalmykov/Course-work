@@ -109,7 +109,7 @@
             this.DeleteAllGraphButton.FlatAppearance.BorderSize = 0;
             this.DeleteAllGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DeleteAllGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.DeleteAllGraphButton.ForeColor = System.Drawing.Color.Magenta;
+            this.DeleteAllGraphButton.ForeColor = System.Drawing.Color.Cyan;
             this.DeleteAllGraphButton.Location = new System.Drawing.Point(0, 60);
             this.DeleteAllGraphButton.Name = "DeleteAllGraphButton";
             this.DeleteAllGraphButton.Size = new System.Drawing.Size(210, 60);
@@ -139,7 +139,7 @@
             this.CheckGraphForStrongConnectionButton.FlatAppearance.BorderSize = 0;
             this.CheckGraphForStrongConnectionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CheckGraphForStrongConnectionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CheckGraphForStrongConnectionButton.ForeColor = System.Drawing.Color.Chartreuse;
+            this.CheckGraphForStrongConnectionButton.ForeColor = System.Drawing.Color.Cyan;
             this.CheckGraphForStrongConnectionButton.Location = new System.Drawing.Point(0, 0);
             this.CheckGraphForStrongConnectionButton.Name = "CheckGraphForStrongConnectionButton";
             this.CheckGraphForStrongConnectionButton.Size = new System.Drawing.Size(220, 60);
@@ -169,7 +169,7 @@
             this.DeleteElementButton.FlatAppearance.BorderSize = 0;
             this.DeleteElementButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DeleteElementButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.DeleteElementButton.ForeColor = System.Drawing.Color.Magenta;
+            this.DeleteElementButton.ForeColor = System.Drawing.Color.Cyan;
             this.DeleteElementButton.Location = new System.Drawing.Point(0, 0);
             this.DeleteElementButton.Name = "DeleteElementButton";
             this.DeleteElementButton.Size = new System.Drawing.Size(210, 60);
@@ -184,7 +184,7 @@
             this.SaveGraphButton.FlatAppearance.BorderSize = 0;
             this.SaveGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SaveGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SaveGraphButton.ForeColor = System.Drawing.Color.Chartreuse;
+            this.SaveGraphButton.ForeColor = System.Drawing.Color.Cyan;
             this.SaveGraphButton.Location = new System.Drawing.Point(0, 180);
             this.SaveGraphButton.Name = "SaveGraphButton";
             this.SaveGraphButton.Size = new System.Drawing.Size(220, 60);
@@ -199,7 +199,7 @@
             this.OpenGraphButton.FlatAppearance.BorderSize = 0;
             this.OpenGraphButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.OpenGraphButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.OpenGraphButton.ForeColor = System.Drawing.Color.Chartreuse;
+            this.OpenGraphButton.ForeColor = System.Drawing.Color.Cyan;
             this.OpenGraphButton.Location = new System.Drawing.Point(0, 120);
             this.OpenGraphButton.Name = "OpenGraphButton";
             this.OpenGraphButton.Size = new System.Drawing.Size(220, 60);
@@ -214,7 +214,7 @@
             this.ChangeEdgeLengthButton.FlatAppearance.BorderSize = 0;
             this.ChangeEdgeLengthButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ChangeEdgeLengthButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ChangeEdgeLengthButton.ForeColor = System.Drawing.Color.Magenta;
+            this.ChangeEdgeLengthButton.ForeColor = System.Drawing.Color.Cyan;
             this.ChangeEdgeLengthButton.Location = new System.Drawing.Point(0, 120);
             this.ChangeEdgeLengthButton.Name = "ChangeEdgeLengthButton";
             this.ChangeEdgeLengthButton.Size = new System.Drawing.Size(210, 60);
@@ -245,7 +245,7 @@
             this.ShowOrHideAdjMatrix.FlatAppearance.BorderSize = 0;
             this.ShowOrHideAdjMatrix.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ShowOrHideAdjMatrix.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ShowOrHideAdjMatrix.ForeColor = System.Drawing.Color.Chartreuse;
+            this.ShowOrHideAdjMatrix.ForeColor = System.Drawing.Color.Cyan;
             this.ShowOrHideAdjMatrix.Location = new System.Drawing.Point(0, 60);
             this.ShowOrHideAdjMatrix.Name = "ShowOrHideAdjMatrix";
             this.ShowOrHideAdjMatrix.Size = new System.Drawing.Size(220, 60);
@@ -275,7 +275,7 @@
             this.StopProcessButton.FlatAppearance.BorderSize = 0;
             this.StopProcessButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.StopProcessButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.StopProcessButton.ForeColor = System.Drawing.Color.LightGray;
+            this.StopProcessButton.ForeColor = System.Drawing.Color.Cyan;
             this.StopProcessButton.Location = new System.Drawing.Point(0, 0);
             this.StopProcessButton.Name = "StopProcessButton";
             this.StopProcessButton.Size = new System.Drawing.Size(211, 60);
@@ -306,7 +306,7 @@
             this.saveChartButton.FlatAppearance.BorderSize = 0;
             this.saveChartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.saveChartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.saveChartButton.ForeColor = System.Drawing.Color.LightGray;
+            this.saveChartButton.ForeColor = System.Drawing.Color.Cyan;
             this.saveChartButton.Location = new System.Drawing.Point(0, 180);
             this.saveChartButton.Name = "saveChartButton";
             this.saveChartButton.Size = new System.Drawing.Size(211, 60);
@@ -327,7 +327,7 @@
             this.openChartButton.FlatAppearance.BorderSize = 0;
             this.openChartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.openChartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.openChartButton.ForeColor = System.Drawing.Color.LightGray;
+            this.openChartButton.ForeColor = System.Drawing.Color.Cyan;
             this.openChartButton.Location = new System.Drawing.Point(0, 120);
             this.openChartButton.Name = "openChartButton";
             this.openChartButton.Size = new System.Drawing.Size(211, 60);
@@ -343,7 +343,7 @@
             this.testingProgrammButton.FlatAppearance.BorderSize = 0;
             this.testingProgrammButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.testingProgrammButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.testingProgrammButton.ForeColor = System.Drawing.Color.LightGray;
+            this.testingProgrammButton.ForeColor = System.Drawing.Color.Cyan;
             this.testingProgrammButton.Location = new System.Drawing.Point(0, 60);
             this.testingProgrammButton.Name = "testingProgrammButton";
             this.testingProgrammButton.Size = new System.Drawing.Size(211, 60);
@@ -545,7 +545,7 @@
             this.exitButton.FlatAppearance.BorderSize = 0;
             this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.exitButton.ForeColor = System.Drawing.Color.Chartreuse;
+            this.exitButton.ForeColor = System.Drawing.Color.Cyan;
             this.exitButton.Location = new System.Drawing.Point(0, 240);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(220, 60);
@@ -637,7 +637,7 @@
             this.exitButton2.FlatAppearance.BorderSize = 0;
             this.exitButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exitButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.exitButton2.ForeColor = System.Drawing.Color.LightGray;
+            this.exitButton2.ForeColor = System.Drawing.Color.Cyan;
             this.exitButton2.Location = new System.Drawing.Point(0, 240);
             this.exitButton2.Name = "exitButton2";
             this.exitButton2.Size = new System.Drawing.Size(211, 60);
