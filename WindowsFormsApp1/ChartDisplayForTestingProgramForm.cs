@@ -10,7 +10,7 @@ namespace WindowsFormsApp1
 {
     public partial class ChartDisplayForTestingProgramForm : MetroFramework.Forms.MetroForm
     {
-        public ChartDisplayForTestingProgramForm(MainForm mf, int formNumber, 
+        public ChartDisplayForTestingProgramForm(MainForm mf, int formNumber,
             List<ChartDisplayForTestingProgramForm> forms)
         {
             InitializeComponent();
@@ -53,6 +53,10 @@ namespace WindowsFormsApp1
         private float coefficient;
         private int totalCountOfPoints;
 
+        /// <summary>
+        /// Установка всех инструментов.
+        /// </summary>
+        /// <param name="mf"> Главная форма </param>
         public void SetAllTools(MainForm mf)
         {
             SetUpMainTools(mf);
@@ -71,6 +75,11 @@ namespace WindowsFormsApp1
 
             SetUpTimers();
         }
+
+        /// <summary>
+        /// Метод для моделирования блуждания.
+        /// </summary>
+        /// <param name="adjacencyList"> список смежности </param>
         public void MainTick(List<Edge>[] adjacencyList)
         {
             timeLabel.Text = $@"Time in millisecond: {currentTimeOfTestingTimer.ElapsedMilliseconds}";
@@ -129,6 +138,9 @@ namespace WindowsFormsApp1
             field.Image = toolsForDrawing.GetBitmap();
         }
 
+        /// <summary>
+        /// Установка параметров таблицы.
+        /// </summary>
         private void SetUpChart()
         {
             chart.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
@@ -137,6 +149,10 @@ namespace WindowsFormsApp1
             chart.ChartAreas[0].AxisX.Title = "Time";
         }
 
+        /// <summary>
+        /// Установка главных инструментов.
+        /// </summary>
+        /// <param name="mf"> Главная форма </param>
         private void SetUpMainTools(MainForm mf)
         {
             mainForm = mf;
@@ -147,6 +163,9 @@ namespace WindowsFormsApp1
             requireTimeForTesting = mf.RequireTimeForTesting;
         }
 
+        /// <summary>
+        /// Настройка всех таймеров.
+        /// </summary>
         private void SetUpTimers()
         {
             var listArr = new List<Edge>[vertices.Count];
@@ -161,6 +180,10 @@ namespace WindowsFormsApp1
             RunTimers(listArr);
         }
 
+        /// <summary>
+        /// Запуск всех таймеров.
+        /// </summary>
+        /// <param name="adjacencyList"> Лист смежности </param>
         private void RunTimers(List<Edge>[] adjacencyList)
         {
             mainTimer = new Timer { Interval = 2 };
@@ -174,6 +197,14 @@ namespace WindowsFormsApp1
             Show();
         }
 
+        /// <summary>
+        /// Вычислить текущие координаты точки.
+        /// </summary>
+        /// <param name="ver1"> Первая вершина </param>
+        /// <param name="ver2"> Вторая вершина </param>
+        /// <param name="allTime"> Суммарное время </param>
+        /// <param name="timer"> Текущее время </param>
+        /// <returns> Точку </returns>
         private PointF GetPoint(Vertex ver1, Vertex ver2, double allTime, Stopwatch timer)
         {
             var distanceX = Math.Abs(ver2.X - ver1.X);
@@ -305,6 +336,11 @@ namespace WindowsFormsApp1
             return new PointF(x, y);
         }
 
+        /// <summary>
+        /// Построение графика.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimerForPlottingTick(object sender, EventArgs e)
         {
             if (currentTimeOfTestingTimer.ElapsedMilliseconds > requireTimeForTesting)
@@ -345,6 +381,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Заугрузка формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChartForTestingProgramLoad(object sender, EventArgs e)
         {
             label3.Visible = false;
@@ -391,6 +432,11 @@ namespace WindowsFormsApp1
                                                    Consts.StopTestingProgramButtonLocationY);
         }
 
+        /// <summary>
+        /// Первеключение страницы влево на 1.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LeftMiniButtonClick(object sender, EventArgs e)
         {
             if (ListOfFormsForTestingProgram.Pointer > 0)
@@ -417,6 +463,9 @@ namespace WindowsFormsApp1
             ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer].Activate();
         }
 
+        /// <summary>
+        /// Скрыть все формы.
+        /// </summary>
         private void HideAllForms()
         {
             foreach (var form in ListOfFormsForTestingProgram.ChartFormsForTestingProgram)
@@ -425,6 +474,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Переключение страницы на 1 вправо.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RightMiniButtonClick(object sender, EventArgs e)
         {
             if (ListOfFormsForTestingProgram.Pointer < ListOfFormsForTestingProgram.ChartFormsForTestingProgram.Count - 1)
@@ -452,6 +506,11 @@ namespace WindowsFormsApp1
             ListOfFormsForTestingProgram.ChartFormsForTestingProgram[ListOfFormsForTestingProgram.Pointer].Activate();
         }
 
+        /// <summary>
+        /// Переключиться на 1ую страницу.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LeftButtonClick(object sender, EventArgs e)
         {
             ListOfFormsForTestingProgram.Pointer = 0;
@@ -470,6 +529,11 @@ namespace WindowsFormsApp1
             ListOfFormsForTestingProgram.ChartFormsForTestingProgram[0].Activate();
         }
 
+        /// <summary>
+        /// Перключиться на последнюю страницу.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RightButtonClick(object sender, EventArgs e)
         {
             var lastForm = ListOfFormsForTestingProgram.ChartFormsForTestingProgram.LastOrDefault();
@@ -557,7 +621,14 @@ namespace WindowsFormsApp1
 
         private void ExitButtonClick(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            try
+            {
+                Environment.Exit(0);
+            }
+            catch (Exception)
+            {
+                Environment.Exit(1); 
+            }
         }
     }
 }

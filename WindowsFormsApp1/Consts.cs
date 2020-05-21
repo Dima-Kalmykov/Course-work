@@ -11,8 +11,8 @@
         internal const int VertexRadius = 20;
         internal const int PointRadius = 10;
 
-        internal const double MinEdgeWeight = 10e-4;//10e-5;
-        internal const double MaxEdgeWeight = 10e2;//10e3;
+        internal const double MinEdgeWeight = 10e-5;
+        internal const double MaxEdgeWeight = 10e3;
 
         internal const int WidthArrow = 7;
         internal const int HeightArrow = 7;

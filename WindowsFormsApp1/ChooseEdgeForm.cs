@@ -21,6 +21,13 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Показывает окошечко, когда надо изменить вес ребра.
+        /// </summary>
+        /// <param name="caption"> Заголовок </param>
+        /// <param name="textFirstAction"> Текст в первой кнопке </param>
+        /// <param name="textSecondAction"> Текст во второй кнопке </param>
+        /// <returns></returns>
         public (DialogResult, bool, bool) MyShowChangeLength(string caption, 
             string textFirstAction, string textSecondAction)
         {
@@ -41,6 +48,13 @@ namespace WindowsFormsApp1
             return (res, cf.WasCanceled, cf.IsFirstAction);
         }
 
+        /// <summary>
+        /// Показывает окошечко, когда надо удалить элемент.
+        /// </summary>
+        /// <param name="caption"> Заголовок </param>
+        /// <param name="textFirstAction"> Текст в первой кнопке </param>
+        /// <param name="textSecondAction"> Текст во второй кнопке </param>
+        /// <returns></returns>
         public (DialogResult, bool, bool) MyShowDeleteEdge(string caption, 
             string textFirstAction, string textSecondAction)
         {

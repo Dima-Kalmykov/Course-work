@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MetroFramework;
+using System;
 using System.Windows.Forms;
-using MetroFramework;
 
 namespace WindowsFormsApp1
 {
@@ -29,7 +29,7 @@ namespace WindowsFormsApp1
                 radioButton19, radioButton20
             };
 
-            RadioButton[] radioButtons = 
+            RadioButton[] radioButtons =
             {
                 radioButton1, radioButton2, radioButton3,
                 radioButton4, radioButton5, radioButton6, radioButton7, radioButton8,
@@ -60,6 +60,10 @@ namespace WindowsFormsApp1
                 selectedRb = resultRb;
         }
 
+        /// <summary>
+        /// Показывает форму.
+        /// </summary>
+        /// <returns> Результат диалога </returns>
         public (DialogResult, bool, int) MyShow()
         {
             var rg = new GetRandomGraphForm
@@ -96,6 +100,9 @@ namespace WindowsFormsApp1
             DoingRadioButtonsUnchecked();
         }
 
+        /// <summary>
+        /// Делает все кнопки небранными.
+        /// </summary>
         private void DoingRadioButtonsUnchecked()
         {
             RadioButton[] radioButtons =

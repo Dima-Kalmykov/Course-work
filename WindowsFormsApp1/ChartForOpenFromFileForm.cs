@@ -10,6 +10,11 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Загрузка формы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormLoad(object sender, System.EventArgs e)
         {
             Style = MetroColorStyle.Magenta;

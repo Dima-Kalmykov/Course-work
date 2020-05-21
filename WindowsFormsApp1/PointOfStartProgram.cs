@@ -6,7 +6,7 @@ namespace WindowsFormsApp1
     /// <summary>
     /// Класс для начала работы программы.
     /// </summary>
-    static class PointOfStartProgram
+    internal static class PointOfStartProgram
     {
         /// <summary>
         /// Главная точка входа для приложения.

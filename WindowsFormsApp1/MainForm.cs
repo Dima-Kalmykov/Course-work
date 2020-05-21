@@ -25,12 +25,14 @@ namespace WindowsFormsApp1
 
         // Списки смежности.
         public List<Vertex> Vertices;
+
         public List<Edge> Edges;
 
         public float SpeedCoefficient = 1;
 
         // Диалоговые формы.
         private readonly ChooseEdgeForm chooseEdgeForm = new ChooseEdgeForm();
+
         private readonly GetWeightEdgeForm getEdgeLengthForm = new GetWeightEdgeForm();
         private readonly GetRandomGraphForm getRandomGraphForm = new GetRandomGraphForm();
 
@@ -45,6 +47,7 @@ namespace WindowsFormsApp1
 
         // Номера вершин, между которым проводим ребро.
         private int ver1ForConnection = -1;
+
         private int ver2ForConnection = -1;
 
         // Матрица смежности.
@@ -52,6 +55,7 @@ namespace WindowsFormsApp1
 
         // Пути для сохранения и считывания файла.
         private string pathForSaveFile;
+
         private string pathForOpenFile;
 
         // Если нажали первый раз, чтобы перетащить вершину.
@@ -65,7 +69,6 @@ namespace WindowsFormsApp1
         private int totalPointsCount;
         private bool isFirstVertex = true;
 
-
         private readonly List<MyPoint> pointsForComputeFormula = new List<MyPoint>();
 
         private readonly List<Stopwatch> timers = new List<Stopwatch>();
@@ -77,8 +80,6 @@ namespace WindowsFormsApp1
 
         private static readonly StringBuilder ChartFormatData = new StringBuilder("Time;Amount\n");
         private int pastSecondsCount;
-
-        
 
         public MainForm()
         {
@@ -102,6 +103,9 @@ namespace WindowsFormsApp1
             HideSubMenu();
         }
 
+        /// <summary>
+        /// Спрятать матрицу смежности.
+        /// </summary>
         private void HideAdjacencyMatrix()
         {
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
@@ -115,6 +119,9 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Перерисовать все вершины.
+        /// </summary>
         private void RedrawSelectedVertex()
         {
             // Если была выбрана вершина для перемещения, то перекрашиваем её.
@@ -159,6 +166,9 @@ namespace WindowsFormsApp1
             HideAdjacencyMatrix();
         }
 
+        /// <summary>
+        /// Удалить граф.
+        /// </summary>
         public void DeleteGraph()
         {
             Vertices.Clear();
@@ -168,6 +178,10 @@ namespace WindowsFormsApp1
             field.Image = ToolsForDrawing.GetBitmap();
         }
 
+        /// <summary>
+        /// Подтвердить удаление.
+        /// </summary>
+        /// <returns> Результат диалога </returns>
         public DialogResult GetConfirmCancellation()
         {
             DrawVertexButton.Enabled = true;
@@ -197,7 +211,6 @@ namespace WindowsFormsApp1
             // Проверяем, есть ли какой-то элемент для удаления.
             if (Vertices.Count != 0)
             {
-
                 var confirmCancellation = GetConfirmCancellation();
 
                 // Если подтверилось удаление, удаляем.
@@ -398,25 +411,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void DeleteElementButtonClick(object sender, EventArgs e)
         {
-            // Если была выбрана вершина для перемещения, то перекрашиваем её.
-            if (indexVertexForMove != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertices[indexVertexForMove].X,
-                    Vertices[indexVertexForMove].Y, (1 + indexVertexForMove).ToString());
-                firstPress = true;
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
-
-            // Если была выбрана вершина для создания ребра, то перевкрашиваем её.
-            if (ver1ForConnection != -1)
-            {
-                ToolsForDrawing.DrawVertex(Vertices[ver1ForConnection].X,
-                    Vertices[ver1ForConnection].Y, (1 + ver1ForConnection).ToString());
-
-                ver1ForConnection = -1;
-
-                field.Image = ToolsForDrawing.GetBitmap();
-            }
+            RedrawSelectedVertex();
 
             // Делаем эту кнопку неактивной.
             DeleteElementButton.Enabled = false;
@@ -545,7 +540,6 @@ namespace WindowsFormsApp1
                 catch (Exception)
                 {
                     myMessageBox.ShowError("Unable to open image");
-
                 }
             }
 
@@ -756,7 +750,7 @@ namespace WindowsFormsApp1
                         // Если это петля
                         if (Edges[i].Ver1 == Edges[i].Ver2)
                         {
-                            // Петля - это круг. и +- ширина кисти/2 к радиусу. 
+                            // Петля - это круг. и +- ширина кисти/2 к радиусу.
                             // У нас центр окружности петли смещён на -R -R.
                             // Если клик попал в тор, то предлагаем изменить длину.
 
@@ -868,7 +862,6 @@ namespace WindowsFormsApp1
                                                         PrintAdjacencyMatrix();
                                                         return;
                                                     }
-
                                                 }
                                             }
                                             else
@@ -899,8 +892,8 @@ namespace WindowsFormsApp1
                             }
                             else
                             {
-                                // Если x координаты вершин ребра совпали, 
-                                // то проводим между ними прямую, и 
+                                // Если x координаты вершин ребра совпали,
+                                // то проводим между ними прямую, и
                                 // "расширяем" её вверх и вниз на ширину кисти/2.
                                 if (e.X <= Vertices[Edges[i].Ver1].X + 4 &&
                                     e.X >= Vertices[Edges[i].Ver1].X - 4 &&
@@ -911,7 +904,7 @@ namespace WindowsFormsApp1
                                         Vertices[Edges[i].Ver1].Y,
                                         Vertices[Edges[i].Ver2].Y) + Consts.VertexRadius)
                                 {
-                                    // Если есть обратное ребро, то даём выбрать, 
+                                    // Если есть обратное ребро, то даём выбрать,
                                     // длину какого пути надо изменить.
                                     if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                         adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
@@ -936,7 +929,7 @@ namespace WindowsFormsApp1
                                         chooseEdgeForm.WasCanceled = res.Item2;
                                         chooseEdgeForm.IsFirstAction = res.Item3;
 
-                                        // Если не отменили, то меняем длину. 
+                                        // Если не отменили, то меняем длину.
                                         if (!chooseEdgeForm.WasCanceled)
                                         {
                                             if (chooseEdgeForm.IsFirstAction)
@@ -975,7 +968,6 @@ namespace WindowsFormsApp1
                                                         PrintAdjacencyMatrix();
                                                         return;
                                                     }
-
                                                 }
                                             }
                                             else
@@ -1194,7 +1186,7 @@ namespace WindowsFormsApp1
                             // Если это петля
                             if (Edges[i].Ver1 == Edges[i].Ver2)
                             {
-                                // Петля - это круг. и +- ширина кисти/2 к радиусу. 
+                                // Петля - это круг. и +- ширина кисти/2 к радиусу.
                                 // У нас центр окружности петли смещён на -R -R.
                                 // Если клик попал в тор, то предлагаем изменить длину.
                                 if ((Math.Pow(Vertices[Edges[i].Ver1].X - Consts.VertexRadius - e.X, 2)
@@ -1300,8 +1292,8 @@ namespace WindowsFormsApp1
                                 // Если x координаты вершин ребра совпадают.
                                 if (Vertices[Edges[i].Ver1].X == Vertices[Edges[i].Ver2].X)
                                 {
-                                    // Если x координаты вершин ребра совпали, 
-                                    // то проводим между ними прямую, и 
+                                    // Если x координаты вершин ребра совпали,
+                                    // то проводим между ними прямую, и
                                     // "расширяем" её вверх и вниз на ширину кисти/2.
                                     if (e.X <= Vertices[Edges[i].Ver1].X + 4 &&
                                         e.X >= Vertices[Edges[i].Ver1].X - 4 &&
@@ -1313,7 +1305,7 @@ namespace WindowsFormsApp1
                                             Vertices[Edges[i].Ver2].Y) + Consts.VertexRadius)
                                     {
                                         // Если есть обратный путь, то предлагаем выбрать путь,
-                                        // который надо удалить. 
+                                        // который надо удалить.
                                         if (adjMatrix[Edges[i].Ver1, Edges[i].Ver2] != 0 &&
                                             adjMatrix[Edges[i].Ver2, Edges[i].Ver1] != 0)
                                         {
@@ -1442,8 +1434,6 @@ namespace WindowsFormsApp1
             field.Image = ToolsForDrawing.GetBitmap();
         }
 
-        // Methods for work with files.
-
         /// <summary>
         /// Устанавливаем необходимые данные из файла.
         /// </summary>
@@ -1565,6 +1555,7 @@ namespace WindowsFormsApp1
                                 case 1:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(7);
                                     break;
+
                                 case 2:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(5);
                                     break;
@@ -1596,9 +1587,11 @@ namespace WindowsFormsApp1
                                 case 1:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(9);
                                     break;
+
                                 case 2:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(7);
                                     break;
+
                                 case 3:
                                     if (IsInt(adjMatrix[i, j]))
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(5);
@@ -1633,15 +1626,18 @@ namespace WindowsFormsApp1
                                 case 1:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(10);
                                     break;
+
                                 case 2:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(8);
                                     break;
+
                                 case 3:
                                     if (IsInt(adjMatrix[i, j]))
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(6);
                                     else
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(7);
                                     break;
+
                                 case 4:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(5);
                                     break;
@@ -1673,18 +1669,22 @@ namespace WindowsFormsApp1
                                 case 1:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(11);
                                     break;
+
                                 case 2:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(9);
                                     break;
+
                                 case 3:
                                     if (IsInt(adjMatrix[i, j]))
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(7);
                                     else
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(8);
                                     break;
+
                                 case 4:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(6);
                                     break;
+
                                 case 5:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(4);
                                     break;
@@ -1716,21 +1716,26 @@ namespace WindowsFormsApp1
                                 case 1:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(12);
                                     break;
+
                                 case 2:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(10);
                                     break;
+
                                 case 3:
                                     if (IsInt(adjMatrix[i, j]))
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(8);
                                     else
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(9);
                                     break;
+
                                 case 4:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(7);
                                     break;
+
                                 case 5:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(5);
                                     break;
+
                                 case 6:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(3);
                                     break;
@@ -1762,24 +1767,30 @@ namespace WindowsFormsApp1
                                 case 1:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(14);
                                     break;
+
                                 case 2:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(12);
                                     break;
+
                                 case 3:
                                     if (IsInt(adjMatrix[i, j]))
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(10);
                                     else
                                         curStrForPrint += adjMatrix[i, j] + GetSpaces(11);
                                     break;
+
                                 case 4:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(9);
                                     break;
+
                                 case 5:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(7);
                                     break;
+
                                 case 6:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(5);
                                     break;
+
                                 case 7:
                                     curStrForPrint += adjMatrix[i, j] + GetSpaces(3);
                                     break;
@@ -1814,7 +1825,6 @@ namespace WindowsFormsApp1
                 // Делаем пропуск строки, если это не последняя строка.
                 if (i != Vertices.Count - 1)
                     showAdjacencyMatrixForm.AdjacencyMatrixListBox.Items.Add(GetSpaces(5) + "|");
-
             }
 
             // Вставляем первую и вторую строки в ListBox.
@@ -1834,8 +1844,6 @@ namespace WindowsFormsApp1
                 Activate();
             }
         }
-
-        // Methods for print adjacency matrix.
 
         /// <summary>
         /// Добавляем требуемое число пробелов к строке.
@@ -1893,6 +1901,11 @@ namespace WindowsFormsApp1
         private static bool IsInt(double val) =>
             int.TryParse(val.ToString(), out var temp);
 
+        /// <summary>
+        /// Построение графика.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimerForPlottingTick(object sender, EventArgs e)
         {
             var xValue = (timerForPlotting.ElapsedMilliseconds) / 1000;
@@ -1905,6 +1918,10 @@ namespace WindowsFormsApp1
             chartForm.chartForm.Series["Amount of points"].Points.AddXY(xValue, yValue);
         }
 
+        /// <summary>
+        /// Моделирование случайных блужданий.
+        /// </summary>
+        /// <param name="adjacencyList"></param>
         public void MainTick(List<Edge>[] adjacencyList)
         {
             SpeedCoefficient = (float)(trackBar1.Value / 10.0);
@@ -1962,6 +1979,14 @@ namespace WindowsFormsApp1
             field.Image = ToolsForDrawing.GetBitmap();
         }
 
+        /// <summary>
+        /// Получить текущую позицию точки.
+        /// </summary>
+        /// <param name="ver1"> Первая вершина </param>
+        /// <param name="ver2"> Вторая вершина </param>
+        /// <param name="fullTime"> Суммарное время </param>
+        /// <param name="timer"> Текущее время </param>
+        /// <returns></returns>
         private PointF GetCurPointPosition(Vertex ver1, Vertex ver2, double fullTime, Stopwatch timer)
         {
             var distanceX = Math.Abs(ver2.X - ver1.X);
@@ -2006,7 +2031,6 @@ namespace WindowsFormsApp1
                         x = -(float)(100 / fullTime * (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 - fullTime / 2));
                         y = -(float)Math.Sqrt(400 - x * x);
 
-
                         x += 20;
                         y -= 20;
                         return new PointF(-x + ver1.X, ver1.Y + y);
@@ -2016,7 +2040,6 @@ namespace WindowsFormsApp1
                     y -= 20;
                     return new PointF(y + ver1.X, ver1.Y - x);
                 }
-
 
                 if (timer.ElapsedMilliseconds * SpeedCoefficient / 1000.0 <= fullTime * 3 / 4)
                 {
@@ -2091,6 +2114,11 @@ namespace WindowsFormsApp1
             return new PointF(x, y);
         }
 
+        /// <summary>
+        /// Начало исследования.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StartReseachButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
@@ -2182,9 +2210,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Показывает график с главной частью.
+        /// </summary>
         private void SetAndShowPlotWithMainPartForm()
         {
-
             DisplayMainPartByTimeForm = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
             mathKernel1.GraphicsHeight = DisplayMainPartByTimeForm.pictureBox1.Height;
             mathKernel1.GraphicsWidth = DisplayMainPartByTimeForm.pictureBox1.Width;
@@ -2201,6 +2231,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Показывает график без главной части
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="value"></param>
         private void SetAndShowPlotWithoutMainPartForm(string data, double value)
         {
             DisplayMainPartByTimeForm = new DisplayMainPartByTimeForm { pictureBox1 = { Image = null } };
@@ -2223,6 +2258,10 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Строит годин из двух графиков:
+        /// Либо с главной частью, либо - без.
+        /// </summary>
         private void ShowResultOfMainPartByTime()
         {
             Alpha = CyclomaticNumber - 1;
@@ -2266,7 +2305,12 @@ namespace WindowsFormsApp1
 
             StopProcessButton.Enabled = true;
         }
-
+        
+        /// <summary>
+        /// Сохранить график в файл.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveChartToCsvFileButtonClick(object sender, EventArgs e)
         {
             RedrawSelectedVertex();
@@ -2312,6 +2356,11 @@ namespace WindowsFormsApp1
             else
                 myMessageBox.NotifyGraphIsEmpty("Graph is empty");
 
+            mainTimer.Start();
+            timer1.Start();
+            timer2.Start();
+            timerForPlotting.Start();
+            timers.ForEach(timer => timer.Start());
             // Если есть веришны, то появляется возможность открыть матрицу смежности.
             if (Vertices.Count != 0)
                 ShowOrHideAdjMatrix.Enabled = true;
@@ -2323,6 +2372,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Преобразование данных для сохранения.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ConvertDataToCsvFormatTimerTick(object sender, EventArgs e)
         {
             var time = TimeSpan.FromSeconds(pastSecondsCount++);
@@ -2331,6 +2385,11 @@ namespace WindowsFormsApp1
             ChartFormatData.AppendLine($"{timeStr};{totalPointsCount}");
         }
 
+        /// <summary>
+        /// Открыть график из файла.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenChartFromCsvFileButtonClick(object sender, EventArgs e)
         {
             chartForOpenFromFileForm.chart1.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;
@@ -2384,9 +2443,20 @@ namespace WindowsFormsApp1
                 {
                     myMessageBox.ShowError("Unable to open chart");
                 }
+
+                mainTimer.Start();
+                timer1.Start();
+                timer2.Start();
+                timerForPlotting.Start();
+                timers.ForEach(timer => timer.Start());
             }
         }
 
+        /// <summary>
+        /// Начало тестирования программы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StartTestingProgramButtonClick(object sender, EventArgs e)
         {
             Hide();
@@ -2402,6 +2472,9 @@ namespace WindowsFormsApp1
                 new List<ChartDisplayForTestingProgramForm>());
         }
 
+        /// <summary>
+        /// Убрать все тексты.
+        /// </summary>
         private void HideAllLabel()
         {
             drawEdgeLabel.Visible = false;
@@ -2411,6 +2484,11 @@ namespace WindowsFormsApp1
             label1.Visible = false;
         }
 
+        /// <summary>
+        /// Загрузка формы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainFormLoad(object sender, EventArgs e)
         {
             x05.Visible = false;
@@ -2472,12 +2550,18 @@ namespace WindowsFormsApp1
             Activate();
         }
 
+        /// <summary>
+        /// Спрятать подменю.
+        /// </summary>
         private void HideSubMenu()
         {
             drawingSubPanel.Visible = false;
             changeParametersSubPanel.Visible = false;
         }
 
+        /// <summary>
+        /// Показать все подменю
+        /// </summary>
         private void ShowAllSubMenu()
         {
             panel2.Visible = true;
@@ -2511,6 +2595,11 @@ namespace WindowsFormsApp1
             ShowSubMenu(panel2);
         }
 
+        /// <summary>
+        /// Вывод информации о графе.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GraphInfoTimerTick(object sender, EventArgs e)
         {
             changeLengthLabel.Visible = !ChangeEdgeLengthButton.Enabled;
@@ -2532,7 +2621,14 @@ namespace WindowsFormsApp1
 
         private void FirstExitButtonClick(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            try
+            {
+                Environment.Exit(0);
+            }
+            catch (Exception)
+            {
+                Environment.Exit(1);
+            }
         }
 
         private void ToolsForChartButtonClick(object sender, EventArgs e)
@@ -2542,7 +2638,14 @@ namespace WindowsFormsApp1
 
         private void SecondExitButtonClick(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            try
+            {
+                Environment.Exit(0);
+            }
+            catch (Exception)
+            {
+                Environment.Exit(1);
+            }
         }
     }
 }

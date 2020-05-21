@@ -10,6 +10,11 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Загрузка формы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChartLoad(object sender, EventArgs e)
         {
             chartForm.Legends[0].BackColor = Color.SlateGray;

@@ -18,12 +18,20 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Проверяем число, попадает ли оно в заданный диапазон.
+        /// </summary>
+        /// <param name="weight"> Вес ребра </param>
+        /// <returns> True - если попадает, false - если нет </returns>
         private static bool IsNotSuitableWeight(double weight) =>
                    weight < Consts.MinEdgeWeight ||
                    weight > Consts.MaxEdgeWeight ||
                    double.IsInfinity(weight) ||
                    double.IsNaN(weight);
 
+        /// <summary>
+        /// Показываем сообщение об ошибке.
+        /// </summary>
         private void ShowErrorMessage()
         {
             var myMessageBox = new MyMessageBox();

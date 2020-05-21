@@ -9,6 +9,11 @@ namespace WindowsFormsApp1
 
         public static int Pointer;
 
+        /// <summary>
+        /// Изменяет лист и укзаатель.
+        /// </summary>
+        /// <param name="newForms"> Новый список форм </param>
+        /// <param name="formCounter"> Количество форм </param>
         public static void SetSwitcherTools(List<ChartDisplayForTestingProgramForm> newForms, int formCounter)
         {
             ChartFormsForTestingProgram = newForms.GetRange(0, newForms.Count);

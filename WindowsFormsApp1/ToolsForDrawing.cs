@@ -91,6 +91,11 @@ namespace WindowsFormsApp1
             cover.DrawString(number, font, brush, point);
         }
 
+        /// <summary>
+        /// Нарисовать точку.
+        /// </summary>
+        /// <param name="x"> X координата </param>
+        /// <param name="y"> Y координата </param>
         internal void DrawPoint(float x, float y)
         {
             cover.FillEllipse(Brushes.Blue,
@@ -232,6 +237,12 @@ namespace WindowsFormsApp1
             DrawArrowhead(xBegin, yBegin, xEnd, yEnd, firstEndArrowX, firstEndArrowY, secondEndArrowX, secondEndArrowY);
         }
 
+        /// <summary>
+        /// Вспомогательный метод для рисования наконечника.
+        /// </summary>
+        /// <param name="ver1"> Первая вершина </param>
+        /// <param name="ver2"> Вторая вершина </param>
+        /// <returns> Конец наконечника </returns>
         private PointF GetXBeginAndYBegin(Vertex ver1, Vertex ver2, double xMaxBegin,
             double yMaxBegin, double xMinBegin, double yMinBegin)
         {
@@ -269,6 +280,10 @@ namespace WindowsFormsApp1
             return new PointF((float)xBegin, (float)yBegin);
         }
 
+        /// <summary>
+        /// Получаем координаты двух точек наконечника.
+        /// </summary>
+        /// <returns> Две точки наконечника </returns>
         private (PointF, PointF) GetArrowheadPoints(PointF pointBegin, PointF pointEnd, double k)
         {
             var (xBegin, yBegin) = (pointBegin.X, pointBegin.Y);
@@ -301,6 +316,10 @@ namespace WindowsFormsApp1
             return arrowHeadPoints;
         }
 
+        /// <summary>
+        /// Первая пара координат части наконечника.
+        /// </summary>
+        /// <returns> Пара координат части наконечника </returns>
         private (PointF, PointF) GetFirstEndOfArrowhead(double xBegin, double xEnd, double yEnd)
         {
             double firstEndArrowX;
@@ -329,6 +348,10 @@ namespace WindowsFormsApp1
                     new PointF((float)secondEndArrowX, (float)secondEndArrowY));
         }
 
+        /// <summary>
+        /// Вторая пара координат части наконечника.
+        /// </summary>
+        /// <returns> Пара координат части наконечника </returns>
         private (PointF, PointF) GetSecondEndOfArrowhead(double yEnd, double yBegin, double xEnd)
         {
             double firstEndArrowX;
@@ -357,6 +380,9 @@ namespace WindowsFormsApp1
                     new PointF((float)secondEndArrowX, (float)secondEndArrowY));
         }
 
+        /// <summary>
+        /// Нарисовать наконечник.
+        /// </summary>
         private void DrawArrowhead(double xBegin, double yBegin, double xEnd, double yEnd, double firstEndArrowX,
             double firstEndArrowY, double secondEndArrowX, double secondEndArrowY)
         {
@@ -373,6 +399,11 @@ namespace WindowsFormsApp1
                 (float)xEnd, (float)yEnd);
         }
 
+        /// <summary>
+        /// Проверяет, есть ли вершины рядом с данной.
+        /// </summary>
+        /// <param name="vertices"> Список вершин </param>
+        /// <param name="currentPoint"> Текущая точка </param>
         private static void CheckNearVertices(ref int i, ref List<Vertex> vertices, Point currentPoint)
         {
             var hasNearOtherVertex = true;
@@ -511,6 +542,12 @@ namespace WindowsFormsApp1
             return adjacencyMatrix;
         }
 
+        /// <summary>
+        /// Генерирует граф по заданному количеству вершин и рёбер.
+        /// </summary>
+        /// <param name="vertices"> Список вершин </param>
+        /// <param name="edges"> Список рёбер </param>
+        /// <returns> Список новых рёбер </returns>
         internal List<Edge> GetOtherGraphWithGivenAmountOfEdgesAndVertices(List<Vertex> vertices, List<Edge> edges)
         {
             var size = vertices.Count;
@@ -586,6 +623,11 @@ namespace WindowsFormsApp1
             return newEdges;
         }
 
+        /// <summary>
+        /// Проверяет особые случаи графа.
+        /// </summary>
+        /// <param name="size"> Размер матрицы </param>
+        /// <returns> Новую матрицу </returns>
         private static double[,] CheckSpecialCaseAdjacencyMatrix(int size)
         {
             var adjacencyMatrix = new double[size, size];
@@ -608,6 +650,10 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Заполняет матрицу смежности для нового графа.
+        /// </summary>
+        /// <param name="adjacencyMatrix"> Матрица смежности </param>
         private static void FillAdjacencyMatrix(ref double[,] adjacencyMatrix, int i)
         {
             var size = adjacencyMatrix.GetLength(0);
@@ -622,6 +668,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Возвращает матрицу смежности указанного размера.
+        /// </summary>
+        /// <param name="size"> Размер матрицы смежности </param>
+        /// <returns> Новая матрица смежности </returns>
         private static double[,] GetAdjacencyMatrix(int size)
         {
             var adjacencyMatrix = new double[size, size];

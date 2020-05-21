@@ -8,6 +8,12 @@ namespace WindowsFormsApp1
         private const int VertexRadius = Consts.VertexRadius;
         private const int WidthArrow = Consts.WidthArrow;
 
+        /// <summary>
+        /// Вычислить дистанцию между точками.
+        /// </summary>
+        /// <param name="point1"> Первая точка </param>
+        /// <param name="point2"> Вторая точка </param>
+        /// <returns> Расстояние </returns>
         internal static double GetDistance(PointF point1, PointF point2)
         {
             var (x1, y1) = (point1.X, point1.Y);
@@ -16,16 +22,40 @@ namespace WindowsFormsApp1
             return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
         }
 
+        /// <summary>
+        /// Получить коэффициент k прямой y = kx + b.
+        /// </summary>
+        /// <param name="ver1"> Первая вершина </param>
+        /// <param name="ver2"> Вторая вершина </param>
+        /// <returns> k </returns>
         internal static double GetK(Vertex ver1, Vertex ver2) =>
            (double)(ver2.Y - ver1.Y) / (ver2.X - ver1.X);
 
+        /// <summary>
+        /// Получить коэффициент b прямой y = kx + b.
+        /// </summary>
+        /// <param name="ver1"> Первая вершина </param>
+        /// <param name="ver2"> Вторая вершина </param>
+        /// <returns> b </returns>
         internal static double GetB(Vertex ver1, Vertex ver2) =>
             (double)(ver2.X * ver1.Y - ver1.X * ver2.Y) / (ver2.X - ver1.X);
 
+        /// <summary>
+        /// Вычисление вспомогательного дискриминанта.
+        /// </summary>
+        /// <param name="ver"> Вершина </param>
+        /// <param name="k"> коэффициент k прямой y = kx + b </param>
+        /// <param name="b"> коэффициент b прямой y = kx + b </param>
+        /// <returns></returns>
         internal static double GetSqrtOfDiscriminant(Vertex ver, double k, double b) =>
            Math.Sqrt(VertexRadius * VertexRadius * (1 + k * k) - ver.Y * ver.Y + 2 * b * ver.Y -
             b * b + 2 * k * ver.X * (ver.Y - b) - k * k * ver.X * ver.X);
 
+        /// <summary>
+        /// Рассматриваем особые случаи вида дроби.
+        /// </summary>
+        /// <param name="digitsFraction"> Число знаков дроби </param>
+        /// <param name="fraction"> Дробь </param>
         private static void ChangeDigitsFraction(ref int digitsFraction, double fraction)
         {
             // Если дробная часть была вида 0,0xx.
@@ -40,6 +70,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        /// <summary>
+        /// Получение дроби из числа.
+        /// </summary>
+        /// <param name="number"> Число </param>
+        /// <returns> Дробь числа </returns>
         private static double GetFraction(double number)
         {
             // Выделяем у числа дробную часть. 
@@ -54,6 +89,12 @@ namespace WindowsFormsApp1
             return fraction;
         }
 
+        /// <summary>
+        /// Подсчёт количества знаков дроби числа.
+        /// </summary>
+        /// <param name="digitsFraction"> Число знаков числа </param>
+        /// <param name="fraction"> Дробь </param>
+        /// <returns></returns>
         private static int GetDigitsFraction(int digitsFraction, double fraction)
         {
             var hasZeroAtEnd = true;
@@ -77,6 +118,11 @@ namespace WindowsFormsApp1
             return digitsFraction;
         }
 
+        /// <summary>
+        /// Подсчёт количества знаков числа.
+        /// </summary>
+        /// <param name="number"> Число </param>
+        /// <returns> Количество знаков числа </returns>
         internal static int GetAmountOfDigits(double number)
         {
             // Флаг для отбрасывания нулей дробной части,
@@ -120,6 +166,12 @@ namespace WindowsFormsApp1
                 : result;
         }
 
+        /// <summary>
+        /// Вычисление координаты X для рисования наконечника.
+        /// </summary>
+        /// <param name="point1"> Первая точка </param>
+        /// <param name="point2"> Вторая точка </param>
+        /// <returns> X координата </returns>
         internal static double GetXCoordinate(PointF point1, PointF point2)
         {
             var (x1, x2) = (point1.X, point2.X);
@@ -130,6 +182,12 @@ namespace WindowsFormsApp1
             return (x1 + delta * x2) / (1 + delta);
         }
 
+        /// <summary>
+        /// Вычисление координаты Y для рисования наконечника.
+        /// </summary>
+        /// <param name="point1"> Первая точка </param>
+        /// <param name="point2"> Вторая точка </param>
+        /// <returns> Y координата </returns>
         internal static double GetYCoordinate(PointF point1, PointF point2)
         {
             var (y1, y2) = (point1.Y, point2.Y);
